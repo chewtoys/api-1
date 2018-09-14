@@ -11,6 +11,7 @@ import hotDrink from './icon/hotDrink.png';
 import breakfast from './icon/breakfast.png';
 import hits from './icon/hits.png';
 import combo from './icon/combo.png';
+import logo from './icon/logo.svg';
 import sandwiche_1 from "./posters/product_844_922670555.png"
 import sandwiche_2 from "./posters/product_684_911563647.png"
 import sandwiche_3 from "./posters/product_1014_671781511.png"
@@ -24,6 +25,11 @@ import sandwiche_10 from "./posters/product_1124_763426707.png"
 import sandwiche_11 from "./posters/product_614_836467336.png"
 
 export default [
+  {
+    ru: "Главная",
+    icon: logo,
+    name: "main"
+  },
   {
     ru: "Сэндвичи",
     icon: sandwiches,
