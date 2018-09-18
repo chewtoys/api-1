@@ -2,7 +2,7 @@ module.exports = {
     apps: [{
         name: "app",
         script: "./build/index.js",
-        watсh: ["build", "static"],
+        watch: ["build", "static"],
         env: {
             NODE_ENV: "development",
         },
