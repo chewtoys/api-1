@@ -1,7 +1,7 @@
 module.exports = {
     apps: [{
         name: "app",
-        script: "./app.js",
+        script: "./build/index.js",
         wath: ["build", "static"],
         env: {
             NODE_ENV: "development",
