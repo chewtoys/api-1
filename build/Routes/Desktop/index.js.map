@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../server/Routes/Desktop/index.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AAEjC,MAAM,MAAM,GAAG,gBAAM,EAAE,CAAC;AAExB,MAAM,CAAC,GAAG,CAAC,GAAG,EAAE,CAAC,GAAG,EAAE,GAAG,EAAE,IAAI,EAAE,EAAE;IAE/B,GAAG,CAAC,QAAQ,CAAC,OAAO,CAAC,GAAG,EAAE,GAAG,+BAA+B,CAAC,CAAC;AAClE,CAAC,CAAC,CAAC;AAEH,kBAAe,MAAM,CAAC"}
