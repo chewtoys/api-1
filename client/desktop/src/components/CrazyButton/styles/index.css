@@ -1,0 +1,21 @@
+.crazy-button {
+  position: fixed;
+  right: 15px;
+  top: 30px;
+  width: 70px;
+  height: 70px;
+  background: hsl(0, 0%, 100%);
+  border-radius: 50%;
+  box-shadow: 0 5px 20px -3px hsla(0, 0%, 0%, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  & svg path {
+    fill: hsl(358, 91%, 34%);
+  }
+  & svg {
+    width: 24px;
+    height: 25px;
+  }
+}
