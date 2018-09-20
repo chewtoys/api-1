@@ -11,6 +11,7 @@ import { bindActionCreators } from "redux";
 import { loadData } from "./actions/loadData";
 import "./styles/tooltip.css";
 import "./styles/index.css";
+import bgVideo from "./video/bg3.mp4";
 
 class Main extends React.Component {
     nav = React.createRef();
@@ -19,8 +20,10 @@ class Main extends React.Component {
         scroller.scrollTo(this.props.location.pathname.replace("/", ""), {
             duration: 0
         });
+        console.log(bgVideo);
+        
         this.props.loadData();
-    }
+    };
 
     onScroll = (e) => {
         if (e.to) this.props.history.push("/" + e.to);
@@ -43,13 +46,24 @@ class Main extends React.Component {
                                     style={{ backgroundImage: `url(${item.icon})` }}
                                     onFocus={this.onScroll}
                                 /> 
-                            </Tooltip>
-                            
+                            </Tooltip>                            
                         );
                     })}
                 </nav>
 
                 {data.map((item, i) => {
+                    if (item.name === "main") {
+                        return (
+                            <OverPack
+                                key={i.toString()}
+                                playScale={[0, 100]}
+                                id={item.name}
+                                className={"page " + item.name}
+                            >
+                                <video className="main-bg" autoPlay={true} loop={true} src={bgVideo} />
+                            </OverPack>
+                        )
+                    }
                     return (
                         <OverPack
                             key={i.toString()}
