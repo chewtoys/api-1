@@ -60,7 +60,7 @@ class Main extends React.Component {
                                 id={item.name}
                                 className={"page " + item.name}
                             >
-                                <video className="main-bg" autoPlay={true} loop={true} src={bgVideo} />
+                                <video preload="auto" className="main-bg" autoPlay={true} loop={true} src={bgVideo} />
                             </OverPack>
                         )
                     }
