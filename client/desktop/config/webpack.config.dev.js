@@ -60,7 +60,7 @@ module.exports = {
       },
       {
         oneOf: [{
-            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.mp4$/],
+            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.mp4$/, /\.webm$/],
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000,

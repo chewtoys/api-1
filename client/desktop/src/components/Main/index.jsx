@@ -11,7 +11,8 @@ import { bindActionCreators } from "redux";
 import { loadData } from "./actions/loadData";
 import "./styles/tooltip.css";
 import "./styles/index.css";
-import bgVideo from "./video/bg3.mp4";
+import bgVideoWebm from "./video/bg3.webm";
+import bgVideoMp4 from "./video/bg3.mp4";
 
 class Main extends React.Component {
     nav = React.createRef();
@@ -19,9 +20,7 @@ class Main extends React.Component {
     componentDidMount() {
         scroller.scrollTo(this.props.location.pathname.replace("/", ""), {
             duration: 0
-        });
-        console.log(bgVideo);
-        
+        });        
         this.props.loadData();
     };
 
@@ -60,7 +59,10 @@ class Main extends React.Component {
                                 id={item.name}
                                 className={"page " + item.name}
                             >
-                                <video preload="auto" className="main-bg" autoPlay={true} loop={true} src={bgVideo} />
+                                <video preload="auto" className="main-bg" muted autoPlay loop>
+                                    <source src={bgVideoWebm} type="video/webm" />
+                                    <source src={bgVideoMp4} type="video/mp4" />
+                                </video>
                             </OverPack>
                         )
                     }
