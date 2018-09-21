@@ -6,14 +6,14 @@ import { scroller } from "react-scroll";
 import Item from "../Item";
 import Cart from "../Cart";
 import CrazyButton from "../CrazyButton";
-import { Tooltip } from "antd";
+import Tooltip from "antd/lib/tooltip";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { loadData } from "./actions/loadData";
-import "./styles/tooltip.css";
-import "./styles/index.css";
 import bgVideoWebm from "./video/bg3.webm";
 import bgVideoMp4 from "./video/bg3.mp4";
+import "./styles/tooltip.css";
+import "./styles/index.css";
 
 class Main extends React.Component {
     nav = React.createRef();
