@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { OverPack, Link } from "rc-scroll-anim";
+import OverPack from "rc-scroll-anim/lib/ScrollOverPack";
+import Link from "rc-scroll-anim/lib/ScrollLink";
 import { scroller } from "react-scroll";
 import Item from "../Item";
 import Cart from "../Cart";
