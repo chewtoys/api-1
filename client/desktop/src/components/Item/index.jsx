@@ -1,5 +1,5 @@
 import React from "react";
-import Tween from 'rc-tween-one';
+import Tween from 'rc-tween-one/lib/TweenOne';
 
 export default class Item extends Tween {
   state = {
