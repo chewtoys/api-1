@@ -69,6 +69,7 @@ class Products {
             for (let key in tmpData) {
                 this.response.data.push(tmpData[key]);
             }
+            this.response.result = true;
             return this.response;
         });
     }

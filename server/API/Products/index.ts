@@ -70,6 +70,8 @@ class Products {
       this.response.data.push(tmpData[key])
     }
 
+    this.response.result = true
+
     return this.response
   }
 
