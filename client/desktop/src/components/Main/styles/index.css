@@ -135,7 +135,7 @@
     justify-content: center;
     align-items: center;
     &.button {
-      background: hsl(4, 90%, 58%);
+      background: hsl(14, 100%, 57%);
       color: hsl(0, 0%, 100%);
       cursor: pointer;
       line-height: 10px;
@@ -144,7 +144,7 @@
     & .item-pay--count {
       border-radius: 15px;
       background: hsl(0, 0%, 100%);
-      color: hsl(4, 90%, 58%);
+      color: hsl(14, 100%, 57%);
       padding: 5px 7.5px 3px 7px;
       font-size: 11px;
       margin-left: 10px;
