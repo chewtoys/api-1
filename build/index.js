@@ -12,6 +12,7 @@ class Server {
     }
     routes() {
         this.app.use(express_1.default.static('static/desktop/'));
+        this.app.use(express_1.default.static('upload/'));
         this.app.use(Routes_1.desktopRoute);
     }
     start() {
