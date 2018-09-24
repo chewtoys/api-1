@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import data, { sandwichesCat } from "../menu";
 import sandwiches from '../icon/sandwiches.png';
 import flatDreadSandwiches from '../icon/flatDreadSandwiches.png';
@@ -14,7 +14,6 @@ import breakfast from '../icon/breakfast.png';
 import hits from '../icon/hits.png';
 import combo from '../icon/combo.png';
 import logo from '../icon/logo.svg';
-
 
 const REQ_LOAD_DATA = "REQ_LOAD_DATA";
 const RES_LOAD_DATA = "RES_LOAD_DATA";
@@ -135,7 +134,6 @@ export default (state = initState, action) => {
 
 export const loadData = () => {
     return (dispatch, store) => {
-        console.log(store())
         dispatch({
             type: REQ_LOAD_DATA
         })

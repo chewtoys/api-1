@@ -2,6 +2,10 @@
   --colorIcon: hsl(358, 91%, 34%);
 }
 
+/* .nav, .content {
+  transition: filter .02s ease;
+} */
+
 .nav {
   position: fixed;
   left: 10px;
@@ -49,7 +53,7 @@
   padding: 100px 105px 30px 100px;
   grid-template-columns: repeat(auto-fill, 23%);
   justify-content: space-between;
-  grid-gap: 30px 2%;
+  grid-gap: 30px 30px;
   position: relative;
   & .page-title {
     position: absolute;

@@ -1,11 +1,12 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Route } from "react-router-dom";
 import OverPack from "rc-scroll-anim/lib/ScrollOverPack";
 import Link from "rc-scroll-anim/lib/ScrollLink";
 import scroller from "react-scroll/modules/mixins/scroller";
 import Item from "../Item";
 import Cart from "../Cart";
 import CrazyButton from "../CrazyButton";
+import ViewItem from "../ViewItem";
 import Tooltip from "antd/lib/tooltip";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
@@ -34,70 +35,74 @@ class Main extends React.Component {
         
         return (
             <React.Fragment>
+                <Route path="/:category/:id" component={ViewItem} />
                 <nav ref={this.nav} className="nav">
                     {data.map((item, i) => {
                         return (
                             <Tooltip text title={item.ru} placement="right" mouseLeaveDelay={0} mouseEnterDelay={0.5} key={i.toString()}>
-                               <Link
+                                <Link
                                     component="a"
                                     to={item.name}
                                     href={item.name}
                                     className={"nav-icon " + item.name}
                                     style={{ backgroundImage: `url(${item.icon})` }}
                                     onFocus={this.onScroll}
-                                /> 
-                            </Tooltip>                            
+                                />
+                            </Tooltip>
                         );
                     })}
                 </nav>
-
-                {data.map((item, i) => {
-                    if (item.name === "main") {
+                <div className="content">
+                    {data.map((category, i) => {
+                        if (category.name === "main") {
+                            return (
+                                <OverPack
+                                    key={i.toString()}
+                                    playScale={[0, 100]}
+                                    id={category.name}
+                                    className={"page " + category.name}
+                                >
+                                    <video preload="auto" className="main-bg" muted autoPlay loop>
+                                        <source src={bgVideoWebm} type="video/webm" />
+                                        <source src={bgVideoMp4} type="video/mp4" />
+                                    </video>
+                                </OverPack>
+                            )
+                        }
                         return (
                             <OverPack
                                 key={i.toString()}
                                 playScale={[0, 100]}
-                                id={item.name}
-                                className={"page " + item.name}
+                                id={category.name}
+                                className={"page " + category.name}
                             >
-                                <video preload="auto" className="main-bg" muted autoPlay loop>
-                                    <source src={bgVideoWebm} type="video/webm" />
-                                    <source src={bgVideoMp4} type="video/mp4" />
-                                </video>
+                                <div className="page-title">
+                                    {category.ru}
+                                </div>
+                                {category.items.map((item, a) => {
+                                    return (
+                                        <Item
+                                            key={a.toString()}
+                                            animation={{
+                                                y: 100,
+                                                playScale: [0.5, 0.5],
+                                                type: "from",
+                                                ease: "easeOutQuart",
+                                                opacity: 0
+                                            }}
+                                            // reverseDelay={200}
+                                            price={item.price}
+                                            poster={item.poster}
+                                            ru={item.ru}
+                                            category={category.name}
+                                            id={item.id}
+                                        />
+                                    );
+                                })}
                             </OverPack>
-                        )
-                    }
-                    return (
-                        <OverPack
-                            key={i.toString()}
-                            playScale={[0, 100]}
-                            id={item.name}
-                            className={"page " + item.name}
-                        >
-                            <div className="page-title">
-                            {item.ru}
-                            </div>
-                            {item.items.map((sandwich, a) => {
-                                return (
-                                    <Item
-                                        key={a.toString()}
-                                        animation={{
-                                            y: 100,
-                                            playScale: [0.5, 0.5],
-                                            type: "from",
-                                            ease: "easeOutQuart",
-                                            opacity: 0
-                                        }}
-                                        // reverseDelay={200}
-                                        price={sandwich.price}
-                                        poster={sandwich.poster}
-                                        ru={sandwich.ru}
-                                    />
-                                );
-                            })}
-                        </OverPack>
-                    );
-                })}
+                        );
+                    })}
+                </div>
                 <Cart />
                 <CrazyButton />
             </React.Fragment>

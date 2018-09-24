@@ -1,5 +1,6 @@
 import React from "react";
 import Tween from 'rc-tween-one/lib/TweenOne';
+import { Link } from "react-router-dom";
 
 export default class Item extends Tween {
   state = {
@@ -15,13 +16,13 @@ export default class Item extends Tween {
   }
 
   render() {
-    const { poster, ru, price } = this.props
+    const { poster, ru, price, id, category } = this.props
     const { count } = this.state
     return (
       <div className="item">
-        <div className="item-poster">
+        <Link to={"/" + category + "/" + id} className="item-poster">
           <div className="item-poster--img" style={{ backgroundImage: `url(${poster})` }} />
-        </div>
+        </Link>
         <div className="item-title">{ru}</div>
         <div className="item-footer">
           <div className="item-price">

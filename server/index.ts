@@ -10,6 +10,7 @@ class Server {
 
     private routes() {
         this.app.use(express.static('static/desktop/'));
+        this.app.use(express.static('upload/'));
         this.app.use(desktopRoute);
     }
 

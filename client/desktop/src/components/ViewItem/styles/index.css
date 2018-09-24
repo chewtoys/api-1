@@ -1,0 +1,85 @@
+.modal-wrap ~ div {
+    filter: blur(10px);
+}
+
+.modal-wrap ~ nav {
+    filter: blur(10px);
+}
+
+.modal {
+    padding: 20px 105px;    
+    bottom: 0;
+    left: 0;
+    margin-right: -17px;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.modal--thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    border-radius: inherit;
+    background-color: hsl(349, 100%, 45%);
+    height: 589px;
+    transform: translateY(0px);
+}
+
+.modal-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: hsla(349, 100%, 8%, 0.9);
+    height: 100vh;
+    z-index: 100000;
+    & .modal-top {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 20px;
+    }
+    & .modal-top--title {
+        font-weight: bold;
+        font-size: 50px;
+        color: hsl(0, 0%, 100%);
+        text-shadow: 0 3px 5px hsla(0, 0%, 0%, .5);
+    }
+    & .modal-top--close {
+        font-weight: bold;
+        font-size: 70px;
+        color: hsl(0, 0%, 100%);
+        text-shadow: 0 3px 5px hsla(0, 0%, 0%, .5);
+        text-decoration: none;
+        line-height: 60px;
+    }
+}
+
+.modal-body {
+    display: grid;
+    grid-template-columns: 35% auto;
+    & .modal-body--poster {
+        background-color: hsla(0, 0%, 100%, 1);
+        background-size: 110%;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 20px;
+        box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
+        /* height: calc(100vh - 121px); */
+        /* position: relative; */
+        display: inline-flex;
+        &::after {
+            content: "";
+            padding-bottom: 100%;
+            display: block;
+        }
+    }
+    /* & .modal-body--active {
+        display: inline-flex;
+    }
+    & .modal-body--description {
+        display: inline-flex;
+    } */
+}
