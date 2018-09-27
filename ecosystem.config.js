@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: "app",
+        name: "kfc",
         script: "./build/index.js",
         watch: ["build", "static"],
         env: {
@@ -8,6 +8,34 @@ module.exports = {
         },
         env_production: {
             NODE_ENV: "production",
-        }
-    }]
+        },
+        output: './logs/out.log',
+        error: './logs/error.log',
+        log: './logs/combined.outerr.log',
+    }],
+    /**
+  * Deployment section
+  * http://pm2.keymetrics.io/docs/usage/deployment/
+  */
+    deploy: {
+        production: {
+            user: 'node',
+            host: 'node3.ortant.ru',
+            ref: 'origin/master',
+            repo: 'https://github.com/BorisHasikov/kfc.git',
+            path: '/home/projects/savin/kfc/',
+            'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
+        },
+        // dev: {
+        //     user: 'node',
+        //     host: '212.83.163.1',
+        //     ref: 'origin/master',
+        //     repo: 'git@github.com:repo.git',
+        //     path: '/var/www/development',
+        //     'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env dev',
+        //     env: {
+        //         NODE_ENV: 'dev'
+        //     }
+        // }
+    }
 }
