@@ -19,12 +19,12 @@ module.exports = {
   */
     deploy: {
         production: {
-            user: 'node',
+            user: 'savin',
             host: 'node3.ortant.ru',
             ref: 'origin/master',
             repo: 'https://github.com/BorisHasikov/kfc.git',
             path: '/home/projects/savin/kfc/',
-            'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
+            'post-deploy': 'yarn install && pm2 reload ecosystem.config.js --env production'
         },
         // dev: {
         //     user: 'node',
