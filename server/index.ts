@@ -5,12 +5,12 @@ class Server {
     app: express.Application
     constructor() {
         this.app = express();
+        this.app.use(express.static('static/desktop/'));
+        this.app.use(express.static('upload/'));
         this.routes();
     }
 
     private routes() {
-        this.app.use(express.static('static/desktop/'));
-        this.app.use(express.static('upload/'));
         this.app.use(desktopRoute);
     }
 
