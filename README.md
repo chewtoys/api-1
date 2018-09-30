@@ -1,10 +1,10 @@
-# README
+# KFC Delivery
 
 ![Наша готовность](https://img.shields.io/badge/done-false-red.svg "Наша готовность")
 
 ## How to start
 
-Pay attention: in this project we don't use ~~npm~~, we use [yarn](https://yarnpkg.com) instead!
+**Pay attention:** in this project we don't use ~~npm~~, we use [yarn](https://yarnpkg.com) instead!
 
 1. Clone repository: `git clone https://github.com/BorisHasikov/kfc.git`
 1. Checkout to **develop** branch `git checkout develop`
@@ -14,7 +14,7 @@ Pay attention: in this project we don't use ~~npm~~, we use [yarn](https://yarnp
 
 ## How to store paswords/keys/tokens
 
-In console on your local machine **and on server** run command. Once you run this command, value will be saved in system enviroment viriabls. You don't need to run this command every time you run the script.
+In console on your local machine **and on server** run command. Once you run this command, value will be saved in system enviroment variables. You don't need to run this command every time you run the script.
 
 ```sh
 export NAME="VALUE"
