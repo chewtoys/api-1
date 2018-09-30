@@ -13,9 +13,9 @@ class DB {
     this.pool = mysql.createPool({
       connectionLimit: 10,
       host: 'node3.ortant.ru',
-      user: 'savin',
-      password: 'xPzWMvFloghs3mjJ',
-      database: 'savin_kfcdelivery',
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: 'kfc_delivery',
       dateStrings: true
     })
   }
