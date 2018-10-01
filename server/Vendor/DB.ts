@@ -2,50 +2,30 @@
  * Класс для работы с БД
  * @author Nikita Bersenev
  */
+import mysql from 'mysql';
 
-class DB {
-
-  pool: any
+class Db {
+  pool: any;
 
   constructor () {
-    const mysql = require('mysql')
-
     this.pool = mysql.createPool({
       connectionLimit: 10,
-      host: 'node3.ortant.ru',
+      host: "node3.ortant.ru",
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
-      database: 'kfc_delivery',
+      database: "kfc",
       dateStrings: true
     })
   }
 
-  execute(sql: string, params?: string[]) {
+  query(sql: string, params?: string[]) {
     return new Promise((resolve, reject) => {
-      this.pool.getConnection((err: any, connection: any) => {
-        if (err) return reject(err)
+      this.pool.query(sql, params, (err: mysql.MysqlError, res: any) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
+  };
+};
 
-        if (typeof params !== 'undefined') {
-          connection.query(sql, params, (err: any, res: any, fields: any) => {
-            connection.release()
-
-            if (err) return reject(err)
-
-            return resolve(res)
-          })
-        } else {
-          connection.query(sql, (err: any, res: any, fields: any) => {
-            connection.release()
-
-            if (err) return reject(err)
-
-            return resolve(res)
-          })
-        }
-      })
-    })
-  }
-
-}
-
-export default new DB()
+export default new Db();
