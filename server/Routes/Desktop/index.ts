@@ -4,13 +4,15 @@ import API from '../../API'
 
 const router = Router()
 
-router.all('/api/:classname.:method', async (req, res, next) => {
-  let classname = req.params.classname[0].toUpperCase() + req.params.classname.slice(1)
-  let method = req.params.method
-  let params = req.query
+router.all('/api/:classname/:method', async (req, res, next) => {
+  const classname = req.params.classname[0].toUpperCase() + req.params.classname.slice(1)
+  const method = req.params.method
+  const params = req.query
+  console.log(process)
 
   try {
-    res.json(await API.call({classname, method, params}))
+    // res.json(await new API()[classname][method](params));
+    res.json(await new API().Products.getItems());
   } catch (e) {
     res.json({
       result: false,

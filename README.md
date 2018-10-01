@@ -1,7 +1,5 @@
 # KFC Delivery
 
-![Наша готовность](https://img.shields.io/badge/done-false-red.svg "Наша готовность")
-
 ## How to start
 
 **Pay attention:** in this project we don't use ~~npm~~, we use [yarn](https://yarnpkg.com) instead!

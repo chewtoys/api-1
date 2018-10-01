@@ -3,21 +3,22 @@
  * @author Nikita Bersenev
  */
 
-import DB from '../../Vendor/DB'
+import Db from '../../Vendor/Db';
 
-class Products {
-
-  response: any
+export default class Products {
+  response: any;
 
   constructor() {
-    this.response = { result: false }
-  }
+    this.response = {
+      result: false
+    };
+  };
 
-  public async get() { // Получение списка всех актуальных продуктов
-    let t_categories = 'categories'
-    let t_products = 'products'
+  public async getItems() { // Получение списка всех актуальных продуктов
+    const t_categories = 'categories';
+    const t_products = 'products';
 
-    let data: any = await DB.execute(`
+    const data: any = await Db.query(`
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
@@ -34,7 +35,7 @@ class Products {
         AND CURDATE() BETWEEN t2.bdate AND t2.edate
     `)
 
-    let tmpData: any = {}
+    const tmpData: any = {}
 
     data.forEach((item: any) => {
       if (typeof tmpData[item.idcategory] !== 'undefined') {
@@ -73,8 +74,5 @@ class Products {
     this.response.result = true
 
     return this.response
-  }
-
-}
-
-module.exports = new Products()
+  };
+};
