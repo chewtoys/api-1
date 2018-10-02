@@ -21,24 +21,20 @@ module.exports = {
      */
     deploy: {
         production: {
-            user: "savin",
-            host: "node3.ortant.ru",
-            ref: "origin/master",
-            repo: "https://github.com/laapl/kfc.git",
-            path: "/home/projects/delivery/kfc/",
-            "post-deploy":
-                "yarn install && tsc && node client/desktop/scripts/start.js && pm2 reload ecosystem.config.js --env production"
+            'user': "savin",
+            'host': "node3.ortant.ru",
+            'ref': "origin/master",
+            'repo': "https://github.com/laapl/kfc.git",
+            'path': "/home/projects/savin/delivery/kfc/",
+            // Pre-setup command or path to a script on your local machine
+            'pre-setup': "ls -la",
+            // Post-setup commands or path to a script on the host machine
+            // eg: placing configurations in the shared dir etc
+            'post-setup': "ls -la",
+            // pre-deploy action
+            'pre-deploy-local': "echo 'This is a local executed command'",
+            // post-deploy action
+            'post-deploy': "yarn install && tsc && node client/desktop/scripts/start.js && pm2 reload ecosystem.config.js --env production"
         }
-        // dev: {
-        //     user: 'node',
-        //     host: '212.83.163.1',
-        //     ref: 'origin/master',
-        //     repo: 'git@github.com:repo.git',
-        //     path: '/var/www/development',
-        //     'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env dev',
-        //     env: {
-        //         NODE_ENV: 'dev'
-        //     }
-        // }
     }
 };
