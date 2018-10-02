@@ -31,9 +31,8 @@ module.exports = {
             // Post-setup commands or path to a script on the host machine
             // eg: placing configurations in the shared dir etc
             'post-setup': "ls -la",
-            // pre-deploy action
             'pre-deploy-local': "echo 'This is a local executed command'",
-            // post-deploy action
+            'pre-deploy': "NPM_CONFIG_PREFIX=~/.npm-global",
             'post-deploy': "yarn install && tsc && node client/desktop/scripts/build.js && pm2 reload ecosystem.config.js --env production"
         }
     }
