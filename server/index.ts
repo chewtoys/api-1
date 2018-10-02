@@ -1,25 +1,28 @@
 import express from "express";
-import { desktopRoute } from "./Routes";
+import { desktopRoute, apiRoute } from "./Routes";
 
 class Server {
-    app: express.Application
+    app: express.Application;
+
     constructor() {
         this.app = express();
         this.app.use(express.static('static/desktop/'));
         this.app.use(express.static('upload/'));
-        this.routes();
-    }
+        this.routing();
+    };
 
-    private routes() {
+    private routing() {
+        this.app.use(apiRoute);
         this.app.use(desktopRoute);
-    }
+    };
 
     /**
      * @description Start Server
      */
+    
     public start() {
         this.app.listen(3000);
-    }
-}
+    };
+};
 
-new Server().start()
+new Server().start();

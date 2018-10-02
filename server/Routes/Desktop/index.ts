@@ -22,7 +22,6 @@ router.all('/api/:classname/:method', async (req, res, next) => {
 });
 
 router.get('*', (req, res, next) => {
-    // console.log(process.cwd())
     res.sendFile(path.resolve(process.cwd(), "static/desktop/index.html"));
 });
 
