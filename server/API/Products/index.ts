@@ -7,6 +7,7 @@ import Db from '../../Vendor/Db';
 
 export default class Products {
   response: any;
+  [propName: string]: any;
 
   constructor() {
     this.response = {
