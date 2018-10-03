@@ -23,3 +23,10 @@ In your Node.js code use following syntax:
 ```js
 const name = process.env.NAME;
 ```
+
+## How to deploy
+Config deploy section in [ecosystem.config.js](./ecosystem.config.js), and then run
+
+```sh
+pm2 deploy production update
+```
