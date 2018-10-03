@@ -33,7 +33,7 @@ module.exports = {
             // 'post-setup': "ls -la",
             // 'pre-deploy-local': "yarn build",
             // 'pre-deploy': "", 
-            'post-deploy': "yarn install && tsc && cd client/desktop/ && yarn install && yarn build && pm2 reload ecosystem.config.js --env production"
+            'post-deploy': "yarn install && tsc && cd client/desktop/ && yarn install && yarn build && cd ../../ && pm2 reload ecosystem.config.js --env production"
         }
     }
 };
