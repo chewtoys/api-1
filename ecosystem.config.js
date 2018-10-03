@@ -27,12 +27,12 @@ module.exports = {
             'repo': "https://github.com/laapl/kfc.git",
             'path': "/home/projects/savin/delivery/kfc/",
             // Pre-setup command or path to a script on your local machine
-            'pre-setup': "ls -la",
+            // 'pre-setup': "ls -la",
             // Post-setup commands or path to a script on the host machine
             // eg: placing configurations in the shared dir etc
-            'post-setup': "ls -la",
-            'pre-deploy-local': "echo 'This is a local executed command'",
-            'pre-deploy': "NPM_CONFIG_PREFIX=~/.npm-global",
+            // 'post-setup': "ls -la",
+            // 'pre-deploy-local': "yarn build",
+            // 'pre-deploy': "", 
             'post-deploy': "yarn install && tsc && node client/desktop/scripts/build.js && pm2 reload ecosystem.config.js --env production"
         }
     }

@@ -3,7 +3,7 @@
  * @author Nikita Bersenev
  */
 
-import Db from '../../Vendor/Db';
+import Db from '../../Vendor/DB';
 
 export default class Products {
   response: any;
