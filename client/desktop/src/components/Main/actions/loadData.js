@@ -133,7 +133,7 @@ export default (state = initState, action) => {
 };
 
 export const loadData = () => {
-    return (dispatch, store) => {
+    return (dispatch) => {
         dispatch({
             type: REQ_LOAD_DATA
         })
