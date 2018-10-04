@@ -35,7 +35,7 @@ class Main extends React.Component {
         
         return (
             <React.Fragment>
-                <ViewItem />
+                {/* <ViewItem /> */}
                 <nav ref={this.nav} className="nav">
                     {data.map((item, i) => {
                         return (
@@ -58,7 +58,7 @@ class Main extends React.Component {
                             return (
                                 <OverPack
                                     key={i.toString()}
-                                    playScale={[0, 100]}
+                                    playScale={[0, 50]}
                                     id={category.name}
                                     className={"page " + category.name}
                                 >
@@ -73,7 +73,7 @@ class Main extends React.Component {
                         return (
                             <OverPack
                                 key={i.toString()}
-                                playScale={[0, 100]}
+                                playScale={[0, 50]}
                                 id={category.name}
                                 className={"page " + category.name}
                             >
@@ -85,8 +85,8 @@ class Main extends React.Component {
                                         <Item
                                             key={a.toString()}
                                             animation={{
-                                                y: 100,
-                                                playScale: [0.5, 0.5],
+                                                y: 10,
+                                                playScale: [0.2, 0.2],
                                                 type: "from",
                                                 ease: "easeOutQuart",
                                                 opacity: 0
