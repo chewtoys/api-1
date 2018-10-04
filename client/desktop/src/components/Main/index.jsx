@@ -4,8 +4,8 @@ import OverPack from "rc-scroll-anim/lib/ScrollOverPack";
 import Link from "rc-scroll-anim/lib/ScrollLink";
 import scroller from "react-scroll/modules/mixins/scroller";
 import Item from "../Item";
-import Cart from "../Cart";
-import CrazyButton from "../CrazyButton";
+import MiniCart from "../MiniCart";
+import MiniLogin from "../MiniLogin";
 import ViewItem from "../ViewItem";
 import Tooltip from "antd/lib/tooltip";
 import connect from "react-redux/lib/connect/connect";
@@ -35,7 +35,7 @@ class Main extends React.Component {
         
         return (
             <React.Fragment>
-                <Route path="/:category/:id" component={ViewItem} />
+                <ViewItem />
                 <nav ref={this.nav} className="nav">
                     {data.map((item, i) => {
                         return (
@@ -66,6 +66,7 @@ class Main extends React.Component {
                                         <source src={bgVideoWebm} type="video/webm" />
                                         <source src={bgVideoMp4} type="video/mp4" />
                                     </video>
+                                    <div className="main-bg--color"></div>
                                 </OverPack>
                             )
                         }
@@ -103,8 +104,8 @@ class Main extends React.Component {
                         );
                     })}
                 </div>
-                <Cart />
-                <CrazyButton />
+                <MiniCart />
+                <MiniLogin />
             </React.Fragment>
         );
     }

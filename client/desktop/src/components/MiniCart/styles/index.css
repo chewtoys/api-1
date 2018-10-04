@@ -1,7 +1,7 @@
-.crazy-button {
+.cart {
   position: fixed;
   right: 15px;
-  top: 30px;
+  top: 115px;
   width: 70px;
   height: 70px;
   background: hsl(0, 0%, 100%);
@@ -11,11 +11,12 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  z-index: 100;
   & svg path {
     fill: hsl(358, 91%, 34%);
   }
   & svg {
-    width: 24px;
-    height: 25px;
+    width: 70px;
+    height: 70px;
   }
 }
