@@ -8,6 +8,8 @@ class Db {
   pool: any;
 
   constructor () {
+    if(!process.env.MYSQL_USER) throw `EXPORT MYSQL_USER=''`;
+    if(!process.env.MYSQL_PASSWORD) throw `EXPORT MYSQL_PASSWORD=''`;
     this.pool = mysql.createPool({
       connectionLimit: 10,
       host: "node3.ortant.ru",
