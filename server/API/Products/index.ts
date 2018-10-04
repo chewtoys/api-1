@@ -98,6 +98,7 @@ export default class Products {
             return {
               id: item.idproduct,
               name: item.product_name,
+              title: item.product_title,
               description: item.product_description,
               poster: item.product_poster,
               specification: item.product_specification,
