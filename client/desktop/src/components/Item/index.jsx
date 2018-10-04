@@ -20,9 +20,9 @@ export default class Item extends Tween {
     const { count } = this.state
     return (
       <div className="item">
-        <Link to={"/" + category + "/" + id} className="item-poster">
+        <div className="item-poster">
           <div className="item-poster--img" style={{ backgroundImage: `url(${poster})` }} />
-        </Link>
+        </div>
         <div className="item-title">{ru}</div>
         <div className="item-footer">
           <div className="item-price">
