@@ -15,18 +15,6 @@ class ViewItem extends React.Component {
         const { data, complite, loading, match } = this.props;
 
         document.querySelector("body").classList.add("scroll--disabled");
-
-        if (!loading && complite) {            
-            const item = data
-                .filter((category) => category.name === match.params.category)[0].items
-                .filter((item) => item.id === match.params.id)[0];
-                console.log(item);
-                
-            this.setState({
-                loading: true,
-                item
-            })
-        }
     };
 
     componentWillUnmount() {
@@ -37,7 +25,7 @@ class ViewItem extends React.Component {
         const { match } = this.props;
         const { item, loading } = this.state;
         
-        if (loading) return (
+        return (
             <div className="modal-wrap">
                 <Scrollbars
                     renderView={() => <div className="modal" />}
@@ -48,37 +36,15 @@ class ViewItem extends React.Component {
                 >
                     <div className="modal-top">
                         <div className="modal-top--title">
-                            {item.ru}
+                            Ваш заказ
                         </div>
-                        <Link to={"/" + match.params.category} className="modal-top--close">
+                        <div to={"/" + match.params.category} className="modal-top--close">
                             ×
-                        </Link>
+                        </div>
                     </div>
                     <div className="modal-body">
-                        <div className="modal-body--poster" style={{ backgroundImage: `url(${item.poster})`, width: (window.screen.availHeight - 200) + "px", height: (window.screen.availHeight - 200) + "px" }} />
-                        <div className="modal-body--active">
-                            <div className="modal-body--price">
-                                {item.price}₽
-                            </div>
-                            <div className="modal-body--pay">
-                                В КОРЗИНУ
-                            </div>
-                        </div>
-                        <div className="modal-body--description">
-                            {item.description}
-                        </div>
                     </div>
                 </Scrollbars>
-            </div>
-        )
-        return (
-            <div className="modal-wrap">
-                <Link to={"/" + match.params.category} className="modal-close">
-                    x
-                </Link>
-                <div className="modal-title">
-                    {/* {item.ru} */}
-                </div>
             </div>
         )
     }
