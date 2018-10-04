@@ -25,6 +25,7 @@ const name = process.env.NAME;
 ```
 
 ## How to deploy
+
 Config deploy section in [ecosystem.config.js](./ecosystem.config.js), and then run
 
 ```sh
