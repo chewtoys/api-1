@@ -12,10 +12,10 @@
 
 ## How to store paswords/keys/tokens
 
-In console on your local machine **and on server** run command. Once you run this command, value will be saved in system enviroment variables. You don't need to run this command every time you run the script.
+On your local machine **and on server** create file `.evn` and put all your non-public infornmation (like password, tokents, etc...) in that file (don't worry, it's already included in [.gitignore](./.gitignore), so it won't be tracked). Example can be found in [.evn.example](./.evn.example)
 
-```sh
-export NAME="VALUE"
+```
+NAME="VALUE"
 ```
 
 In your Node.js code use following syntax:
