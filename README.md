@@ -12,7 +12,7 @@
 
 ## How to store paswords/keys/tokens
 
-On your local machine **and on server** create file `.evn` and put all your non-public infornmation (like password, tokents, etc...) in that file (don't worry, it's already included in [.gitignore](./.gitignore), so it won't be tracked). Example can be found in [.evn.example](./.evn.example)
+On your local machine **and on server** create file `.env` and put all your non-public infornmation (like password, tokents, etc...) in that file (don't worry, it's already included in [.gitignore](./.gitignore), so it won't be tracked). Example can be found in [.env.example](./.env.example)
 
 ```
 NAME="VALUE"
