@@ -3,11 +3,14 @@
  * @author Nikita Bersenev
  */
 
-import Db from '../../Vendor/DB';
+import Db from '../../Vendor/Db';
 
 export default class Products {
-  response: any;
-  [propName: string]: any;
+  response: {
+    result: boolean;
+    data?: any[]
+  };
+  [prop: string]: any;
 
   constructor() {
     this.response = {
@@ -19,7 +22,9 @@ export default class Products {
     const t_categories = 'categories';
     const t_products = 'products';
 
-    let data: any = await Db.query(`
+    // await new Db().query(`USE test`);
+
+    let data: any = await new Db().query(`
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
@@ -43,44 +48,8 @@ export default class Products {
         AND CURDATE() BETWEEN t2.bdate AND t2.edate
     `);
 
-    // const tmpData: any = {}
-
-    // data.forEach((item: any) => {
-    //   if (typeof tmpData[item.idcategory] !== 'undefined') {
-    //     tmpData[item.idcategory].items.push({
-    //       id: item.idproduct,
-    //       name: item.product_name,
-    //       description: item.product_description,
-    //       poster: item.product_poster,
-    //       price: item.product_price
-    //     })
-    //   } else {
-    //     tmpData[item.idcategory] = {
-    //       id: item.idcategory,
-    //       name: item.category_name,
-    //       aliase: item.category_aliase,
-    //       icon: item.category_icon,
-    //       items: [
-    //         {
-    //           id: item.idproduct,
-    //           name: item.product_name,
-    //           description: item.product_description,
-    //           poster: item.product_poster,
-    //           price: item.product_price
-    //         }
-    //       ]
-    //     }
-    //   }
-    // })
-
-    // this.response.data = []
-
-    // for (let key in tmpData) {
-    //   this.response.data.push(tmpData[key])
-    // }
-
     let idcategories: number[] = [];
-    let modifdata: any = [];
+    let modifdata: any[] = [];
 
     data.forEach((item: any) => {
       if (idcategories.indexOf(item.idcategory) === -1) {

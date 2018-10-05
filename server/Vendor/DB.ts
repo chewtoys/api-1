@@ -2,10 +2,10 @@
  * Класс для работы с БД
  * @author Nikita Bersenev
  */
-import mysql from 'mysql';
+import mysql, { Pool } from 'mysql';
 
-class Db {
-  pool: any;
+export default class Db {
+  pool: Pool;
 
   constructor () {
     if(!process.env.MYSQL_USER) throw `EXPORT MYSQL_USER=''`;
@@ -17,7 +17,7 @@ class Db {
       password: process.env.MYSQL_PASSWORD,
       database: "kfc",
       dateStrings: true
-    })
+    });
   }
 
   query(sql: string, params?: string[]) {
@@ -29,5 +29,3 @@ class Db {
     });
   };
 };
-
-export default new Db();

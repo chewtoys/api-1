@@ -23,7 +23,7 @@ class Server {
     
     public start() {
         this.app.listen(3000);
-        console.log('env = ', process.env)
+        // console.log('env = ', process.env)
     };
 };
 

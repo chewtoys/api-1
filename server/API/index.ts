@@ -4,12 +4,18 @@
  */
 
 import Products from "./Products";
+import Db from "../Vendor/Db"
 
 export default class API {
-    [propName: string]: any;
-    Products: Products;
+    [prop: string]: any;
+    Products: any;
+    basename?: string;
 
-    constructor() {
+    constructor(basename?:string) {
         this.Products = new Products;
     }
+
+    // private async setBasename() {
+    //     await new Db().query(`USE ??`, [this.basename]);
+    // }
 }
