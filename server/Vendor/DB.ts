@@ -4,7 +4,7 @@
  */
 import mysql from 'mysql';
 
-class Db {
+export default class Db {
   pool: any;
 
   constructor () {
@@ -29,5 +29,3 @@ class Db {
     });
   };
 };
-
-export default new Db();

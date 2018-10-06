@@ -19,7 +19,7 @@ export default class Products {
     const t_categories = 'categories';
     const t_products = 'products';
 
-    let data: any = await Db.query(`
+    const data: any = await new Db().query(`
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
