@@ -4,7 +4,7 @@
  */
 import mysql from 'mysql';
 
-export default class Db {
+export default class DB {
   pool: any;
 
   constructor () {
