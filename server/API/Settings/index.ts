@@ -51,6 +51,7 @@ export default class Settings {
 
     const data: any = await new DB().query(sql);
 
+    this.response.result = true;
     this.response.data = data;
 
     return this.response;
@@ -90,6 +91,7 @@ export default class Settings {
 
     const data: any = await new DB().query(sql);
 
+    this.response.result = true;
     this.response.data = data;
 
     return data;
