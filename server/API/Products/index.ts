@@ -3,7 +3,7 @@
  * @author Nikita Bersenev
  */
 
-import Db from '../../Vendor/DB';
+import DB from '../../Vendor/DB';
 
 export default class Products {
   response: any;
@@ -19,7 +19,7 @@ export default class Products {
     const t_categories = 'categories';
     const t_products = 'products';
 
-    const data: any = await new Db().query(`
+    const data: any = await new DB().query(`
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
@@ -42,42 +42,6 @@ export default class Products {
       WHERE CURDATE() BETWEEN t1.bdate AND t1.edate
         AND CURDATE() BETWEEN t2.bdate AND t2.edate
     `);
-
-    // const tmpData: any = {}
-
-    // data.forEach((item: any) => {
-    //   if (typeof tmpData[item.idcategory] !== 'undefined') {
-    //     tmpData[item.idcategory].items.push({
-    //       id: item.idproduct,
-    //       name: item.product_name,
-    //       description: item.product_description,
-    //       poster: item.product_poster,
-    //       price: item.product_price
-    //     })
-    //   } else {
-    //     tmpData[item.idcategory] = {
-    //       id: item.idcategory,
-    //       name: item.category_name,
-    //       aliase: item.category_aliase,
-    //       icon: item.category_icon,
-    //       items: [
-    //         {
-    //           id: item.idproduct,
-    //           name: item.product_name,
-    //           description: item.product_description,
-    //           poster: item.product_poster,
-    //           price: item.product_price
-    //         }
-    //       ]
-    //     }
-    //   }
-    // })
-
-    // this.response.data = []
-
-    // for (let key in tmpData) {
-    //   this.response.data.push(tmpData[key])
-    // }
 
     let idcategories: number[] = [];
     let modifdata: any = [];

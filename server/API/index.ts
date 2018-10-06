@@ -3,13 +3,16 @@
  * @author Nikita Bersenev
  */
 
-import Products from "./Products";
+import Settings from './Settings';
+import Products from './Products';
 
 export default class API {
     [propName: string]: any;
+    Settings: Settings;
     Products: Products;
 
     constructor() {
+        this.Settings = new Settings;
         this.Products = new Products;
     }
 }
