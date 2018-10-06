@@ -54,7 +54,6 @@ export default class Orders {
 
     let idclient: number = 1;
     let paid = 0;
-
     if (params.paid) paid = 1;
 
     const order_sql: string = `
@@ -81,7 +80,7 @@ export default class Orders {
     await new DB().query(data_sql);
 
     this.response.result = true;
-
+    
     return this.response;
 
   }
