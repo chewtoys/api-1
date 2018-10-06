@@ -5,7 +5,6 @@
 
 import DB from '../../Vendor/DB';
 import Functions from '../../Vendor/Functions';
-import { throws } from 'assert';
 
 export default class Settings {
 
