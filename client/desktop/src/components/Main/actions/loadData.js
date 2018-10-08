@@ -1,112 +1,12 @@
-// import axios from "axios";
-import data, { sandwichesCat } from "../menu";
-import sandwiches from '../icon/sandwiches.png';
-import flatDreadSandwiches from '../icon/flatDreadSandwiches.png';
-import chicken from '../icon/chicken.png';
-import basket from '../icon/basket.png';
-import snacks from '../icon/snacks.png';
-import sauces from '../icon/sauces.png';
-import salads from '../icon/salads.png';
-import desserts from '../icon/desserts.png';
-import drinks from '../icon/drinks.png';
-import hotDrink from '../icon/hotDrink.png';
-import breakfast from '../icon/breakfast.png';
-import hits from '../icon/hits.png';
-import combo from '../icon/combo.png';
-import logo from '../icon/logo.svg';
+import axios from "axios";
 
-const REQ_LOAD_DATA = "REQ_LOAD_DATA";
-const RES_LOAD_DATA = "RES_LOAD_DATA";
+const REQ_LOAD_DATA = "main/REQ_LOAD_DATA";
+const RES_LOAD_DATA = "main/RES_LOAD_DATA";
 
 const initState = {
     loading: false,
     complite: false,
     data: [
-        {
-            ru: "Главная",
-            icon: logo,
-            name: "main",
-            items: []
-        },
-        {
-            ru: "Бургеры",
-            icon: sandwiches,
-            name: "burgers",
-            items: [
-            ]
-        },
-        {
-            ru: "Сэндвичи в лепешках",
-            icon: flatDreadSandwiches,
-            name: "flatDreadSandwiches",
-            items: []
-        },
-        {
-            ru: "Курица",
-            icon: chicken,
-            name: "chicken",
-            items: []
-        },
-        {
-            ru: "Баскеты",
-            icon: basket,
-            name: "basket",
-            items: []
-        },
-        {
-            ru: "Снэки",
-            icon: snacks,
-            name: "snacks",
-            items: []
-        },
-        {
-            ru: "Соусы",
-            icon: sauces,
-            name: "sauces",
-            items: []
-        },
-        {
-            ru: "Салаты",
-            icon: salads,
-            name: "salads",
-            items: []
-        },
-        {
-            ru: "Десерты",
-            icon: desserts,
-            name: "desserts",
-            items: []
-        },
-        {
-            ru: "Напитки",
-            icon: drinks,
-            name: "drinks",
-            items: []
-        },
-        {
-            ru: "Горячие напитки",
-            icon: hotDrink,
-            name: "hotDrink",
-            items: []
-        },
-        {
-            ru: "Завтрак (до 11:00)",
-            icon: breakfast,
-            name: "breakfast",
-            items: []
-        },
-        {
-            ru: "Комбо",
-            icon: combo,
-            name: "combo",
-            items: []
-        },
-        {
-            ru: "Хиты по 50 руб.",
-            icon: hits,
-            name: "hits",
-            items: []
-        },
     ]
 };
 
@@ -137,16 +37,14 @@ export const loadData = () => {
         dispatch({
             type: REQ_LOAD_DATA
         })
-        setTimeout(() => {
-            dispatch({
-                type: RES_LOAD_DATA,
-                data: data.map(item => {
-                    return {
-                        ...item,
-                        items: sandwichesCat
-                    }
-                })
-            })
-        }, 500);
+
+        axios({
+            url: "https://kfc.laapl.ru/api/Products/getItems",
+            method: "GET",
+            withCredentials: true
+        }).then(res => {
+            console.log(res.data.data)
+            dispatch({ type: RES_LOAD_DATA, data: res.data.data });
+        });
     }
 }
