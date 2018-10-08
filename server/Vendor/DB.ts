@@ -4,12 +4,12 @@
  */
 import mysql from 'mysql';
 
-class Db {
+export default class DB {
   pool: any;
 
   constructor () {
-    if(!process.env.MYSQL_USER) throw `EXPORT MYSQL_USER=''`;
-    if(!process.env.MYSQL_PASSWORD) throw `EXPORT MYSQL_PASSWORD=''`;
+    if(!process.env.MYSQL_USER) throw `You need to add to .env file: MYSQL_USER=''`;
+    if(!process.env.MYSQL_PASSWORD) throw `You need to add to .env file: MYSQL_PASSWORD=''`;
     this.pool = mysql.createPool({
       connectionLimit: 10,
       host: "node3.ortant.ru",
@@ -29,5 +29,3 @@ class Db {
     });
   };
 };
-
-export default new Db();
