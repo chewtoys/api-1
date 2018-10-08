@@ -1,15 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "kfc",
-  "version": "0.1.16",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ./build/index.js",
-    "dev": "nodemon ./build/index.js",
-    "ts:w": "tsc -w",
-    "build": "tsc"
-=======
   "private": true,
   "scripts": {
     "start": "node ./build/index.js",
@@ -17,7 +6,6 @@
     "dev:server": "nodemon ./build/index.js",
     "dev:client": "node ./client/desktop/scripts/start.js",
     "build:client": "node ./client/desktop/scripts/build.js"
->>>>>>> feature/modals
   },
   "repository": {
     "type": "git",

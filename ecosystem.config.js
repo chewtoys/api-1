@@ -17,14 +17,6 @@ module.exports = {
     ],
     deploy: {
         production: {
-<<<<<<< HEAD
-            'user': "savin",
-            'host': "node3.ortant.ru",
-            'ref': "origin/master",
-            'repo': "https://github.com/laapl/kfc.git",
-            'path': "/home/projects/savin/delivery/kfc/",
-            'post-deploy': "yarn install && tsc && cd client/desktop/ && yarn install && yarn build && cd ../../ && pm2 reload ecosystem.config.js --env production"
-=======
             user: "savin",
             host: "node3.ortant.ru",
             ref: "origin/master",
@@ -39,7 +31,6 @@ module.exports = {
             // 'pre-deploy': "",
             "post-deploy":
                 "yarn install && tsc && yarn build:client && pm2 reload ecosystem.config.js --env production"
->>>>>>> feature/modals
         }
     }
 };
