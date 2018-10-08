@@ -6,11 +6,8 @@
 import DB from '../../Vendor/DateBase';
 
 export default class Products {
-  response: {
-    result: boolean;
-    data?: any[]
-  };
-  [prop: string]: any;
+  response: any;
+  [propName: string]: any;
 
   constructor() {
     this.response = {
@@ -47,7 +44,7 @@ export default class Products {
     `);
 
     let idcategories: number[] = [];
-    let modifdata: any[] = [];
+    let modifdata: any = [];
 
     data.forEach((item: any) => {
       if (idcategories.indexOf(item.idcategory) === -1) {
