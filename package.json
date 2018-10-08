@@ -15,7 +15,6 @@
   "bugs": {
     "url": "https://github.com/laapl/kfc/issues"
   },
-  "homepage": "https://github.com/laapl/kfc#readme",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
