@@ -15,10 +15,6 @@ module.exports = {
             log: "./logs/combined.outerr.log"
         }
     ],
-    /**
-     * Deployment section
-     * http://pm2.keymetrics.io/docs/usage/deployment/
-     */
     deploy: {
         production: {
             'user': "savin",
@@ -26,13 +22,6 @@ module.exports = {
             'ref': "origin/master",
             'repo': "https://github.com/laapl/kfc.git",
             'path': "/home/projects/savin/delivery/kfc/",
-            // Pre-setup command or path to a script on your local machine
-            // 'pre-setup': "ls -la",
-            // Post-setup commands or path to a script on the host machine
-            // eg: placing configurations in the shared dir etc
-            // 'post-setup': "ls -la",
-            // 'pre-deploy-local': "yarn build",
-            // 'pre-deploy': "", 
             'post-deploy': "yarn install && tsc && cd client/desktop/ && yarn install && yarn build && cd ../../ && pm2 reload ecosystem.config.js --env production"
         }
     }
