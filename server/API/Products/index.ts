@@ -1,25 +1,26 @@
-/**
- * Класс для работы с продуктами
- * @author Nikita Bersenev
- */
+import Main from '../../Main';
 
-import DB from '../../Vendor/DateBase';
-
-export default class Products {
-  response: any;
+export default class Products extends Main {
+  response: responseAPI;
+  table: tableList;
   [propName: string]: any;
 
   constructor() {
+    super();
     this.response = {
       result: false
     };
+    this.table = {
+      categories: "categories",
+      products: "products"
+    }
   };
 
-  public async getItems() { // Получение списка всех актуальных продуктов
-    const t_categories = 'categories';
-    const t_products = 'products';
-
-    const data: any = await new DB().query(`
+  /**
+   * @description Получение списка всех актуальных продуктов
+   */
+  public async getItems() {
+    const data: any = await this.Db.query(`
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
@@ -37,14 +38,14 @@ export default class Products {
         t2.description AS product_description,
         t2.poster AS product_poster,
         t2.price AS product_price
-      FROM ${t_categories} AS t1
-      INNER JOIN ${t_products} AS t2 ON t1.idcategory = t2.idcategory
+      FROM ?? AS t1
+      INNER JOIN ?? AS t2 ON t1.idcategory = t2.idcategory
       WHERE CURDATE() BETWEEN t1.bdate AND t1.edate
         AND CURDATE() BETWEEN t2.bdate AND t2.edate
-    `);
+    `, [this.table.categories, this.table.products]);
 
     let idcategories: number[] = [];
-    let modifdata: any = [];
+    let modifdata: any[] = [];
 
     data.forEach((item: any) => {
       if (idcategories.indexOf(item.idcategory) === -1) {
@@ -78,9 +79,9 @@ export default class Products {
       }
     });
 
-    this.response.data = modifdata
-    this.response.result = true
+    this.response.data = modifdata;
+    this.response.result = true;
 
-    return this.response
+    return this.response;
   };
 };
