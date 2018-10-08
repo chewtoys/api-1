@@ -1,26 +1,29 @@
-/**
- * Class for work with settings
- * @author Nikita Bersenev
- */
+import Main from '../../Main';
+import Functions from '../../Main/Functions';
 
-import DB from '../../Vendor/DateBase';
-import Functions from '../../Vendor/Functions';
-
-export default class Settings {
-
+export default class Settings extends Main {
   functions: Functions;
-  response: ResponseInterface;
+  response: responseAPI;
+  table: tableList;
   [propName: string]: any;
 
   constructor() {
+    super();
     this.functions = new Functions;
 
     this.response = {
       result: false 
-    }
-  }
+    };
+    this.table = {
+      settings: "settings"
+    };
+  };
 
-  public async getAll(params: any) { // get all settings
+  /**
+   * @description Get all settings
+   * @param params 
+   */
+  public async getAll(params: any) {
 
     /**
      * REQUIRED:
@@ -28,9 +31,6 @@ export default class Settings {
      * OPTIONAL:
      * @param debug - debug mode
      */
-    
-    // used tables
-    const t_settings: string = 'settings';
 
     // check of required parameters
     if (!params.idproject) {
@@ -45,20 +45,23 @@ export default class Settings {
         value,
         start_date,
         end_date
-      FROM ${t_settings}
+      FROM ??
       WHERE CURDATE() BETWEEN start_date AND end_date
     `;
 
-    const data: any = await new DB().query(sql);
+    const data: any = await this.Db.query(sql, [this.table.settings]);
 
     this.response.result = true;
     this.response.data = data;
 
     return this.response;
+  };
 
-  }
-
-  public async get(params: any) { // get setting by name
+  /**
+   * @description Get setting by name
+   * @param params 
+   */
+  public async get(params: any) {
 
     /**
      * REQUIRED:
@@ -68,8 +71,6 @@ export default class Settings {
      * @param debug - debug mode
      */
 
-    // used tables
-    const t_settings: string = 'settings';
 
     // check of required parameters
     if (!params.idproject || !params.name) {
@@ -84,23 +85,16 @@ export default class Settings {
         value,
         start_date,
         end_date
-      FROM ${t_settings}
+      FROM ??
       WHERE name = '${params.name}'
         AND CURDATE() BETWEEN start_date AND end_date
     `;
 
-    const data: any = await new DB().query(sql);
+    const data: any = await this.Db.query(sql, [this.table.settings]);
 
     this.response.result = true;
     this.response.data = data;
 
-    return data;
-
-  }
-
-}
-
-interface ResponseInterface {
-  result: boolean;
-  [propName: string]: any;
-}
+    return this.response;
+  };
+};
