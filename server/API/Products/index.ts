@@ -3,7 +3,7 @@
  * @author Nikita Bersenev
  */
 
-import DB from '../../Vendor/DB';
+import DB from '../../Vendor/DateBase';
 
 export default class Products {
   response: any;
