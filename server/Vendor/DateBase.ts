@@ -5,7 +5,7 @@
 import mysql, { Pool } from 'mysql';
 
 export default class DB {
-  pool: any;
+  pool: Pool;
 
   constructor () {
     if(!process.env.MYSQL_USER) throw `You need to add to .env file: MYSQL_USER=''`;
