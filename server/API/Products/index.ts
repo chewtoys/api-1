@@ -3,11 +3,14 @@
  * @author Nikita Bersenev
  */
 
-import DB from '../../Vendor/DB';
+import DB from '../../Vendor/DateBase';
 
 export default class Products {
-  response: any;
-  [propName: string]: any;
+  response: {
+    result: boolean;
+    data?: any[]
+  };
+  [prop: string]: any;
 
   constructor() {
     this.response = {
@@ -19,7 +22,13 @@ export default class Products {
     const t_categories = 'categories';
     const t_products = 'products';
 
+<<<<<<< HEAD
     const data: any = await new DB().query(`
+=======
+    // await new Db().query(`USE test`);
+
+    let data: any = await new Db().query(`
+>>>>>>> feature/subdomain-detected
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
@@ -44,7 +53,7 @@ export default class Products {
     `);
 
     let idcategories: number[] = [];
-    let modifdata: any = [];
+    let modifdata: any[] = [];
 
     data.forEach((item: any) => {
       if (idcategories.indexOf(item.idcategory) === -1) {

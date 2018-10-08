@@ -18,4 +18,8 @@ export default class API {
         this.Products = new Products;
         this.Orders = new Orders;
     }
+
+    // private async setBasename() {
+    //     await new Db().query(`USE ??`, [this.basename]);
+    // }
 }

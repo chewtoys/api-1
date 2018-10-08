@@ -2,7 +2,7 @@
  * Класс для работы с БД
  * @author Nikita Bersenev
  */
-import mysql from 'mysql';
+import mysql, { Pool } from 'mysql';
 
 export default class DB {
   pool: any;
@@ -17,7 +17,7 @@ export default class DB {
       password: process.env.MYSQL_PASSWORD,
       database: "kfc",
       dateStrings: true
-    })
+    });
   }
 
   query(sql: string, params?: string[]) {
