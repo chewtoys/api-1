@@ -24,7 +24,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const publicPath = paths.servedPath;
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
-const shouldUseRelativeAssetPaths = publicPath === './';
+const shouldUseRelativeAssetPaths = publicPath === '.';
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
@@ -53,7 +53,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
       loader: MiniCssExtractPlugin.loader,
       options: Object.assign(
         {},
-        shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+        shouldUseRelativeAssetPaths ? { publicPath: './' } : undefined
       ),
     },
     {
