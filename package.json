@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./build/index.js",
     "dev": "nodemon ./build/index.js",
-    "ts:w": "tsc -w"
+    "ts:w": "tsc -w",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
