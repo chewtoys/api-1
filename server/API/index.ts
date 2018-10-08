@@ -4,7 +4,7 @@
  */
 
 import Products from "./Products";
-import Db from "../Vendor/Db"
+import Db from "../Vendor/DateBase"
 
 export default class API {
     [prop: string]: any;
