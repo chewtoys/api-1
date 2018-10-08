@@ -22,13 +22,7 @@ export default class Products {
     const t_categories = 'categories';
     const t_products = 'products';
 
-<<<<<<< HEAD
     const data: any = await new DB().query(`
-=======
-    // await new Db().query(`USE test`);
-
-    let data: any = await new Db().query(`
->>>>>>> feature/subdomain-detected
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
