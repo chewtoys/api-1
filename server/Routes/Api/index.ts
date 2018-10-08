@@ -15,7 +15,7 @@ router.all("/api/:classname/:method", async (req, res, next) => {
     const params = req.query;
 
     try {
-        res.json(await new API("test")[classname][method](params));
+        res.json(await new API()[classname][method](params));
     } catch (e) {
         res.json({
             result: false,
