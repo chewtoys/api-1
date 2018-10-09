@@ -41,7 +41,7 @@ export const loadData = () => {
         axios({
             url: "https://kfc.laapl.ru/api/Products/getItems",
             method: "GET",
-            withCredentials: true
+            // withCredentials: true
         }).then(res => {
             console.log(res.data.data)
             dispatch({ type: RES_LOAD_DATA, data: res.data.data });

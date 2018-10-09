@@ -16,14 +16,19 @@ export default class Item extends Tween {
   }
 
   render() {
-    const { poster, ru, price, id, category } = this.props
-    const { count } = this.state
+    const { poster, title, price, id, category } = this.props;
+    const { count } = this.state;
+    const spicy = title.search(/остр/i);
+    console.log(spicy);
+    
+
     return (
       <div className="item">
         <div className="item-poster">
-          <div className="item-poster--img" style={{ backgroundImage: `url(${poster})` }} />
+          {(spicy !== -1) && <div className="item-poster--spicy"></div>}
+          <div className="item-poster--img" style={{ backgroundImage: `url(https://kfc.laapl.ru${poster})` }} />
         </div>
-        <div className="item-title">{ru}</div>
+        <div className="item-title">{title}</div>
         <div className="item-footer">
           <div className="item-price">
             {price}₽

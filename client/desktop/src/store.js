@@ -3,14 +3,15 @@ import { routerMiddleware, routerReducer } from "react-router-redux";
 import thunk from "redux-thunk";
 import createHistory from "history/createBrowserHistory";
 // Actions
-import { data } from "./components/Main/actions";
+import { data, settings } from "./components/Main/actions";
 import logger from 'redux-logger';
 
 export const history = createHistory();
 
 const redusers = combineReducers({
-  router: routerReducer,
-  data
+    router: routerReducer,
+    data,
+    settings
 });
 const initialState = {};
 const enhancers = [];
