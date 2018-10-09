@@ -22,21 +22,14 @@ export default class Orders extends Main {
 
   /**
    * @description Create new order
-   * @param params 
-   * @param test 
+   * @param {Array.<number>} products - array with products id
+   * @param {string} address - delivery address
+   * @param {string} [delayed_datetime] - pending order date and time
+   * @param {string} [comment] - order comment
+   * @param {boolean} [paid] - order has been paid
+   * @param {boolean} [debug=false] - debug mode
    */
   public async create(params: any) {
-
-    /**
-     * REQUIRED:
-     * @param products - array with products id
-     * @param address - delivery address
-     * OPTIONAL:
-     * @param delayed_datetime - pending order date and time
-     * @param comment - order comment
-     * @param paid - order has been paid
-     * @param debug - debug mode
-     */
 
     params.session = '123';
 
