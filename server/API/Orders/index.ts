@@ -84,7 +84,7 @@ export default class Orders extends Main {
   }
 
   /**
-   * @description order state change
+   * @description Order state change
    * @param {number} idstate - state id
    * @param {number} idorder - order id
    */
