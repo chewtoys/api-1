@@ -20,7 +20,7 @@ module.exports = {
             user: "savin",
             host: "node3.ortant.ru",
             ref: "origin/master",
-            repo: "https://github.com/laapl/kfc.git",
+            repo: "https://github.com/laapl/api.git",
             path: "/home/projects/savin/delivery/kfc/",
             "post-deploy": "yarn install && tsc && yarn build:client && pm2 reload ecosystem.config.js --env production"
         }
