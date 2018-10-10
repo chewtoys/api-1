@@ -38,15 +38,15 @@ class Main extends React.PureComponent {
     render() {
         const { dataComplite, settingsComplite } = this.props;
         
-        // if (dataComplite && settingsComplite) return (
-        //     <>
-        //         {/* <ViewItem /> */}
-        //         <Nav />
-        //         <Content />
-        //         <MiniCart />
-        //         <MiniLogin />
-        //     </>
-        // )
+        if (dataComplite && settingsComplite) return (
+            <>
+                {/* <ViewItem /> */}
+                <Nav />
+                <Content />
+                <MiniCart />
+                <MiniLogin />
+            </>
+        )
         return (
             <>
                 <LoadNav />
