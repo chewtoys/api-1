@@ -6,8 +6,7 @@ const RES_LOAD_DATA = "main/RES_LOAD_DATA";
 const initState = {
     loading: false,
     complite: false,
-    data: [
-    ]
+    data: []
 };
 
 export default (state = initState, action) => {
@@ -17,7 +16,7 @@ export default (state = initState, action) => {
                 ...state,
                 loading: true,
                 complite: false
-            }
+            };
 
         case RES_LOAD_DATA:
             return {
@@ -25,26 +24,25 @@ export default (state = initState, action) => {
                 loading: false,
                 complite: true,
                 data: action.data
-            }
+            };
 
         default:
-            return state
-    }
+            return state;
+    };
 };
 
 export const loadData = () => {
     return (dispatch) => {
         dispatch({
             type: REQ_LOAD_DATA
-        })
+        });
 
         axios({
             url: "https://kfc.laapl.ru/api/Products/getItems",
             method: "GET",
             // withCredentials: true
         }).then(res => {
-            console.log(res.data.data)
             dispatch({ type: RES_LOAD_DATA, data: res.data.data });
         });
-    }
-}
+    };
+};
