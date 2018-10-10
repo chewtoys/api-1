@@ -1,4 +1,4 @@
-import Db from "./DateBase";
+import Db from "./DataBase";
 
 export default class Main {
     Db: Db;
