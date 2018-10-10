@@ -1,6 +1,6 @@
 import Main from '../../Main';
 import Functions from '../../Main/Functions';
-import { parse } from 'url';
+import moment from 'moment';
 
 export default class Orders extends Main {  
   functions: Functions;
@@ -16,8 +16,12 @@ export default class Orders extends Main {
       result: false
     };
     this.table = {
-      orders: "orders",
-      orders_data: "orders_data",
+      orders: 'orders',
+      orders_data: 'orders_data',
+      orders_states: 'orders_states',
+      clients: 'clients',
+      products: 'products',
+      categories: 'categories'
     };
   }
 
@@ -80,7 +84,7 @@ export default class Orders extends Main {
   }
 
   /**
-   * @description order state change
+   * @description Order state change
    * @param {number} idstate - state id
    * @param {number} idorder - order id
    */
@@ -104,6 +108,111 @@ export default class Orders extends Main {
     await this.Db.query(sql, params);
 
     this.response.result = true;
+
+    return this.response;
+
+  }
+
+  /**
+   * @description Get orders info
+   * @param {string} [date_start=moment().format('YYYY-MM-DD')] - start date
+   * @param {string} [date_end=moment().format('YYYY-MM-DD')] - end date
+   * @param {number} [idorder] - order id
+   * @param {boolean} [debug=false] - debug mode
+   */
+  public async get(query: any) {
+
+    // default values
+    if (!query.date_start) query.date_start = moment().format('YYYY-MM-DD');
+    if (!query.date_end) query.date_end = moment().format('YYYY-MM-DD');
+
+    let restrictions: string[] = ['DATE(t1.start_datetime) BETWEEN ? AND ?'];
+
+    if (query.idorder) {
+      restrictions.push(`t1.idorder = ?`);
+    }
+
+    const where_clause: any = (restrictions.length) ? restrictions.join(' AND ') : 1;
+
+    const sql: string = `
+      SELECT
+        t1.*,
+        t2.name AS client_name,
+        t2.email AS client_email,
+        t2.phone AS client_phone,
+        t4.idproduct AS idproduct,
+        t4.title AS product_title,
+        t4.poster AS product_poster,
+        t4.price AS product_price,
+        t5.idcategory AS idcategory,
+        t5.name AS categoy_name,
+        t5.icon AS category_icon,
+        t6.name AS state
+      FROM ?? AS t1
+      INNER JOIN ?? AS t2 ON t1.idclient = t2.idclient
+      INNER JOIN ?? AS t3 ON t1.idorder = t3.idorder
+      INNER JOIN ?? AS t4 ON t3.idproduct = t4.idproduct
+      INNER JOIN ?? AS t5 ON t4.idcategory = t5.idcategory
+      INNER JOIN ?? AS t6 ON t1.idstate = t6.idstate
+      WHERE ${where_clause}
+      ORDER BY t1.start_datetime DESC
+    `;
+
+    const params: any[] = [
+      this.table.orders, 
+      this.table.clients, 
+      this.table.orders_data, 
+      this.table.products, 
+      this.table.categories, 
+      this.table.orders_states, 
+      query.date_start,
+      query.date_end,
+      query.idorder
+    ];
+
+    const data: any = await this.Db.query(sql, params);
+
+    let idorders: number[] = [];
+    let modifdata: any[] = [];
+
+    data.forEach((item: any) => {
+      if (idorders.indexOf(item.idorder) === -1) {
+        idorders.push(item.idorder);
+        let orderItems: any[] = data.filter((subitem: any) => {
+          return subitem.idorder === item.idorder;
+        });
+
+        modifdata.push({
+          idorder: item.idorder,
+          idclient: item.idclient,
+          client_name: item.client_name,
+          client_email: item.client_email,
+          client_phone: item.client_phone,
+          idstate: item.idstate,
+          state: item.state,
+          address: item.address,
+          comment: item.comment,
+          paid: item.paid,
+          start_datetime: item.start_datetime,
+          delayed_datetime: item.delayed_datetime,
+          lead_datetime: item.lead_datetime,
+          items: orderItems.map((item: any) => {
+            return {
+              idcategory: item.idcategory,
+              category: item.category_name,
+              category_icon: item.category_icon,
+              idproduct: item.idproduct,
+              product: item.product_title,
+              poster: item.product_poster,
+              price: item.product_price
+            }
+          })
+        });
+      }
+    });
+
+    this.response.result = true;
+    this.response.data = modifdata;
 
     return this.response;
 
