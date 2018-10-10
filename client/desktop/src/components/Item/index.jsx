@@ -1,6 +1,6 @@
 import React from "react";
 import Tween from 'rc-tween-one/lib/TweenOne';
-import { Link } from "react-router-dom";
+import "./styles/index.css";
 
 export default class Item extends Tween {
   state = {
@@ -19,7 +19,6 @@ export default class Item extends Tween {
     const { poster, title, price, id, category } = this.props;
     const { count } = this.state;
     const spicy = title.search(/остр/i);
-    console.log(spicy);
     
 
     return (

@@ -1,0 +1,41 @@
+.nav {
+  position: fixed;
+  left: 10px;
+  top: calc(50vh - 300px);
+  width: 80px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  & .nav-icon {
+    background-size: 90%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: hsla(0, 0%, 100%, 1);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
+    transition: width .4s ease, height .4s ease;
+    display: inline-flex;
+    &:hover {
+      width: 80px;
+      height: 80px;
+    }
+    &:hover + .nav-icon {
+      width: 40px;
+      height: 40px;
+    }
+    &.main {
+      background-size: cover;
+      background-color: hsla(0, 0%, 100%, 1);
+      border: 3px solid hsla(0, 0%, 100%, 1);
+    }
+  }
+  &:not(:hover) .nav-icon.active {
+    width: 70px;
+    height: 70px;
+  }
+}

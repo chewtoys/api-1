@@ -3,6 +3,14 @@
  * @author Nikita Bersenev
  */
 import mysql, { Pool } from "mysql";
+const pool = mysql.createPool({
+    connectionLimit: 10,
+    host: "node3.ortant.ru",
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: "kfc",
+    dateStrings: true
+});
 
 export default class DB {
     pool: Pool;
@@ -10,15 +18,8 @@ export default class DB {
     constructor() {
         if (!process.env.MYSQL_USER) throw `You need to add to .env file: MYSQL_USER=''`;
         if (!process.env.MYSQL_PASSWORD) throw `You need to add to .env file: MYSQL_PASSWORD=''`;
-        this.pool = mysql.createPool({
-            connectionLimit: 10,
-            host: "node3.ortant.ru",
-            user: process.env.MYSQL_USER,
-            password: process.env.MYSQL_PASSWORD,
-            database: "kfc",
-            dateStrings: true
-        });
-    }
+        this.pool = pool;
+    };
 
     query(sql: string, params?: string[]) {
         return new Promise((resolve, reject) => {
@@ -31,6 +32,5 @@ export default class DB {
                 });
             });
         });
-    }
-    
-}
+    };    
+};

@@ -7,19 +7,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Current",
-            "program": "${file}"
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}\\build\\index.js",
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "ts:w",
             "outFiles": [
                 "${workspaceFolder}/build/**/*.js"
             ]
-        },
-        
+        }        
     ]
 }
