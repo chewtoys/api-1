@@ -9,6 +9,7 @@ import Content from "../Content";
 import MiniCart from "../MiniCart";
 import MiniLogin from "../MiniLogin";
 import ViewItem from "../ViewItem";
+import Laapl from "../Laapl";
 import { LoadNav, LoadLogin, LoadCart, LoadContent } from "../Loading";
 // Actions
 import { loadData } from "./actions/loadData";
@@ -38,22 +39,25 @@ class Main extends React.PureComponent {
     render() {
         const { dataComplite, settingsComplite } = this.props;
         
-        if (dataComplite && settingsComplite) return (
-            <>
-                {/* <ViewItem /> */}
-                <Nav />
-                <Content />
-                <MiniCart />
-                <MiniLogin />
-            </>
-        )
+        // if (dataComplite && settingsComplite) return (
+        //     <>
+        //         {/* <ViewItem /> */}
+        //         <Nav />
+        //         <Content />
+        //         <MiniCart />
+        //         <MiniLogin />
+        //     </>
+        // )
+        // return (
+        //     <>
+        //         <LoadNav />
+        //         <LoadContent />
+        //         <LoadLogin />
+        //         <LoadCart />
+        //     </>
+        // )
         return (
-            <>
-                <LoadNav />
-                <LoadContent />
-                <LoadLogin />
-                <LoadCart />
-            </>
+            <Laapl />
         )
     };
 };
