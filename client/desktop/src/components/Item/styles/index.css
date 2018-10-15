@@ -4,8 +4,7 @@
   flex-direction: column;
   & .item-poster {
     width: 100%;
-    background: var(--white);
-    border-radius: 20px;
+    border-radius: 10px;
     box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
     position: relative;
     transition: transform .15s ease-out, box-shadow .5s ease-out;
@@ -15,92 +14,93 @@
       position: relative;
       display: block;
     }
+    & .item-poster--img {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: absolute;
+      border-radius: 10px;
+    }
+    & .item-poster--spicy {
+      width: 60px;
+      height: 40px;
+      background-image: url("../icons/spicy.svg");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      filter: drop-shadow(0px 5px 5px hsla(0,0%,0%,.5));
+    }
   }
   &:hover .item-poster {
     box-shadow: 0px 10px 25px -3px rgba(0, 0, 0, .5);
     transform: translateY(-5px);
   }
-  & .item-title {
-    color: hsl(0, 0%, 0%);
-    font-size: 15px;
-    background: var(--white);
-    border-radius: 20px;
-    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
-    padding: 13px 20px;
-    margin-top: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  & .item-price {
-    color: hsl(0, 0%, 0%);
-    font-size: 15px;
-    font-weight: bold;
-    background: var(--white);
-    border-radius: 20px;
-    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
-    padding: 13px 20px;
-    display: flex;
-    margin-right: 10px;
-  }
-  & .item-pay {
-    color: var(--white);
-    font-size: 13px;
-    font-weight: 400;
-    border-radius: 20px;
-    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
-    flex: 1;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    &.button {
-      background: var(--green);
-      color: hsla(0, 0%, 100%, 1);
-      cursor: pointer;
-      line-height: 10px;
-      user-select: none;
-    }
-    & .item-pay--count {
-      border-radius: 15px;
-      background: var(--white);
-      color: var(--green);
-      padding: 5px 7.5px 3px 7px;
-      font-size: 11px;
-      margin-left: 10px;
-      visibility: visible;
-      transition: visibility .2s ease;
-      font-weight: 600;
-      &[data-count="0"] {
-        display: none;
-        visibility: hidden;
-      }
-    }
-  }
   & .item-footer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 10px;
-  }
-  & .item-poster--img {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: absolute;
-    border-radius: 15px;
-  }
-  & .item-poster--spicy {
-    width: 60px;
-    height: 40px;
-    background-image: url("../icons/spicy.svg");
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
-    filter: drop-shadow(0px 5px 5px hsla(0,0%,0%,.5));
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
+    /* padding: 5px; */
+    & .item-title {
+      color: hsl(0, 0%, 0%);
+      font-size: 15px;
+      /* background: var(--white); */
+      /* border-radius: 20px; */
+      /* box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7); */
+      padding: 13px 15px;
+      /* margin-top: 10px; */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    & .item-price {
+      color: hsl(0, 0%, 0%);
+      font-size: 15px;
+      font-weight: bold;
+      padding: 9px 15px;
+      display: flex;
+      /* margin-right: 10px; */
+    }
+    & .item-pay {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 400;
+      border-radius: 20px;
+      /* box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7); */
+      flex: 1;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      &.button {
+        background: var(--green);
+        color: hsla(0, 0%, 100%, 1);
+        cursor: pointer;
+        line-height: 10px;
+        user-select: none;
+      }
+      & .item-pay--count {
+        border-radius: 15px;
+        background: var(--white);
+        color: var(--green);
+        padding: 5px 7.5px 3px 7px;
+        font-size: 11px;
+        margin-left: 10px;
+        visibility: visible;
+        transition: visibility .2s ease;
+        font-weight: 600;
+        &[data-count="0"] {
+          display: none;
+          visibility: hidden;
+        }
+      }
+    }
   }
 }
