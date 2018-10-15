@@ -5,6 +5,7 @@ import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { trackWindowScroll } from "react-lazy-load-image-component";
 import { Route, Redirect, Switch } from "react-router";
+import { YMInitializer } from "react-yandex-metrika";
 // Custom components
 import Nav from "../Nav";
 import Content from "../Content";
@@ -46,6 +47,7 @@ class Main extends React.PureComponent {
         
         if (dataComplite && settingsComplite) return (
             <>
+                <YMInitializer accounts={[50403535]} />
                 {/* <ViewItem /> */}
                 <Switch>
                     <Redirect exact from="/" to={this.props.data.data[0].aliase} />
