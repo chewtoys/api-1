@@ -3,6 +3,8 @@ import { withRouter } from "react-router-dom";
 import scroller from "react-scroll/modules/mixins/scroller";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
+import { trackWindowScroll } from "react-lazy-load-image-component";
+import { Route, Redirect, Switch } from "react-router";
 // Custom components
 import Nav from "../Nav";
 import Content from "../Content";
@@ -24,6 +26,9 @@ class Main extends React.PureComponent {
     };
 
     componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            window.scrollTo(0, 0);
+        };
         if (prevProps.settingsComplite !== this.props.settingsComplite) {
             const color = this.props.settings.data.filter((item) => item.name === "background")[0].value;
             const html = document.querySelector("html");
@@ -37,46 +42,54 @@ class Main extends React.PureComponent {
     };
 
     render() {
-        const { dataComplite, settingsComplite } = this.props;
+        const { dataComplite, settingsComplite, scrollPosition } = this.props;
         
-        // if (dataComplite && settingsComplite) return (
-        //     <>
-        //         {/* <ViewItem /> */}
-        //         <Nav />
-        //         <Content />
-        //         <MiniCart />
-        //         <MiniLogin />
-        //     </>
-        // )
-        // return (
-        //     <>
-        //         <LoadNav />
-        //         <LoadContent />
-        //         <LoadLogin />
-        //         <LoadCart />
-        //     </>
-        // )
-        return (
-            <Laapl />
+        if (dataComplite && settingsComplite) return (
+            <>
+                {/* <ViewItem /> */}
+                <Switch>
+                    <Redirect exact from="/" to={this.props.data.data[0].aliase} />
+                    <Route path="/:category" component={Content} />
+                </Switch>
+                
+                <Nav />
+                
+                {/* <Content scrollPosition={scrollPosition} /> */}
+                <MiniCart />
+                <MiniLogin />
+            </>
         )
+        return (
+            <>
+                <LoadNav />
+                <LoadContent />
+                <LoadLogin />
+                <LoadCart />
+            </>
+        )
+        // return (
+        //     <Laapl />
+        // )
     };
 };
 
-export default withRouter(
-    connect(
-        (store) => ({
-            dataComplite: store.data.complite,
-            data: store.data,
-            settings: store.settings,
-            settingsComplite: store.settings.complite
-        }),
-        (dispatch) =>
-            bindActionCreators(
-                {
-                    loadData: loadData,
-                    loadSettings: loadSettings
-                },
-                dispatch
-            )
-    )(Main)
+export default trackWindowScroll(
+    withRouter(
+        connect(
+            (store) => ({
+                dataComplite: store.data.complite,
+                data: store.data,
+                settings: store.settings,
+                settingsComplite: store.settings.complite
+            }),
+            (dispatch) =>
+                bindActionCreators(
+                    {
+                        loadData: loadData,
+                        loadSettings: loadSettings
+                    },
+                    dispatch
+                )
+        )(Main)
+    )
 );

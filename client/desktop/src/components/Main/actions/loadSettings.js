@@ -45,7 +45,7 @@ export const loadData = () => {
             }
             // withCredentials: true
         }).then((res) => {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             dispatch({ type: RES_LOAD_DATA, data: res.data.data });
         });
     };
