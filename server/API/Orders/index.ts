@@ -19,7 +19,7 @@ export default class Orders extends Main {
       orders: 'orders',
       orders_data: 'orders_data',
       orders_states: 'orders_states',
-      clients: 'clients',
+      clients: 'users',
       products: 'products',
       categories: 'categories'
     };
@@ -27,6 +27,7 @@ export default class Orders extends Main {
 
   /**
    * @description Create new order
+   * @param {number} idclient - client id
    * @param {Array.<number>} products - array with products id
    * @param {string} address - delivery address
    * @param {string} [delayed_datetime] - pending order date and time
@@ -39,7 +40,7 @@ export default class Orders extends Main {
     query.session = '123';
 
     // check of required parameters
-    if (!query.session || !query.products || !query.address) {
+    if (!query.session || !query.products || !query.address || !query.idclient) {
       if (query.debug) this.functions.paramsError();
       else this.functions.unknownError();
     } else if (!query.products.length) {
@@ -51,13 +52,12 @@ export default class Orders extends Main {
      * there will be a function to get a client ID by session
      */
 
-    let idclient: number = 1;
     let paid = 0;
     if (query.paid) paid = 1;
 
     const order_sql: string = `
       INSERT INTO ?? (idclient, idstate, address, comment, paid, start_datetime)
-      VALUES ('${idclient}', '${(!paid) ? '1' : '2'}', '${query.address}', ${(!query.comment) ? 'NULL' : "'" + query.comment + "'"}, '${paid}', CURRENT_TIMESTAMP)
+      VALUES ('${query.idclient}', '${(!paid) ? '1' : '2'}', '${query.address}', ${(!query.comment) ? 'NULL' : "'" + query.comment + "'"}, '${paid}', CURRENT_TIMESTAMP)
     `;
 
     const data: any = await this.Db.query(order_sql, [this.table.orders]);
@@ -115,9 +115,11 @@ export default class Orders extends Main {
 
   /**
    * @description Get orders info
-   * @param {string} [date_start=moment().format('YYYY-MM-DD')] - start date
-   * @param {string} [date_end=moment().format('YYYY-MM-DD')] - end date
+   * @param {string} [date_start=moment()] - start date
+   * @param {string} [date_end=moment()] - end date
    * @param {number} [idorder] - order id
+   * @param {number} [idclient] - client id
+   * @param {number} [idcourier] - courier id
    * @param {boolean} [debug=false] - debug mode
    */
   public async get(query: any) {
@@ -126,10 +128,32 @@ export default class Orders extends Main {
     if (!query.date_start) query.date_start = moment().format('YYYY-MM-DD');
     if (!query.date_end) query.date_end = moment().format('YYYY-MM-DD');
 
+    let params: any[] = [
+      this.table.orders, 
+      this.table.clients, 
+      this.table.orders_data, 
+      this.table.products, 
+      this.table.categories, 
+      this.table.orders_states, 
+      query.date_start,
+      query.date_end
+    ];
+
     let restrictions: string[] = ['DATE(t1.start_datetime) BETWEEN ? AND ?'];
 
     if (query.idorder) {
       restrictions.push(`t1.idorder = ?`);
+      params.push(query.idorder);
+    }
+
+    if (query.idclient) {
+      restrictions.push(`t1.idclient = ?`);
+      params.push(query.idclient);
+    }
+
+    if (query.idcourier) {
+      restrictions.push(`t1.idcourier = ?`);
+      params.push(query.idcourier);
     }
 
     const where_clause: any = (restrictions.length) ? restrictions.join(' AND ') : 1;
@@ -149,7 +173,7 @@ export default class Orders extends Main {
         t5.icon AS category_icon,
         t6.name AS state
       FROM ?? AS t1
-      INNER JOIN ?? AS t2 ON t1.idclient = t2.idclient
+      INNER JOIN ?? AS t2 ON t1.idclient = t2.iduser
       INNER JOIN ?? AS t3 ON t1.idorder = t3.idorder
       INNER JOIN ?? AS t4 ON t3.idproduct = t4.idproduct
       INNER JOIN ?? AS t5 ON t4.idcategory = t5.idcategory
@@ -157,18 +181,6 @@ export default class Orders extends Main {
       WHERE ${where_clause}
       ORDER BY t1.start_datetime DESC
     `;
-
-    const params: any[] = [
-      this.table.orders, 
-      this.table.clients, 
-      this.table.orders_data, 
-      this.table.products, 
-      this.table.categories, 
-      this.table.orders_states, 
-      query.date_start,
-      query.date_end,
-      query.idorder
-    ];
 
     const data: any = await this.Db.query(sql, params);
 
