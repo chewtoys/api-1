@@ -28,7 +28,7 @@ export default (state = initState, action) => {
 
         default:
             return state;
-    };
+    }
 };
 
 export const loadData = () => {

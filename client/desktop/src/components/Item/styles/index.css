@@ -2,105 +2,225 @@
   display: inline-flex;
   position: relative;
   flex-direction: column;
+  animation-duration: .8s;
+  animation-fill-mode: forwards;
+  animation-name: main;
+  user-select: none;
+  &:hover > .item-poster .item-poster--front .item-poster--details {
+    visibility: visible;
+    opacity: 1;
+  }
+  &:hover > .item-pay {    
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  & .item-details {
+    display: none;
+    &:checked ~ .item-poster {
+      transform: rotateY(180deg);
+    }
+  }
   & .item-poster {
     width: 100%;
-    border-radius: 10px;
-    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
     position: relative;
-    transition: transform .15s ease-out, box-shadow .5s ease-out;
-    &::after {
-      content: '';
+    transition: transform 0.5s cubic-bezier(0.75, 0, 0.85, 1);
+    transform-style: preserve-3d;
+    &:before {
+      content: "";
       padding-bottom: 100%;
       position: relative;
       display: block;
     }
-    & .item-poster--img {
+    & .item-poster--front {
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: var(--mainShadow);
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      position: absolute;
+      transform-style: preserve-3d;
+      & .item-poster--inner {
+        transform: translateZ(50px) scale(0.94);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+      }
+      & .item-poster--details {
+        position: absolute;
+        bottom: 10px;
+        width: 45px;
+        height: 45px;
+        left: 10px;
+        border: 2px solid var(--white);
+        border-radius: 50%;
+        color: var(--white);
+        box-shadow: 0 2px 10px 0px hsla(0, 0%, 0%, .5), inset 0 2px 7px 0px hsla(0, 0%, 0%, .5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 1s ease;
+        & svg {
+          width: 30px;
+          height: 30px;
+          filter: drop-shadow(0px 2px 3px hsla(0,0%,0%,.8));
+        }
+      }
+      & .item-poster--price {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-weight: bold;
+        font-size: 25px;
+        color: var(--white);
+        text-shadow: 0 0 8px hsla(0, 0%, 0%, .5), 0 0 15px hsla(0, 0%, 0%, .4), 0 5px 10px hsla(0, 0%, 0%, .4);
+      }
+      & .item-poster--img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 10px;
+        background-color: var(--white);
+      }
+      & .item-poster--spicy {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        z-index: 10;
+        filter: drop-shadow(0px 5px 5px hsla(0,0%,0%,.5));
+        color: #FF5722;
+      }
+    }
+    & .item-poster--back {    
+      backface-visibility: hidden;
       border-radius: 10px;
-    }
-    & .item-poster--spicy {
-      width: 60px;
-      height: 40px;
-      background-image: url("../icons/spicy.svg");
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
+      box-shadow: var(--mainShadow);
+      background: var(--white);
       position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 10;
-      filter: drop-shadow(0px 5px 5px hsla(0,0%,0%,.5));
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotateY(180deg);
+      transform-style: preserve-3d;
+      & .item-poster--inner {
+        transform: translateZ(50px) scale(0.94);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        /* z-index: 10; */
+      }
+      & .item-poster--details {
+        position: absolute;
+        bottom: 10px;
+        width: 45px;
+        height: 45px;
+        left: 10px;
+        border: 2px solid var(--white);
+        border-radius: 50%;
+        color: var(--white);
+        box-shadow: 0 2px 10px 0px hsla(0, 0%, 0%, .5), inset 0 2px 7px 0px hsla(0, 0%, 0%, .5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        backface-visibility: hidden;
+        & svg {
+          width: 30px;
+          height: 30px;
+          filter: drop-shadow(0px 2px 2px hsla(0,0%,0%,.7));
+        }
+      }
+    }
+    & .item-poster--count {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      border-radius: 15px;
+      background: var(--white);
+      color: var(--red);
+      padding: 7px 11px 7px 10px;
+      font-size: 13px;
+      visibility: visible;
+      transition: visibility .2s ease;
+      font-weight: 600;
+      box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
+      backface-visibility: hidden;
+      transform: scale(1);
+      opacity: 1;
+      transition: all .4s ease;
+      &[data-count="0"] {
+        visibility: hidden;
+        transform: scale(.7);
+        opacity: 0;
+      }
     }
   }
-  &:hover .item-poster {
-    box-shadow: 0px 10px 25px -3px rgba(0, 0, 0, .5);
-    transform: translateY(-5px);
-  }
-  & .item-footer {
+  & .item-title {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
     background: var(--white);
     border-radius: 10px;
-    box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7);
-    /* padding: 5px; */
-    & .item-title {
-      color: hsl(0, 0%, 0%);
-      font-size: 15px;
-      /* background: var(--white); */
-      /* border-radius: 20px; */
-      /* box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7); */
-      padding: 13px 15px;
-      /* margin-top: 10px; */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    box-shadow: var(--mainShadow);
+    padding: 10px 10px;
+    height: 40px;
+    color: var(--black);
+    font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  & .item-pay {
+    background: linear-gradient(45deg, hsl(199, 75%, 56%) 0%, hsl(230, 74%, 62%) 25%, hsl(284, 46%, 49%) 51%, hsl(338, 100%, 60%) 100%);
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    color: var(--white);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    line-height: 10px;
+    user-select: none;
+    transform: scale(.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform .4s ease, opacity .3s ease;
+    &:active {
+      transform: scale(.8);
     }
-    & .item-price {
-      color: hsl(0, 0%, 0%);
-      font-size: 15px;
-      font-weight: bold;
-      padding: 9px 15px;
-      display: flex;
-      /* margin-right: 10px; */
+    & svg {
+      width: 20px;
+      height: 20px;
     }
-    & .item-pay {
-      color: var(--white);
-      font-size: 13px;
-      font-weight: 400;
-      border-radius: 20px;
-      /* box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7); */
-      flex: 1;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      &.button {
-        background: var(--green);
-        color: hsla(0, 0%, 100%, 1);
-        cursor: pointer;
-        line-height: 10px;
-        user-select: none;
-      }
-      & .item-pay--count {
-        border-radius: 15px;
-        background: var(--white);
-        color: var(--green);
-        padding: 5px 7.5px 3px 7px;
-        font-size: 11px;
-        margin-left: 10px;
-        visibility: visible;
-        transition: visibility .2s ease;
-        font-weight: 600;
-        &[data-count="0"] {
-          display: none;
-          visibility: hidden;
-        }
-      }
-    }
+  }
+}
+
+@keyframes main {
+  from {
+    opacity: .4;
+    margin-top: -10px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0px;
   }
 }
