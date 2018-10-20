@@ -7,7 +7,7 @@ import { TweenMax, Elastic, Power1, Power4 } from "gsap";
 // Styles
 import "./styles/index.css";
 
-class Nav extends React.PureComponent {
+class LeftPanael extends React.PureComponent {
     cur = React.createRef();
     state = {
         spacing: 0,
@@ -117,7 +117,7 @@ class Nav extends React.PureComponent {
         const { data, settings } = this.props;
 
         return (
-            <div className="navigation">
+            <div className="left-panel">
                 <div ref={this.cur} className="item--current" />
                 <nav className="nav">
                     {data.data.map((item, i) => {
@@ -139,14 +139,14 @@ class Nav extends React.PureComponent {
                         );
                     })}
                 </nav>
-                <FilterSVG />
+                {/* <FilterSVG /> */}
             </div>
         );
     }
 }
 
 const FilterSVG = () => (
-    <svg style={{ display: "none" }} xmlns="http://www.w3.org/2000/svg" version="1.1" width="800">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
         <defs>
             <filter id="goo">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
@@ -166,5 +166,5 @@ export default withRouter(
     connect((store) => ({
         data: store.data,
         settings: store.settings
-    }))(Nav)
+    }))(LeftPanael)
 );

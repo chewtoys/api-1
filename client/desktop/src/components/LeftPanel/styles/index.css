@@ -53,12 +53,12 @@
     /* box-shadow: 0px 5px 20px -3px rgba(0, 0, 0, .7); */
 }
 
-.navigation {
+.left-panel {
   position: fixed;
   top: 0;
-  left: 10px;
-  width: 80px;
+  left: 0;
+  width: 100px;
   height: 100vh;
-  filter: url("#goo");
+  /* filter: url("#goo"); */
 	transform: translateZ(0);
 }

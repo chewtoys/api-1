@@ -22,12 +22,13 @@ class Content extends React.Component {
                         return (
                             <Item
                                 key={item.id}
-                                price={item.price}
-                                poster={item.poster}
-                                title={item.title}
-                                category={category.name}
-                                id={item.id}
-                                description={item.description}
+                                {...item}
+                                // price={item.price}
+                                // poster={item.poster}
+                                // title={item.title}
+                                // category={category.name}
+                                // id={item.id}
+                                // description={item.description}
                             />
                         );
                     })}
