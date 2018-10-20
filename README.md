@@ -4,7 +4,7 @@
 
 **Pay attention:** in this project we don't use ~~npm~~, we use [yarn](https://yarnpkg.com) instead!
 
-1. Clone repository: `git clone https://github.com/BorisHasikov/kfc.git`
+1. Clone repository: `git clone https://github.com/laapl/api.git`
 1. Checkout to **develop** branch `git checkout develop`
 1. Install all dependencies: `yarn install`
 1. Set all the necessary environment variables `export NAME="VALUE"`

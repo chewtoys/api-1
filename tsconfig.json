@@ -14,7 +14,8 @@
                 "node_modules/*",
                 "server/types/*"
             ]
-        }
+        },
+        "typeRoots" : ["server/types"]
     },
     "include": [
         "server/**/*"
