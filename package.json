@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laapl/kfc.git"
+    "url": "git+https://github.com/laapl/api.git"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/laapl/kfc/issues"
+    "url": "https://github.com/laapl/api/issues"
   },
   "dependencies": {
     "@babel/core": "7.1.0",
