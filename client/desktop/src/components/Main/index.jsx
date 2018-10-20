@@ -3,14 +3,12 @@ import { withRouter } from "react-router-dom";
 import scroller from "react-scroll/modules/mixins/scroller";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
-import { trackWindowScroll } from "react-lazy-load-image-component";
 import { Route, Redirect, Switch } from "react-router";
 import { YMInitializer } from "react-yandex-metrika";
 // Custom components
-import Nav from "../Nav";
+import LeftPanel from "../LeftPanel";
 import Content from "../Content";
-import MiniCart from "../MiniCart";
-import MiniLogin from "../MiniLogin";
+import RightPanel from "../RightPanel";
 import ViewItem from "../ViewItem";
 import Laapl from "../Laapl";
 import { LoadNav, LoadLogin, LoadCart, LoadContent } from "../Loading";
@@ -43,7 +41,7 @@ class Main extends React.PureComponent {
     };
 
     render() {
-        const { dataComplite, settingsComplite, scrollPosition } = this.props;
+        const { dataComplite, settingsComplite } = this.props;
         
         if (dataComplite && settingsComplite) return (
             <>
@@ -63,11 +61,8 @@ class Main extends React.PureComponent {
                     <Route path="/:category" component={Content} />
                 </Switch>
                 
-                <Nav />
-                
-                {/* <Content scrollPosition={scrollPosition} /> */}
-                <MiniCart />
-                <MiniLogin />
+                <LeftPanel />
+                <RightPanel />
             </>
         )
         return (
@@ -84,23 +79,21 @@ class Main extends React.PureComponent {
     };
 };
 
-export default trackWindowScroll(
-    withRouter(
-        connect(
-            (store) => ({
-                dataComplite: store.data.complite,
-                data: store.data,
-                settings: store.settings,
-                settingsComplite: store.settings.complite
-            }),
-            (dispatch) =>
-                bindActionCreators(
-                    {
-                        loadData: loadData,
-                        loadSettings: loadSettings
-                    },
-                    dispatch
-                )
-        )(Main)
-    )
+export default withRouter(
+    connect(
+        (store) => ({
+            dataComplite: store.data.complite,
+            data: store.data,
+            settings: store.settings,
+            settingsComplite: store.settings.complite
+        }),
+        (dispatch) =>
+            bindActionCreators(
+                {
+                    loadData: loadData,
+                    loadSettings: loadSettings
+                },
+                dispatch
+            )
+    )(Main)
 );

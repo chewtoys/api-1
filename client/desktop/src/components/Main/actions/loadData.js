@@ -2,6 +2,8 @@ import axios from "axios";
 
 const REQ_LOAD_DATA = "main/REQ_LOAD_DATA";
 const RES_LOAD_DATA = "main/RES_LOAD_DATA";
+const ADD_TO_CART = "cart/ADD_TO_CART";
+const REMOVE_FROM_CART = "cart/REMOVE_FROM_CART";
 
 const initState = {
     loading: false,
@@ -26,9 +28,50 @@ export default (state = initState, action) => {
                 data: action.data
             };
 
+        case ADD_TO_CART:
+            return {
+                ...state,
+                data: state.data.map((cat) => {
+                    return {
+                        ...cat,
+                        items: cat.items.map(prod => {
+                            if (prod.id === action.id) {
+                                return {
+                                    ...prod,
+                                    count: prod.count + 1,
+                                    recentСhange: (prod.count === 0) ? Date.now() : prod.recentСhange
+                                }
+                            } else {
+                                return prod
+                            }
+                        })
+                    }
+                })
+            };
+
+        case REMOVE_FROM_CART:
+            return {
+                ...state,
+                data: state.data.map((cat) => {
+                    return {
+                        ...cat,
+                        items: cat.items.map(prod => {
+                            if (prod.id === action.id) {
+                                return {
+                                    ...prod,
+                                    count: prod.count - 1,
+                                }
+                            } else {
+                                return prod
+                            }
+                        })
+                    }
+                })
+            };
+
         default:
             return state;
-    };
+    }
 };
 
 export const loadData = () => {
@@ -42,7 +85,34 @@ export const loadData = () => {
             method: "GET",
             // withCredentials: true
         }).then(res => {
-            dispatch({ type: RES_LOAD_DATA, data: res.data.data });
+            const data = res.data.data.map(cat => {
+                const items = cat.items.map(prod => {
+                    return {
+                        ...prod,
+                        count: 0,
+                        recentСhange: Date.now()
+                    }
+                })
+                return {
+                    ...cat,
+                    items
+                }
+            })
+            dispatch({ type: RES_LOAD_DATA, data });
         });
     };
+};
+
+export const addToCart = (id) => {
+    return {
+        type: ADD_TO_CART,
+        id
+    }
+};
+
+export const removeFromCart = (id) => {
+    return {
+        type: REMOVE_FROM_CART,
+        id
+    }
 };

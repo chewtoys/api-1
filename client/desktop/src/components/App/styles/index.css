@@ -4,7 +4,9 @@
   --white: hsla(0, 0%, 100%, 1);
   --black: hsla(0, 0%, 0%, 1);
   --green: hsla(122, 39%, 49%, 1);
+  --red: hsl(358, 91%, 34%);
   --fontName: "Roboto";
+  --mainShadow: 0px 2px 10px -1px rgba(0, 0, 0, .4);
 }
 
 body {
