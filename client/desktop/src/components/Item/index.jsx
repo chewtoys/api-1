@@ -37,7 +37,6 @@ class Item extends React.PureComponent {
                 <div className="item-poster">
                     <div className="item-poster--front front">
                         <IronImage
-                            className="item-poster--img"
                             placeholder={`https://kfc.laapl.ru${poster.split(".")[0].replace("products", "small")}.webP`}
                             src={`https://kfc.laapl.ru${poster}`}
                             alt={title}
