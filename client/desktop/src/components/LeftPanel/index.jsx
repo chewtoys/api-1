@@ -17,7 +17,7 @@ class LeftPanael extends React.PureComponent {
                         return (
                             <Link
                                 key={i.toString()}
-                                to={item.aliase}
+                                to={"/" + item.aliase}
                                 className={`nav-icon ${item.aliase} ${
                                     this.props.location.pathname === "/" + item.aliase
                                         ? "active"

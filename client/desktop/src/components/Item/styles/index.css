@@ -50,6 +50,7 @@
         width: 100%;
         height: 100%;
         backface-visibility: hidden;
+        z-index: 10;
       }
       & .item-poster--details {
         position: absolute;
@@ -83,12 +84,19 @@
         color: var(--white);
         text-shadow: 0 0 8px hsla(0, 0%, 0%, .5), 0 0 15px hsla(0, 0%, 0%, .4), 0 5px 5px hsla(0, 0%, 0%, .4);
       }
-      & .item-poster--img {
+      & .iron-image__container {
         width: 100%;
         height: 100%;
         position: absolute;
         border-radius: 10px;
         background-color: var(--white);
+        & .iron-image {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          border-radius: 10px;
+          background-color: var(--white);
+        }
       }
       & .item-poster--spicy {
         width: 40px;

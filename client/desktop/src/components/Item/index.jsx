@@ -1,6 +1,7 @@
 import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
+import IronImage from "react-image-lazy-load-component";
 // Actions
 import { addToCart } from "../Main/actions/loadData";
 // Styles
@@ -35,11 +36,17 @@ class Item extends React.PureComponent {
                 />
                 <div className="item-poster">
                     <div className="item-poster--front front">
-                        <img
+                        <IronImage
+                            className="item-poster--img"
+                            placeholder={`https://kfc.laapl.ru${poster.split(".")[0].replace("products", "svg")}.svg`}
+                            src={`https://kfc.laapl.ru${poster}`}
+                            alt={title}
+                        />
+                        {/* <img
                             alt={title}
                             className="item-poster--img"
                             src={`https://kfc.laapl.ru${poster}`}
-                        />
+                        /> */}
                         <div className="item-poster--inner">
                             {spicy !== -1 && <Spacy />}
                             <div className="item-poster--price">{price}₽</div>
