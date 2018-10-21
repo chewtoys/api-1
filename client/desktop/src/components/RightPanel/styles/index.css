@@ -60,16 +60,19 @@
       height: 30px;
       visibility: hidden;
       transform: scale(.4);
+      opacity: 0;
       transition: all .1s ease;
     }
     &[data-total="0"] {
       & svg {
         visibility: visible;
+        opacity: 1;
         transform: scale(1);
       }
       & .cart-mini--total {
         visibility: hidden;
         transform: scale(.4);
+        opacity: 0;
       }
     }
     & .cart-mini--total {
@@ -84,6 +87,7 @@
       font-weight: bold;
       visibility: visible;
       transform: scale(1);
+      opacity: 1;
       transition: all .1s ease;
     }
   }
