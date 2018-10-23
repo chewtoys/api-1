@@ -1,3 +1,8 @@
+/**
+ * Загрузчик моделей
+ * @author Nikita Bersenev
+ */
+
 import fs = require('fs');
 import path = require('path');
 import sequelize = require('sequelize');
