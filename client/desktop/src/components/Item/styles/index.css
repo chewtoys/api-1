@@ -80,7 +80,7 @@
         top: 10px;
         left: 10px;
         font-weight: bold;
-        font-size: 25px;
+        font-size: 1.8rem;
         color: var(--white);
         text-shadow: 0 0 8px hsla(0, 0%, 0%, .5), 0 0 15px hsla(0, 0%, 0%, .4), 0 5px 5px hsla(0, 0%, 0%, .4);
       }
@@ -178,29 +178,31 @@
     }
   }
   & .item-title {
-    /* display: flex; */
+    display: flex;
     /* flex-direction: column; */
     margin-top: 10px;
     background: var(--white);
     border-radius: 10px;
     box-shadow: var(--mainShadow);
-    padding: 10px 10px;
-    height: 40px;
+    padding: 5px 10px;
+    min-height: 1rem;
     color: var(--black);
-    font-size: 17px;
+    font-size: 1rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    align-items: center;
+    flex: 1;
   }
   & .item-pay {
     background: linear-gradient(45deg, hsl(199, 75%, 56%) 0%, hsl(230, 74%, 62%) 25%, hsl(284, 46%, 49%) 51%, hsl(338, 100%, 60%) 100%);
     position: absolute;
-    bottom: 15px;
-    right: 10px;
+    bottom: 1rem;
+    right: 1rem;
     color: var(--white);
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 4rem;
+    height: 4rem;
     box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
     display: inline-flex;
     justify-content: center;
