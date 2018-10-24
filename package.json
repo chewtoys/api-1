@@ -6,7 +6,8 @@
     "dev:server": "nodemon ./build/index.js",
     "build:live": "nodemon --watch server/**/*.ts --exec ts-node server/index.ts",
     "dev:client": "node ./client/desktop/scripts/start.js",
-    "build:client": "node ./client/desktop/scripts/build.js"
+    "build:client": "node ./client/desktop/scripts/build.js",
+    "deploy": "git push && pm2 deploy production update"
   },
   "repository": {
     "type": "git",
