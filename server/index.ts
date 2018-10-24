@@ -10,7 +10,8 @@ import { desktopRoute, apiRoute, authRoute } from "./Routes";
 
 const RedisClient = redis.createClient({
   host: 'localhost',
-  port: 6379
+  port: 6379,
+  password: process.env.REDIS_PASSWORD
 });
 const RedisStore = connectRedis(session);
 
