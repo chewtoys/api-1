@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 100px;
+  width: 7rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -10,8 +10,8 @@
   justify-content: space-between;
   padding: 10px 0;
   & .logo {
-    width: 70px;
-    height: 70px;
+    width: 5rem;
+    height: 5rem;
     background-color: hsl(0, 0%, 100%);
     background-size: cover;
     background-position: center;
@@ -25,8 +25,8 @@
     margin: 5px 0;
   }
   & .login--mini {
-    width: 60px;
-    height: 60px;
+    width: 3.5rem;
+    height: 3.5rem;
     background: hsl(0, 0%, 100%);
     border-radius: 50%;
     display: flex;
@@ -42,8 +42,8 @@
     }
   }
   & .cart-mini {
-    width: 70px;
-    height: 70px;
+    width: 5rem;
+    height: 5rem;
     background: hsl(0, 0%, 100%);
     border-radius: 50%;
     display: flex;
@@ -100,8 +100,8 @@
     justify-content: flex-start;
     align-items: center;
     & .cart-mini--item {
-      width: 50px;
-      height: 50px;
+      width: 3.5rem;
+      height: 3.5rem;
       margin-top: 10px;
       box-shadow: var(--mainShadow);
       animation-duration: .3s;
