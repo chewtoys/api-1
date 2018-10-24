@@ -1,6 +1,23 @@
 require('dotenv').config()
 import express from "express";
+<<<<<<< HEAD
 import { desktopRoute, apiRoute } from "./Routes";
+=======
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import passport from 'passport';
+import redis from 'redis';
+import connectRedis from 'connect-redis';
+import { desktopRoute, apiRoute, authRoute } from "./Routes";
+
+const RedisClient = redis.createClient({
+  host: 'localhost',
+  port: 6379,
+  password: process.env.REDIS_PASSWORD
+});
+const RedisStore = connectRedis(session);
+>>>>>>> feature/redis
 
 class Server {
     app: express.Application;
