@@ -63,7 +63,7 @@ class Item extends React.PureComponent {
                     </div>
                 </div>
                 <BPay onClick={() => this.props.addToCart(id)} className="item-pay" />
-                <div className="item-title">{title}</div>
+                <div className="item-title"><span>{title}</span></div>
             </div>
         );
     };
