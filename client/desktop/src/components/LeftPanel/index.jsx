@@ -13,24 +13,32 @@ class LeftPanael extends React.PureComponent {
             <div className="left-panel">
                 {/* <div className="item--current" /> */}
                 <nav className="nav">
-                    {data.data.map((item, i) => {
+                    {data.data.map((cat, i) => {
                         return (
                             <Link
                                 key={i.toString()}
-                                to={"/" + item.aliase}
-                                className={`nav-icon ${item.aliase} ${
-                                    this.props.location.pathname === "/" + item.aliase
+                                to={"/" + cat.aliase}
+                                className={`nav-icon ${cat.aliase} ${
+                                    this.props.location.pathname === "/" + cat.aliase
                                         ? "active"
                                         : ""
                                 }`}
                             >
-                                <div
-                                    // onClick={(e) => this.onClick(e, i)}
-                                    // src={`https://kfc.laapl.ru${item.icon}`}
-                                />
+                                <div className="nav-icon--title">{cat.name}</div>
+                                {/* <div className="nav-icon--top">
+                                    {cat.items.map((prod, a) => {
+                                        if (a < 3) return (
+                                            <div className="nav-icon--item" key={a.toString()}>
+                                                <img className="nav-icon--item-poster" src={`https://kfc.laapl.ru${prod.poster}`} alt={prod.title}/>
+                                            </div>
+                                        )
+                                        return null
+                                    })}
+                                </div> */}
                             </Link>
                         );
                     })}
+                    <div className="nav--hover"></div>
                 </nav>
                 {/* <FilterSVG /> */}
             </div>
