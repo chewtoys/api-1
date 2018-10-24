@@ -6,7 +6,7 @@ import Models from '../../Models';
 
 const router = Router();
 
-router.all('/api/auth/login', async (req, res, next) => {
+router.post('/api/auth/login', async (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
 
