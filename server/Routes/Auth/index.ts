@@ -5,6 +5,8 @@ import bCrypt from 'bcrypt-nodejs';
 import Models from '../../Models';
 
 const router = Router();
+const LocalStrategy = passportLocal.Strategy;
+const { User } = Models;
 
 // Роут для авторизации
 router.post('/api/auth/login', async (req, res, next) => {
@@ -47,10 +49,6 @@ router.post('/api/auth/logout', (req, res) => {
     result: true
   });
 });
-
-const LocalStrategy = passportLocal.Strategy;
-
-const { User } = Models;
 
 passport.use('local', new LocalStrategy({
   usernameField: 'login',
