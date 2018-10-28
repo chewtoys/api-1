@@ -6,12 +6,14 @@ import Models from '../../Models';
 
 const router = Router();
 
+// Роут для авторизации
 router.post('/api/auth/login', async (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
 
     if (!user) return res.json({
-      result: false
+      result: false,
+      error_text: 'Неверный логин и/или пароль!'
     });
 
     req.logIn(user, (err) => {
@@ -21,6 +23,29 @@ router.post('/api/auth/login', async (req, res, next) => {
       });
     });
   })(req, res, next);
+});
+
+// Роут для проверки авторизации
+router.post('/api/auth/check', (req, res) => {
+  if (req.user) {
+    return res.json({
+      result: true,
+      data: req.user
+    });
+  } else {
+    return res.json({
+      result: false 
+    });
+  }
+});
+
+// Роут для выхода
+router.post('/api/auth/logout', (req, res) => {
+  req.logout();
+  res.clearCookie('connect.sid');
+  return res.json({
+    result: true
+  });
 });
 
 const LocalStrategy = passportLocal.Strategy;
