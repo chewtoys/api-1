@@ -10,13 +10,16 @@ const { User } = Models;
 
 // Роут для авторизации
 router.post('/api/auth/login', async (req, res, next) => {
-  passport.authenticate('local', (err, user) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
 
-    if (!user) return res.json({
-      result: false,
-      error_text: 'Неверный логин и/или пароль!'
-    });
+    if (!user) {
+      return res.json({
+        result: false,
+        error_code: parseInt(info.message, 10),
+        error_text: 'Неверный логин и/или пароль!'
+      }); 
+    }
 
     req.logIn(user, (err) => {
       if (err) return next(err);
@@ -62,10 +65,10 @@ passport.use('local', new LocalStrategy({
       if (bCrypt.compareSync(password, user.password)) {
         return done(null, user);
       } else {
-        return done(null, false);
+        return done(null, false, { message: '2' });
       }
     } else {
-      return done(null, false);
+      return done(null, false, { message: '1' });
     }
   });
 
