@@ -16,6 +16,11 @@ export default (sequelize: any, Sequelize: any) => {
      allowNull: false,
      notEmpty: true
    },
+   name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    notEmpty: true
+   },
    email: {
      type: Sequelize.STRING,
      allowNull: true
