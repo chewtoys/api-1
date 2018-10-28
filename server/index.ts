@@ -9,7 +9,7 @@ import connectRedis from 'connect-redis';
 import { desktopRoute, apiRoute, authRoute } from "./Routes";
 
 const RedisClient = redis.createClient({
-  host: 'node3.ortant.ru',
+  host: 'localhost',
   port: 6379,
   password: process.env.REDIS_PASSWORD
 });
