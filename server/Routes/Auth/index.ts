@@ -11,7 +11,6 @@ const { User } = Models;
 // Роут для авторизации
 router.post('/api/auth/login', async (req, res, next) => {
   passport.authenticate('local', (err, user) => {
-    console.log(err);
     if (err) return next(err);
 
     if (!user) return res.json({
