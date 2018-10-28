@@ -6,7 +6,7 @@
   justify-content: space-between;
   grid-gap: 2rem 1rem;
   position: relative;
-  perspective: 1500px;
+  /* perspective: 1500px; */
   & .page-title {
     position: absolute;
     top: 1rem;
