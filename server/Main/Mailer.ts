@@ -3,10 +3,10 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
     host: "smtp.yandex.ru",
     port: 465,
-    secure: true, // true for 465, false for other ports
+    secure: true,
     auth: {
-        user: "noreply@laapl.ru", // generated ethereal user
-        pass: "9mnfWp7YBPzp8X2" // generated ethereal password
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD
     }
 });
 
@@ -27,7 +27,7 @@ export default class Mailer {
         const mailOptions = {
             from: '"LAAPL DELIVERY" <noreply@laapl.ru>',
             to: options.toEmail,
-            subject: "Laapl Email Verification",
+            subject: "📧 Laapl Email Verification",
             text: `
                 Привет, ${options.toName}!
                 
