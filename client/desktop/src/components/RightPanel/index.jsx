@@ -1,6 +1,8 @@
 import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
+// Custom components
+import BigCart from "../BigCart";
 // Actions
 import { removeFromCart } from "../Main/actions/loadData";
 // Styles
@@ -13,6 +15,7 @@ export default class RightPanel extends React.PureComponent {
                 <Logo />
                 <MiniLogin />
                 <MiniCart />
+                <BigCart />
             </div>
         );
     }

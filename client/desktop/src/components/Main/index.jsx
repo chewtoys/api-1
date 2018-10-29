@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import scroller from "react-scroll/modules/mixins/scroller";
+// import scroller from "react-scroll/modules/mixins/scroller";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Route, Redirect, Switch } from "react-router";
@@ -33,11 +33,11 @@ class Main extends React.PureComponent {
             const html = document.querySelector("html");
             html.style.setProperty("--mainColor", color);
         };
-        if (prevProps.dataComplite !== this.props.dataComplite) {
-            scroller.scrollTo(this.props.location.pathname.replace("/", ""), {
-                duration: 0
-            });
-        };
+        // if (prevProps.dataComplite !== this.props.dataComplite) {
+        //     scroller.scrollTo(this.props.location.pathname.replace("/", ""), {
+        //         duration: 0
+        //     });
+        // };
     };
 
     render() {

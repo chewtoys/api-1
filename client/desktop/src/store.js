@@ -15,10 +15,11 @@ const redusers = combineReducers({
 });
 const initialState = {};
 const enhancers = [];
-const middleware = [thunk, logger, routerMiddleware(history)];
+let middleware = [thunk, routerMiddleware(history)];
 
 if (process.env.NODE_ENV === "development") {
   const devToolsExtension = window.devToolsExtension;
+  middleware = middleware.concat(logger)
 
   if (typeof devToolsExtension === "function") {
     enhancers.push(devToolsExtension());
