@@ -148,6 +148,24 @@
       height: 100%;
       transform: rotateY(180deg);
       transform-style: preserve-3d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: hsl(0, 0%, 30%);
+      text-shadow: 0 0 5px hsla(0, 0%, 0%, .5);
+      & .mass {
+        font-size: 3rem;
+        font-weight: 600;
+      }
+      & .energy {
+        font-size: 2rem;
+        font-weight: 400;
+      }
+      & .energy-values {
+        font-size: 1rem;
+        font-weight: 300;
+      }
       & .item-poster--inner {
         transform: translateZ(50px) scale(0.94);
         position: absolute;
