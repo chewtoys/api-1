@@ -21,7 +21,7 @@ class Item extends React.PureComponent {
     };
 
     render() {
-        const { poster, title, price, description, id, count } = this.props;
+        const { poster, title, price, id, count, mass, energy_value, protein, fat, starch } = this.props;
         const { checked } = this.state;
         const spicy = title.search(/остр/i);
 
@@ -41,11 +41,6 @@ class Item extends React.PureComponent {
                             src={`https://kfc.laapl.ru${poster}`}
                             alt={title}
                         />
-                        {/* <img
-                            alt={title}
-                            className="item-poster--img"
-                            src={`https://kfc.laapl.ru${poster}`}
-                        /> */}
                         <div className="item-poster--inner">
                             {spicy !== -1 && <Spacy />}
                             <div className="item-poster--price">{price}₽</div>
@@ -56,7 +51,9 @@ class Item extends React.PureComponent {
                         </div>
                     </div>
                     <div className="item-poster--back back">
-                        {description}
+                        <div className="mass">{mass} Г</div>
+                        <div className="energy">{energy_value} ККАЛ</div>
+                        <div className="energy-values">Б:{protein} Ж:{fat} У:{starch}</div>
                         <div className="item-poster--inner">
                             <BClose onClick={this.checkedToggle} className="item-poster--details" />
                         </div>
