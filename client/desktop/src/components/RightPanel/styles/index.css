@@ -127,7 +127,7 @@
         left: -8px;
         background: var(--white);
         color: var(--red);
-        padding: 2px 6px 2px 6px;
+        padding: 3px 7px 3px 6px;
         font-size: 10px;
         border-radius: 15px;
         box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);

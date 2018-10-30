@@ -15,8 +15,6 @@ import { LoadNav, LoadLogin, LoadCart, LoadContent } from "../Loading";
 // Actions
 import { loadData } from "./actions/loadData";
 import { loadData as loadSettings } from "./actions/loadSettings";
-// Styles
-import "./styles/tooltip.css";
 
 class Main extends React.PureComponent {
     componentDidMount() {

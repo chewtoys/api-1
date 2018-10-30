@@ -1,12 +1,14 @@
 import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
+import Tooltip from "rc-tooltip";
 // Custom components
 import BigCart from "../BigCart";
 // Actions
 import { removeFromCart } from "../Main/actions/loadData";
 // Styles
 import "./styles/index.css";
+import "rc-tooltip/assets/bootstrap.css";
 
 export default class RightPanel extends React.PureComponent {
     render() {
@@ -60,22 +62,24 @@ const MiniCart = connect(
             <div className="cart-mini--space">
                 {cartItems.map((item) => {
                     return (
-                        <div data-count={item.count} key={item.id} className="cart-mini--item">
-                            <img
-                                width="100%"
-                                height="100%"
-                                src={`https://kfc.laapl.ru${item.poster}`}
-                                alt={item.title}
-                            />
-                            <div onClick={() => props.removeFromCart(item.id)} className="cart-mini--item--remove">
-                                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="currentcolor" d="M64,38.55H0V25.45H64Z" />
-                                </svg>
+                        <Tooltip key={item.id} placement="left" trigger={['hover']} overlay={item.title}>
+                            <div data-count={item.count} className="cart-mini--item">
+                                <img
+                                    width="100%"
+                                    height="100%"
+                                    src={`https://kfc.laapl.ru${item.poster}`}
+                                    alt={item.title}
+                                />
+                                <div onClick={() => props.removeFromCart(item.id)} className="cart-mini--item--remove">
+                                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="currentcolor" d="M64,38.55H0V25.45H64Z" />
+                                    </svg>
+                                </div>
+                                <div className="cart-mini--item--count">
+                                    {item.count}
+                                </div>
                             </div>
-                            <div className="cart-mini--item--count">
-                                {item.count}
-                            </div>
-                        </div>
+                        </Tooltip>
                     );
                 })}
                 {cartItems.length > 5 && <div className="cart-mini--more">+{count}</div>}
