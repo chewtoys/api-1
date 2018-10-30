@@ -11,9 +11,8 @@ import logger from "redux-logger";
 if (typeof localStorage["checkDate"] === "undefined") {
     localStorage["checkDate"] = moment().format("YYYY-MM-DD");
 } else if (localStorage["checkDate"] !== moment().format("YYYY-MM-DD")) {
-    localStorage["checkDate"] = moment().format("YYYY-MM-DD");
-} else {
     localStorage.clear();
+    localStorage["checkDate"] = moment().format("YYYY-MM-DD");
 }
 
 export const history = createHistory();

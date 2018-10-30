@@ -11,7 +11,7 @@ import Content from "../Content";
 import RightPanel from "../RightPanel";
 import ViewItem from "../ViewItem";
 import Laapl from "../Laapl";
-import { LoadNav, LoadLogin, LoadCart, LoadContent } from "../Loading";
+import { LoadNav, LoadLogin, LoadCart, LoadContent, LoadComponent } from "../Loading";
 // Actions
 import { loadData } from "./actions/loadData";
 import { loadData as loadSettings } from "./actions/loadSettings";
@@ -31,11 +31,6 @@ class Main extends React.PureComponent {
             const html = document.querySelector("html");
             html.style.setProperty("--mainColor", color);
         };
-        // if (prevProps.dataComplite !== this.props.dataComplite) {
-        //     scroller.scrollTo(this.props.location.pathname.replace("/", ""), {
-        //         duration: 0
-        //     });
-        // };
     };
 
     render() {
@@ -63,17 +58,7 @@ class Main extends React.PureComponent {
                 <RightPanel />
             </>
         )
-        return (
-            <>
-                <LoadNav />
-                <LoadContent />
-                <LoadLogin />
-                <LoadCart />
-            </>
-        )
-        // return (
-        //     <Laapl />
-        // )
+        return null
     };
 };
 

@@ -30,6 +30,8 @@
     "bfj": "6.1.1",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
+    "connect-redis": "^3.4.0",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
@@ -53,6 +55,7 @@
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
+    "passport": "^0.4.0",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-gap-properties": "^2.0.0",
@@ -71,6 +74,7 @@
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "react-yandex-metrika": "^2.4.2",
+    "redis": "^2.8.0",
     "redux": "^4.0.0",
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^3.0.6",
@@ -139,8 +143,12 @@
     ]
   },
   "devDependencies": {
+    "@types/connect-redis": "^0.0.7",
+    "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.16.0",
     "@types/mysql": "^2.15.5",
+    "@types/passport": "^0.4.6",
+    "@types/redis": "^2.8.7",
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.3"
