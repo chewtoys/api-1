@@ -62,7 +62,7 @@ const MiniCart = connect(
             <div className="cart-mini--space">
                 {cartItems.map((item) => {
                     return (
-                        <Tooltip key={item.id} placement="left" trigger={['hover']} overlay={item.title}>
+                        <Tooltip destroyTooltipOnHide={true} key={item.id} placement="left" trigger={['hover']} overlay={item.title}>
                             <div data-count={item.count} className="cart-mini--item">
                                 <img
                                     width="100%"

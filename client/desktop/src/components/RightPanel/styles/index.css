@@ -110,6 +110,7 @@
       position: relative;
       transition: transform .3s ease;
       user-select: none;
+      border-radius: 5px;
       &[data-count="1"] .cart-mini--item--count {
         visibility: hidden;
         opacity: 0;

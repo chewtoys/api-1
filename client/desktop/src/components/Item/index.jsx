@@ -144,7 +144,7 @@ const BClose = (props) => {
 
 const Spacy = () => {
     return (
-        <Tooltip placement="top" trigger={["hover"]} overlay="Острое">
+        <Tooltip destroyTooltipOnHide={true} placement="top" trigger={["hover"]} overlay="Острое">
             <div className="item-poster--spicy">
                 <svg viewBox="0 0 16 16" width="100%" height="100%">
                     <path
