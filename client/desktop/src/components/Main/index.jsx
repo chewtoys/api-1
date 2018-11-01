@@ -1,6 +1,5 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-// import scroller from "react-scroll/modules/mixins/scroller";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Route, Redirect, Switch } from "react-router";
@@ -9,9 +8,7 @@ import { YMInitializer } from "react-yandex-metrika";
 import LeftPanel from "../LeftPanel";
 import Content from "../Content";
 import RightPanel from "../RightPanel";
-import ViewItem from "../ViewItem";
-import Laapl from "../Laapl";
-import { LoadNav, LoadLogin, LoadCart, LoadContent, LoadComponent } from "../Loading";
+import FilterSVG from "../FilterSVG";
 // Actions
 import { loadData } from "./actions/loadData";
 import { loadData as loadSettings } from "./actions/loadSettings";
@@ -56,6 +53,7 @@ class Main extends React.PureComponent {
                 
                 <LeftPanel />
                 <RightPanel />
+                <FilterSVG />
             </>
         )
         return null

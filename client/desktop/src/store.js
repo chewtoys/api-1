@@ -6,6 +6,7 @@ import moment from "moment";
 import createHistory from "history/createBrowserHistory";
 // Actions
 import { data, settings } from "./components/Main/actions";
+import { cart } from "./components/BigCart/actions";
 import logger from "redux-logger";
 
 if (typeof localStorage["checkDate"] === "undefined") {
@@ -20,7 +21,8 @@ export const history = createHistory();
 const redusers = combineReducers({
     router: routerReducer,
     data,
-    settings
+    settings,
+    cart
 });
 
 const initialState = {};

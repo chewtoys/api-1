@@ -1,5 +1,81 @@
 .cart-big {
     position: fixed;
     right: 7rem;
-    top: 0px;
+    bottom: calc(-100vh - 1rem);
+    width: 50vw;
+    height: calc(100vh - 1rem);
+    max-height: 45rem;
+    background: var(--white);
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: var(--mainShadow);
+    transition: bottom .3s ease;
+    &.open {
+        bottom: 0;
+        transition: bottom .5s cubic-bezier(0.9, 0.3, 0.35, 0.62);
+    }
+    & .cart-big--title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: flex;
+        height: 4rem;
+        justify-content: space-between;
+        color: #282828;
+        padding: 1rem;
+    }
+    & .cart-big--close {
+        font-size: 3rem;
+        line-height: 1.8rem;
+        cursor: pointer;
+    }
+    & .cart-big--space {
+        height: calc(100% - 12rem);
+        padding: 1rem 1rem 0;
+        & > div:first-child {
+            display: grid;
+            padding: 1rem 1rem 1rem 1rem;
+            grid-template-columns: repeat(auto-fill, 23%);
+            justify-content: space-between;
+            grid-gap: 1rem 1rem;
+            position: relative;
+        }
+        & .cart-big--item {
+            position: relative;
+            &::after {
+                content: "";
+                padding-bottom: 100%;
+                position: relative;
+                display: block;
+            }
+            & img {
+                position: absolute;
+                border-radius: 1rem;
+                box-shadow: var(--mainShadow);
+            }
+            & .cart-big--item--count {
+                position: absolute;
+                top: -12px;
+                left: -12px;
+                color: var(--white);
+                background: var(--mainColor);
+                padding: 4px 9px 4px 8px;
+                font-size: 1rem;
+                border-radius: 1rem;
+                box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
+                font-weight: 400;
+                visibility: visible;
+                opacity: 1;
+                transform: scale(1);
+                transition: all .4s ease;                
+                transition-duration: .4s;
+                transition-timing-function: ease;
+                transition-property: transform, opacity, visibility;
+                &[data-count="1"] {
+                    visibility: hidden;
+                    transform: scale(.7);
+                    opacity: 0;
+                    color: transparent;
+                }
+            }
+        }
+    }
 }
