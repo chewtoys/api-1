@@ -80,26 +80,26 @@ export const loadData = () => {
             type: REQ_LOAD_DATA
         });
 
-        axios({
-            url: "https://kfc.laapl.ru/api/Products/getItems",
-            method: "GET",
-            // withCredentials: true
-        }).then(res => {
-            const data = res.data.data.map(cat => {
-                const items = cat.items.map(prod => {
-                    return {
-                        ...prod,
-                        count: 0,
-                        recentСhange: Date.now()
-                    }
-                })
-                return {
-                    ...cat,
-                    items
-                }
-            })
-            dispatch({ type: RES_LOAD_DATA, data });
-        });
+        if (JSON.parse(localStorage["root"]).data.data.length) {
+            dispatch({
+                type: RES_LOAD_DATA,
+                data: JSON.parse(localStorage["root"]).data.data
+            });
+        } else {
+            axios({
+                url: "https://kfc.laapl.ru/api/Products/getItems",
+                method: "GET"
+                // withCredentials: true
+            }).then((res) => {
+                const data = res.data.data.map((cat) => {
+                    const items = cat.items.map((prod) => {
+                        return { ...prod, count: 0, recentСhange: Date.now() };
+                    });
+                    return { ...cat, items };
+                });
+                dispatch({ type: RES_LOAD_DATA, data });
+            });
+        }        
     };
 };
 

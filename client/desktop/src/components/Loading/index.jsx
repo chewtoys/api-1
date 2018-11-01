@@ -72,3 +72,13 @@ export class LoadContent extends React.PureComponent {
         )
     };
 };
+
+export const LoadComponent = () => {
+    return (
+        <div className="loading-wrap">
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
+        </div>
+    )
+}

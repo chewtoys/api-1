@@ -1,8 +1,14 @@
 import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
+import { Tooltip } from "react-tippy";
+// Fn
+import { formatData } from "../BigCart";
+// Custom components
+import BigCart from "../BigCart";
 // Actions
 import { removeFromCart } from "../Main/actions/loadData";
+import { toggleCart } from "../BigCart/actions/cart";
 // Styles
 import "./styles/index.css";
 
@@ -13,6 +19,7 @@ export default class RightPanel extends React.PureComponent {
                 <Logo />
                 <MiniLogin />
                 <MiniCart />
+                <BigCart />
             </div>
         );
     }
@@ -20,64 +27,48 @@ export default class RightPanel extends React.PureComponent {
 
 const MiniCart = connect(
     (store) => ({
-        data: store.data.data
+        data: store.data.data,
+        open: store.cart.open
     }),
     (dispatch) =>
         bindActionCreators(
             {
-                removeFromCart: removeFromCart
+                removeFromCart: removeFromCart,
+                toggleCart: toggleCart
             },
             dispatch
         )
 )((props) => {
-    const sortFn = (a, b) => {
-        if (a.recentСhange > b.recentСhange) return 1;
-        if (a.recentСhange < b.recentСhange) return -1;
-    };
-    let cartItems = [];
-    props.data
-        .map((cat) => {
-            return cat.items.filter((prod) => prod.count > 0);
-        })
-        .forEach((item) => {
-            cartItems = cartItems.concat(item);
-        });
-    cartItems.sort(sortFn);
-    let count = 0;
-    let total = 0;
-    cartItems.forEach((item, i) => {
-        if (i > 4) {
-            count = count + item.count;
-        }
-        total = total + (item.price * item.count);
-    });
+    const { data, count, total} = formatData(props.data, 4);
 
     return (
         <>
-            <div className="cart-mini--space">
-                {cartItems.map((item) => {
+            <div className={`cart-mini--space${props.open ? " open" : ""}`}>
+                {data.map((item) => {
                     return (
-                        <div data-count={item.count} key={item.id} className="cart-mini--item">
-                            <img
-                                width="100%"
-                                height="100%"
-                                src={`https://kfc.laapl.ru${item.poster}`}
-                                alt={item.title}
-                            />
-                            <div onClick={() => props.removeFromCart(item.id)} className="cart-mini--item--remove">
-                                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="currentcolor" d="M64,38.55H0V25.45H64Z" />
-                                </svg>
-                            </div>
-                            <div className="cart-mini--item--count">
-                                {item.count}
-                            </div>
+                        <div key={item.id} data-count={item.count} className="cart-mini--item">
+                            <Tooltip position="left" title={item.title}>
+                                <img
+                                    width="100%"
+                                    height="100%"
+                                    src={`https://kfc.laapl.ru${item.poster}`}
+                                    alt={item.title}
+                                />
+                                <div onClick={() => props.removeFromCart(item.id)} className="cart-mini--item--remove">
+                                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="currentcolor" d="M64,38.55H0V25.45H64Z" />
+                                    </svg>
+                                </div>
+                                <div className="cart-mini--item--count">
+                                    {item.count}
+                                </div>
+                            </Tooltip>
                         </div>
                     );
                 })}
-                {cartItems.length > 5 && <div className="cart-mini--more">+{count}</div>}
+                {data.length > 5 && <div className="cart-mini--more">+{count}</div>}
             </div>
-            <div data-total={total} className="cart-mini">
+            <div onClick={props.toggleCart} data-total={total} className={`cart-mini${props.open ? " open" : ""}`}>
                 <div className="cart-mini--total">{total}₽</div>
                 <svg
                     viewBox="0 0 48 48"

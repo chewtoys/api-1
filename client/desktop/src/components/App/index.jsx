@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store, { history } from "../../store";
 import Main from "../Main";
 import "./styles/index.css";
+import "react-tippy/dist/tippy.css";
 
 export default class App extends React.Component {
     render() {
