@@ -84,7 +84,7 @@ class BigCart extends React.Component {
                     {data.map((item, i) => {
                         const spicy = item.title.search(/остр/i);
                         return (
-                            <Tooltip sticky={true} key={item.id} position="top" title={item.title}>
+                            <Tooltip sticky={true} stickyDuration={100} key={item.id} position="top" title={item.title}>
                                 <div data-count={item.count} className="cart-big--item">
                                     <div className="cart-big--item--hover" />
                                     <div onClick={e => addToCart(item.id)} className="cart-big--action add">+</div>
