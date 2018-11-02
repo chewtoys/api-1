@@ -153,7 +153,7 @@
       align-items: center;
       flex-direction: column;
       color: hsl(0, 0%, 30%);
-      text-shadow: 0 0 5px hsla(0, 0%, 0%, .5);
+      text-shadow: 0 0 5px hsla(0, 0%, 0%, .2);
       & .mass {
         font-size: 3rem;
         font-weight: 600;
