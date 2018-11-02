@@ -1,6 +1,5 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import scroller from "react-scroll/modules/mixins/scroller";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Route, Redirect, Switch } from "react-router";
@@ -9,14 +8,10 @@ import { YMInitializer } from "react-yandex-metrika";
 import LeftPanel from "../LeftPanel";
 import Content from "../Content";
 import RightPanel from "../RightPanel";
-import ViewItem from "../ViewItem";
-import Laapl from "../Laapl";
-import { LoadNav, LoadLogin, LoadCart, LoadContent } from "../Loading";
+import FilterSVG from "../FilterSVG";
 // Actions
 import { loadData } from "./actions/loadData";
 import { loadData as loadSettings } from "./actions/loadSettings";
-// Styles
-import "./styles/tooltip.css";
 
 class Main extends React.PureComponent {
     componentDidMount() {
@@ -32,11 +27,6 @@ class Main extends React.PureComponent {
             const color = this.props.settings.data.filter((item) => item.name === "background")[0].value;
             const html = document.querySelector("html");
             html.style.setProperty("--mainColor", color);
-        };
-        if (prevProps.dataComplite !== this.props.dataComplite) {
-            scroller.scrollTo(this.props.location.pathname.replace("/", ""), {
-                duration: 0
-            });
         };
     };
 
@@ -63,19 +53,10 @@ class Main extends React.PureComponent {
                 
                 <LeftPanel />
                 <RightPanel />
+                <FilterSVG />
             </>
         )
-        return (
-            <>
-                <LoadNav />
-                <LoadContent />
-                <LoadLogin />
-                <LoadCart />
-            </>
-        )
-        // return (
-        //     <Laapl />
-        // )
+        return null
     };
 };
 
