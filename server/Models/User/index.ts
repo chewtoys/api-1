@@ -13,7 +13,7 @@ export default (sequelize: any, Sequelize: any) => {
    },
    login: {
      type: Sequelize.STRING,
-     allowNull: false,
+     allowNull: true,
      notEmpty: true
    },
    name: {
@@ -27,12 +27,17 @@ export default (sequelize: any, Sequelize: any) => {
    },
    password: {
      type: Sequelize.STRING,
-     allowNull: false,
+     allowNull: true,
      notEmpty: true
    },
    phone: {
      type: Sequelize.STRING,
-     allowNull: false,
+     allowNull: true,
+     notEmpty: true
+   },
+   vk_id: {
+     type: Sequelize.INTEGER,
+     allowNull: true,
      notEmpty: true
    }
  });
