@@ -1,15 +1,38 @@
 import { Router } from 'express';
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import passportVK from 'passport-vkontakte';
 import bCrypt from 'bcrypt-nodejs';
 import Models from '../../Models';
 
 const router = Router();
 const LocalStrategy = passportLocal.Strategy;
+const VKStrategy = passportVK.Strategy;
 const { User } = Models;
 
-// Роут для авторизации
-router.post('/api/auth/login', async (req, res, next) => {
+// Авторизация через ВК
+router.get('/api/auth/vk', (req, res, next) => {
+  passport.authenticate('vk')(req, res, next);
+});
+
+// Колбек для авторизации через ВК
+router.get('/api/auth/vk/callback/', (req, res, next) => {
+  passport.authenticate('vk', (err, user) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.redirect('/?error=1');
+    }
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.redirect('/');
+    });
+  })(req, res, next);
+});
+
+// Роут для локальной авторизации
+router.post('/api/auth/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
 
@@ -53,6 +76,7 @@ router.post('/api/auth/logout', (req, res) => {
   });
 });
 
+// Локальная стратегия
 passport.use('local', new LocalStrategy({
   usernameField: 'login',
   passwordField: 'password'
@@ -72,6 +96,29 @@ passport.use('local', new LocalStrategy({
     }
   });
 
+}));
+
+// Стратегия ВК
+passport.use('vk', new VKStrategy({
+  clientID: process.env.VK_APP_ID,
+  clientSecret: process.env.VK_APP_SECRET,
+  callbackURL: '/api/auth/vk/callback'
+}, (accessToken: any, refreshToken: any, params: any, profile: any, done: any) => {
+  User.findOrCreate({
+    where: {
+      vk_id: profile.id
+    },
+    defaults: {
+      idusertype: 1,
+      name: profile.name.givenName
+    }
+  }).spread((user: any, created: any) => {
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  });
 }));
 
 passport.serializeUser((user: any, done: any) => {
