@@ -15,17 +15,12 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 
-// Webpack uses `publicPath` to determine where the app is being served from.
-// In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
-// `publicUrl` is just like `publicPath`, but we will provide it to our app
-// as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
-// Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
+
 const publicUrl = '';
-// Get environment variables to inject into our app.
+
 const env = getClientEnvironment(publicUrl);
 
-// style files regexes
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
@@ -223,6 +218,9 @@ module.exports = {
                       },
                     },
                   },
+                ],
+                [
+                  require.resolve('babel-plugin-styled-components'),
                 ],
               ],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
