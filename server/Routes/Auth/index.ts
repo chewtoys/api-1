@@ -4,7 +4,6 @@ import passportLocal from 'passport-local';
 import passportVK from 'passport-vkontakte';
 import bCrypt from 'bcrypt-nodejs';
 import Models from '../../Models';
-import { userInfo } from 'os';
 
 const router = Router();
 const LocalStrategy = passportLocal.Strategy;
