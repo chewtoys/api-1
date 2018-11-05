@@ -98,10 +98,12 @@ passport.use('local', new LocalStrategy({
 
 }));
 
+console.log(process.env)
+
 // Стратегия ВК
 passport.use('vk', new VKStrategy({
-  clientID: process.env.VK_APP_ID,
-  clientSecret: process.env.VK_APP_SECRET,
+  clientID: process.env.VK_APP_ID.toString(),
+  clientSecret: process.env.VK_APP_SECRET.toString(),
   callbackURL: '/api/auth/vk/callback'
 }, (accessToken: any, refreshToken: any, params: any, profile: any, done: any) => {
   User.findOrCreate({
