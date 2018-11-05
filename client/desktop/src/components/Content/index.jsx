@@ -2,39 +2,38 @@ import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { withRouter } from "react-router-dom";
 import { Redirect } from "react-router";
+import PropTypes from "prop-types";
+// Custom Components
 import Item from "../Item";
-import "./styles/index.css";
+// UI
+import { WrapContent, Title } from "./ui";
 
-class Content extends React.Component {
+class Content extends React.PureComponent {
+    static contextTypes = {
+        scrollArea: PropTypes.object
+    };
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            setTimeout(() => {
+                this.context.scrollArea.scrollTop();
+            }, 50);
+        };
+    };
+
     render() {
         const { data, match } = this.props;
         const category = data.data.filter((item) => item.aliase === match.params.category)[0];
-        // const Item = import("../Item");
-        
-        if (!category) return <Redirect exact to="404" />
+
+        if (!category) return <Redirect exact to="/NotFound" />;
         return (
-            <div className="content">
-                <div id={category.aliase} className={"page " + category.aliase}>
-                    <div className="page-title">
-                        {category.name}
-                    </div>
-                    {category.items.map((item, a) => {
-                        return (
-                            <Item
-                                key={item.id}
-                                {...item}
-                                // price={item.price}
-                                // poster={item.poster}
-                                // title={item.title}
-                                // category={category.name}
-                                // id={item.id}
-                                // description={item.description}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
-        )
+            <WrapContent>
+                <Title>{category.name}</Title>
+                {category.items.map((item, a) => {
+                    return <Item key={item.id} {...item} />;
+                })}
+            </WrapContent>
+        );
     };
 };
 
