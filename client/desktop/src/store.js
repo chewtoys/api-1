@@ -5,7 +5,7 @@ import thunk from "redux-thunk";
 import moment from "moment";
 import createHistory from "history/createBrowserHistory";
 // Actions
-import { data, settings } from "./components/Main/actions";
+import { data, settings } from "./components/Root/actions";
 import { cart } from "./components/BigCart/actions";
 import logger from "redux-logger";
 

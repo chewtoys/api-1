@@ -2,12 +2,11 @@ import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Tooltip } from "react-tippy";
-import ScrollArea from "react-scrollbar";
-// Styles
-import "./styles/index.css";
+// UI
+import { Cart, Title, Close, ScrollArea, Item, ItemHover, Image, Count, Add, Remove, Price, Spacy, Order, Arrow, OrderTitle } from "./ui";
 // Actions
 import { closeCart } from "./actions/cart";
-import { addToCart, removeFromCart } from "../Main/actions/loadData";
+import { addToCart, removeFromCart } from "../Root/actions/loadData";
 
 export const formatData = (data, offset = -1) => {
     let cartItems = [];
@@ -40,12 +39,25 @@ class BigCart extends React.Component {
     input = React.createRef();
     ymaps = window.ymaps;
 
+    state = {
+        isActive: false
+    };
+
+    onClick = () => {
+        this.setState({
+            isActive: !this.state.isActive
+        })
+    }
+
     componentDidMount() {
         document.addEventListener("mousedown", (e) => {
-            const ele = e.target.closest(".cart-big.open") || e.target.closest(".cart-mini");
+            const ele = e.target.closest(".cart");
             
             if (!ele && this.props.cart.open) {
-                this.props.closeCart()
+                setTimeout(() => {
+                    this.props.closeCart()
+                }, 300);
+                
             }            
         })
         document.addEventListener("keydown", (e) => {
@@ -64,68 +76,59 @@ class BigCart extends React.Component {
     }
 
     render() {
+        const { isActive } = this.state;
         const { cart, closeCart, addToCart, removeFromCart } = this.props;
         const { data, count, total } = formatData(this.props.data);        
 
         return (
-            <div className={`cart-big${cart.open ? " open" : ""}`}>
-                <div className="cart-big--title">
+            <Cart isOpen={cart.open} className="cart">
+                <Title>
                     Корзина
-                    <div onClick={closeCart} className="cart-big--close">×</div>
-                </div>
+                    <Close onClick={closeCart}>×</Close>
+                </Title>
                 <ScrollArea
                     stopScrollPropagation={true}
                     horizontal={false}
-                    className="cart-big--space"
-                    // onScroll={(e) => {
-                    //     console.log(e);
-                    // }}
                 >
                     {data.map((item, i) => {
                         const spicy = item.title.search(/остр/i);
+                        
                         return (
-                            <Tooltip sticky={true} stickyDuration={100} key={item.id} position="top" title={item.title}>
-                                <div data-count={item.count} className="cart-big--item">
-                                    <div className="cart-big--item--hover" />
-                                    <div onClick={e => addToCart(item.id)} className="cart-big--action add">+</div>
-                                    <div onClick={e => removeFromCart(item.id)} className="cart-big--action remove">—</div>
-                                    <img
-                                        width="100%"
-                                        height="100%"
+                            <Tooltip key={item.id} position="top" title={item.title}>
+                                <Item count={item.count}>
+                                    <ItemHover />
+                                    <Add onClick={() => addToCart(item.id)}>+</Add>
+                                    <Remove onClick={() => removeFromCart(item.id)}>—</Remove>
+                                    <Image
                                         src={`https://kfc.laapl.ru${item.poster}`}
                                         alt={item.title}
                                     />
-                                    <div data-count={item.count} className="cart-big--item--count">
-                                        {item.count}
-                                    </div>
-                                    <div className="cart-big--item-price">{item.price}₽</div>
-                                    {spicy !== -1 && <Spacy />}
-                                </div>
+                                    <Count>{item.count}</Count>
+                                    <Price>{item.price}₽</Price>
+                                    {spicy !== -1 &&
+                                        <Spacy>
+                                            <svg xmlns="http://www.w3.org/2000/svg">
+                                                <use xlinkHref="#spacy" />
+                                                <rect width="100%" height="100%" style={{fill: "transparent"}} />
+                                            </svg>
+                                        </Spacy>
+                                    }
+                                </Item>
                             </Tooltip>
                         )
                     })}
                     {data.length === 0 && "Здесь ничего нет"}
                 </ScrollArea>
+                <Order isActive={isActive}>
+                    <OrderTitle onClick={this.onClick}>
+                        Оформить заказ
+                        <Arrow/>
+                    </OrderTitle>
+                </Order>
                 {/* <input style={{width: "500px"}} ref={this.input} id="suggest" type="text" /> */}
-            </div>
+            </Cart>
         );
-    }
-};
-
-const Spacy = () => {
-    return (
-        <div className="item-poster--spicy">
-            {/* <Tooltip distance="25" position="top" title="Острое"> */}
-                <svg viewBox="0 0 16 16" width="100%" height="100%">
-                    <path
-                        d="M5.415 0c-.108 1.825-.835 3.385-2.18 4.68C1.218 6.622 0 7.757 0 10.776s2.094 5.022 7.368 5.183c-1.217-.367-1.825-1.178-1.825-2.431 0-1.254.588-2.645 1.763-4.174 1.631 1.41 2.447 2.77 2.447 4.075 0 1.306-.673 2.15-2.02 2.53 4.62 0 7.663-1.984 7.745-5.647.055-2.442-1.056-4.774-3.332-6.996.093.88.049 1.571-.132 2.073-.18.503-.533.917-1.056 1.244-.13-1.39-.768-2.689-1.914-3.895C7.897 1.53 6.688.618 5.414 0z"
-                        fill="currentColor"
-                        fillRule="nonzero"
-                    />
-                </svg>
-            {/* </Tooltip> */}
-        </div>
-    );
+    };
 };
 
 export default connect(
