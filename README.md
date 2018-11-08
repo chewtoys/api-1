@@ -1,4 +1,4 @@
-# KFC Delivery
+# Delivery
 
 ## How to start
 
