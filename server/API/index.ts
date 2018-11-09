@@ -1,6 +1,8 @@
 /**
  * Класс для работы с API
  * @author Nikita Bersenev
+ * @todo Use JSON:API specification
+ * @body For our API we should follow [JSON:API](https://jsonapi.org/) standard. More info at https://jsonapi.org/
  */
 
 import Settings from './Settings';
