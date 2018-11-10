@@ -98,8 +98,6 @@ passport.use('local', new LocalStrategy({
 
 }));
 
-console.log(process.env)
-
 // Стратегия ВК
 passport.use('vk', new VKStrategy({
   clientID: process.env.VK_APP_ID,
