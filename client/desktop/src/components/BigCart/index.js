@@ -3,7 +3,7 @@ import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Tooltip } from "react-tippy";
 import { YMaps, ZoomControl, Placemark } from "react-yandex-maps";
-import axios from "axios";
+import moment from "moment";
 // UI
 import {
   Cart,
@@ -25,51 +25,90 @@ import {
   Block,
   OrderNameBlock,
   Input,
-  MyMap
+  MyMap,
+  FindMeBackground
 } from "./ui";
 // Actions
 import { closeCart } from "./actions/cart";
 import { addToCart, removeFromCart } from "../Root/actions/loadData";
 // Fn
-import validAddr from "./validAddr";
+import { formatData, validAddr, createPayLink, documentEvent } from "./util";
 // Icon
-import pointIcon from "./icon.svg";
+import pointIcon from "./icon/point.svg";
 
-export const formatData = (data, offset = -1) => {
-  let cartItems = [];
-  let count = 0;
-  let total = 0;
-  const sortFn = (a, b) => {
-    if (a.recentСhange > b.recentСhange) return 1;
-    if (a.recentСhange < b.recentСhange) return -1;
-  };
-  data
-    .map(cat => {
-      return cat.items.filter(prod => prod.count > 0);
-    })
-    .forEach(item => {
-      cartItems = cartItems.concat(item);
-    });
-  cartItems.sort(sortFn);
-  cartItems.forEach((item, i) => {
-    if (i > offset) {
-      count = count + item.count;
+const Inputs = {
+  address: [
+    {
+      type: "address",
+      label: "Адрес",
+      placeholder: "улица Можайского, 7, Иркутск",
+      id: "suggest"
+    },
+    {
+      type: "entrance",
+      label: "Подъезд",
+      placeholder: "1"
+    },
+    {
+      type: "apartment",
+      label: "Квартира",
+      placeholder: "1"
+    },
+    {
+      type: "domofon",
+      label: "Домофон",
+      placeholder: "Да/Нет"
+    },
+    {
+      type: "comment",
+      label: "Комментарий",
+      placeholder: "Любая информация, которая поможет найти вас быстрее"
     }
-    total = total + item.price * item.count;
-  });
-  return { data: cartItems, count, total };
+  ],
+  contacts: [
+    {
+      type: "number",
+      label: "Телефон",
+      placeholder: "7 9XX XXXXXXX"
+    },
+    {
+      type: "email",
+      label: "Email",
+      placeholder: "example@laapl.ru"
+    },
+    {
+      type: "name",
+      label: "Имя",
+      placeholder: "Иван Иванов"
+    }
+  ]
 };
 
-class BigCart extends React.Component {
-  myMap = React.createRef();
-  ymaps = window.ymaps;
+const TimeToWork = {
+  start: moment("10:00", "HH:mm"),
+  end: moment("23:00", "HH:mm")
+};
 
+let currTime = moment("11:00", "HH:mm");
+const TimeDelivery = [];
+// while (TimeToWork.start <= currTime <= TimeToWork.end) {
+//   TimeDelivery.push(moment(currTime, "HH:mm").format("HH:mm"));
+//   currTime = moment(currTime, "HH:mm").add(30, "m");
+// }
+
+console.log(TimeDelivery);
+
+class BigCart extends React.Component {
   state = {
     isActive: false,
     name: "",
     number: "",
     email: "",
     address: "",
+    apartment: "",
+    entrance: "",
+    domofon: "",
+    comment: "",
     point: null
   };
 
@@ -91,24 +130,16 @@ class BigCart extends React.Component {
         this.props.closeCart();
       }
     });
-
-    // this.ymaps.ready(() => {
-    //   const myMap = new this.ymaps.Map("map", {
-    //     center: [52.286387, 104.28066],
-    //     zoom: 10,
-    //     controls: ["fullscreenControl", "zoomControl"]
-    //   });
-    //   myMap.behaviors.disable(["scrollZoom"]);
-    //   console.log(1);
-    // });
-
-    // this.ymaps.ready(() => {
-    //     const suggestView = new this.ymaps.SuggestView("suggest", {
-    //         results: 5,
-    //         offset: [0, 10]
-    //     });
-    // });
+    console.log(TimeToWork);
   }
+
+  createPoint = (e, obj) => {
+    const cords = obj.properties
+      .get("metaDataProperty")
+      .GeocoderMetaData.InternalToponymInfo.Point.coordinates.reverse();
+    e.setCenter(cords, 17);
+    this.setState({ point: cords });
+  };
 
   onClick = () => {
     this.setState({
@@ -119,55 +150,6 @@ class BigCart extends React.Component {
   onChange = (e, type) => {
     const value = e.target.value;
     this.setState({ [type]: value });
-  };
-
-  createLink = () => {
-    const { data, count, total } = this.props.data;
-
-    axios({
-      method: "POST",
-      url: "https://securepay.tinkoff.ru/v2/Init",
-      headers: { "Content-Type": "application/json" },
-      data: {
-        TerminalKey: "1540469806401DEMO",
-        Amount: (total + 250) * 100,
-        OrderId: "14887001",
-        Description: "",
-        Frame: true,
-        Language: "ru",
-        DATA: {
-          // Email: "laapl@yandex.ru",
-          Phone: "79501111756",
-          Name: "Борис Хасиков",
-          connection_type: "Widget2.0"
-        },
-        Receipt: {
-          Taxation: "usn_income_outcome",
-          Phone: "79501111756",
-          Items: data
-            .map(item => {
-              return {
-                Name: item.title,
-                Price: item.price * 100,
-                Quantity: item.count,
-                Amount: item.price * item.count * 100,
-                Tax: "none"
-              };
-            })
-            .concat([
-              {
-                Name: "Доставка",
-                Price: 250 * 100,
-                Quantity: 1,
-                Amount: 250 * 100,
-                Tax: "none"
-              }
-            ])
-        }
-      }
-    }).then(res => {
-      console.log(res);
-    });
   };
 
   render() {
@@ -223,43 +205,28 @@ class BigCart extends React.Component {
           <OrderScrollArea stopScrollPropagation={true} horizontal={false}>
             <OrderNameBlock>Контакты</OrderNameBlock>
             <Block>
-              <Input
-                value={this.state.number}
-                onChange={e => this.onChange(e, "number")}
-                type="number"
-                label="Телефон"
-                placeholder="7 9XX XXXXXXX"
-              />
-              <Input
-                value={this.state.email}
-                onChange={e => this.onChange(e, "email")}
-                type="email"
-                label="Email"
-                placeholder="example@laapl.ru"
-              />
-              <Input
-                value={this.state.name}
-                onChange={e => this.onChange(e, "name")}
-                type="name"
-                label="Имя"
-                placeholder="Иван Иванов"
-              />
+              {Inputs.contacts.map((item, i) => {
+                return (
+                  <Input
+                    key={i.toString()}
+                    value={this.state[item.type]}
+                    onChange={e => this.onChange(e, item.type)}
+                    type={item.type}
+                    label={item.label}
+                    placeholder={item.placeholder}
+                  />
+                );
+              })}
             </Block>
             <OrderNameBlock>Адрес доставки</OrderNameBlock>
             <Block>
-              <Input
-                value={this.state.address}
-                onChange={e => this.onChange(e, "address")}
-                type="address"
-                label="Адрес"
-                placeholder="Адрес"
-                id="suggest"
-              />
               <YMaps
                 query={{
+                  // lang: "en_US",
                   apikey: "94eb5873-7c63-4228-ab82-eea769147415",
-                  load: "Map,SuggestView,geocode"
+                  load: "Map,SuggestView,geocode,geolocation"
                 }}
+                version="2.1-dev"
               >
                 <MyMap
                   instanceRef={e => {
@@ -270,26 +237,30 @@ class BigCart extends React.Component {
                           .get("metaDataProperty")
                           .GeocoderMetaData.InternalToponymInfo.Point.coordinates.reverse();
                         e.setCenter(cords, 17);
-                        this.setState({
-                          point: cords
-                        });
+                        this.setState({ point: cords });
                       };
                     }
                   }}
                   defaultState={{
                     center: [52.286387, 104.28066],
                     zoom: 11,
-                    checkZoomRange: true
+                    checkZoomRange: true,
+                    duration: 300
                   }}
                   onLoad={e => {
+                    e.geolocation.get().then(res => {
+                      const currPos = res.geoObjects.position;
+                      this.setState({ point: currPos });
+                    });
                     const suggestView = new e.SuggestView("suggest", {
                       results: 5,
-                      offset: [0, 10]
+                      offset: [0, 10],
+                      boundedBy: [
+                        [52.419859, 104.027374],
+                        [52.217885, 104.598663]
+                      ]
                     });
-                    // console.log(e.Map.setCenter(obj.properties.get("boundedBy")));
-                    // suggestView.select(a => console.log(a));
                     suggestView.events.add("select", a => {
-                      // console.log(a.originalEvent.item.displayName);
                       this.setState({
                         address: a.originalEvent.item.displayName
                       });
@@ -307,15 +278,30 @@ class BigCart extends React.Component {
                         iconLayout: "default#image",
                         iconImageHref: pointIcon,
                         iconImageSize: [60, 68],
-                        iconOffset: [-15, -15]
-                        // preset: "islands#circleDotIcon",
-                        // Задаем цвет метки (в формате RGB).
-                        // iconColor: "#ff0000"
+                        iconOffset: [-20, -25]
                       }}
                     />
                   )}
+                  <FindMeBackground />
                 </MyMap>
               </YMaps>
+              {Inputs.address.map((item, i) => {
+                return (
+                  <Input
+                    key={i.toString()}
+                    value={this.state[item.type]}
+                    onChange={e => this.onChange(e, item.type)}
+                    type={item.type}
+                    label={item.label}
+                    placeholder={item.placeholder}
+                    id={item.id}
+                  />
+                );
+              })}
+            </Block>
+            <OrderNameBlock>Время доставки</OrderNameBlock>
+            <Block>
+              <div />
             </Block>
           </OrderScrollArea>
         </Order>
@@ -323,6 +309,8 @@ class BigCart extends React.Component {
     );
   }
 }
+
+export { formatData };
 
 export default connect(
   store => ({

@@ -1,4 +1,4 @@
-export default (res, callback) => {
+export const validAddr = (res, callback) => {
   var obj = res.geoObjects.get(0),
     error,
     hint;
@@ -28,7 +28,10 @@ export default (res, callback) => {
         obj.getPremiseNumber(),
         obj.getLocalities(),
         obj.getPremise()
-      ].join(" ")
+      ]
+        .reverse()
+        .join(" ")
+        .trim()
     );
     callback(obj);
   } else {

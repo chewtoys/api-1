@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Scroll from "react-scrollbar";
 import { IMaskInput } from "react-imask";
 import { Map } from "react-yandex-maps";
@@ -13,10 +13,7 @@ export const Cart = styled.div`
   border-radius: 1rem 1rem 0 0;
   box-shadow: var(--mainShadow);
   bottom: ${props => (props.isOpen ? `0` : `calc(-100vh - 1rem)`)};
-  transition: ${props =>
-    props.isOpen
-      ? `bottom .5s cubic-bezier(0.9, 0.3, 0.35, 0.62)`
-      : `bottom .3s ease`};
+  transition: bottom 0.3s ease;
 `;
 
 export const Title = styled.div`
@@ -27,6 +24,7 @@ export const Title = styled.div`
   justify-content: space-between;
   color: hsl(0, 0%, 16%);
   padding: 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 93%);
 `;
 
 export const Close = styled.div`
@@ -218,10 +216,7 @@ export const Order = styled.div`
   box-shadow: 0px -2px 10px -1px hsla(0, 0%, 0%, 0.5);
   z-index: 10000;
   bottom: ${props => (props.isActive ? `0` : `-34rem`)};
-  transition: ${props =>
-    props.isActive
-      ? `bottom .5s cubic-bezier(0.9, 0.3, 0.35, 0.62)`
-      : `bottom .3s ease`};
+  transition: bottom 0.3s ease;
   ${props =>
     !props.isActive
       ? `      
@@ -287,56 +282,18 @@ export const Block = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
+  font-size: 0.8rem;
 `;
 
-const InputName = styled.input.attrs({
-  type: "text",
-  autoComplete: "off",
-  autoCapitalize: "words",
-  spellCheck: "false"
-})`
+const InputStyled = css`
   border: 1px solid hsla(0, 0%, 0%, 0.3);
   width: 100%;
-  padding: 1rem;
-  margin-top: 0.2rem;
-  outline: none;
-  text-transform: capitalize;
-  transition: border 0.2s ease;
-  border-radius: 0.1rem;
-  :focus {
-    border-color: hsla(0, 0%, 0%, 0.6);
-  }
-`;
-
-const InputEmail = styled.input.attrs({
-  type: "text",
-  autoComplete: "off",
-  spellCheck: "false"
-})`
-  border: 1px solid hsla(0, 0%, 0%, 0.3);
-  width: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 1.5rem;
   margin-top: 0.2rem;
   outline: none;
   transition: border 0.2s ease;
   border-radius: 0.1rem;
-  :focus {
-    border-color: hsla(0, 0%, 0%, 0.6);
-  }
-`;
-
-const InputAdres = styled.input.attrs({
-  type: "text",
-  autoComplete: "off",
-  spellCheck: "false"
-})`
-  border: 1px solid hsla(0, 0%, 0%, 0.3);
-  width: 100%;
-  padding: 1rem;
-  margin-top: 0.2rem;
-  outline: none;
-  transition: border 0.2s ease;
-  border-radius: 0.1rem;
+  font: inherit;
   :focus {
     border-color: hsla(0, 0%, 0%, 0.6);
   }
@@ -348,22 +305,39 @@ const InputNumber = styled(IMaskInput).attrs({
   autoCapitalize: "off",
   spellCheck: "false"
 })`
-  border: 1px solid hsla(0, 0%, 0%, 0.3);
-  width: 100%;
-  padding: 1rem 1rem 1rem 1.5rem;
-  margin-top: 0.2rem;
-  outline: none;
+  ${InputStyled};
+`;
+
+const InputName = styled.input.attrs({
+  type: "text",
+  autoComplete: "off",
+  autoCapitalize: "words",
+  spellCheck: "false"
+})`
   text-transform: capitalize;
-  transition: border 0.2s ease;
-  border-radius: 0.1rem;
-  :focus {
-    border-color: hsla(0, 0%, 0%, 0.6);
-  }
+  ${InputStyled};
+`;
+
+const InputEmail = styled.input.attrs({
+  type: "text",
+  autoComplete: "off",
+  spellCheck: "false"
+})`
+  ${InputStyled};
+`;
+
+const InputAdres = styled.input.attrs({
+  type: "text",
+  autoComplete: "off",
+  spellCheck: "false"
+})`
+  ${InputStyled};
 `;
 
 const Label = styled.label`
   color: hsla(0, 0%, 0%, 0.7);
   display: block;
+  font-size: 1rem;
 `;
 
 const Plus = styled.span`
@@ -392,6 +366,24 @@ const Relative = styled.div`
       case "name":
         return `
           grid-column-start: 1;
+          grid-column-end: 4;
+        `;
+
+      case "entrance":
+        return `
+          grid-column-start: 1;
+          grid-column-end: 2;
+        `;
+
+      case "apartment":
+        return `
+          grid-column-start: 2;
+          grid-column-end: 3;
+        `;
+
+      case "domofon":
+        return `
+          grid-column-start: 3;
           grid-column-end: 4;
         `;
 
@@ -461,10 +453,43 @@ export const Input = ({ type, placeholder, value, onChange, label, id }) => {
         </Relative>
       );
 
+    case "comment":
+      return (
+        <Relative type={type}>
+          <Label>{label}</Label>
+          <Textarea
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            name={type}
+            id={id}
+          />
+        </Relative>
+      );
+
     default:
-      return null;
+      return (
+        <Relative type={type}>
+          <Label>{label}</Label>
+          <InputAdres
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            name={type}
+            id={id}
+          />
+        </Relative>
+      );
   }
 };
+
+export const Textarea = styled.textarea.attrs({ maxLength: 250 })`
+  ${InputStyled};
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 6rem;
+  resize: none;
+`;
 
 export const MyMap = styled(Map)`
   grid-column-start: 1;
@@ -473,5 +498,15 @@ export const MyMap = styled(Map)`
   grid-row-end: 2; */
   width: 100%;
   height: 15rem;
-  margin-bottom: 1rem;
+  position: relative;
+`;
+
+export const FindMeBackground = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: hsla(0, 0%, 0%, 0.3);
+  z-index: 10;
 `;
