@@ -35,8 +35,28 @@ export default (sequelize: any, Sequelize: any) => {
      allowNull: true,
      notEmpty: true
    },
+   avatar: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    notEmpty: true
+   },
    vk_id: {
      type: Sequelize.INTEGER,
+     allowNull: true,
+     notEmpty: true
+   },
+   vk_url: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    notEmpty: true
+   },
+   ok_id: {
+     type: Sequelize.INTEGER,
+     allowNull: true,
+     notEmpty: true
+   },
+   ok_url: {
+     type: Sequelize.STRING,
      allowNull: true,
      notEmpty: true
    }
