@@ -25,7 +25,7 @@ class Content extends React.PureComponent {
         const { data, match } = this.props;
         const category = data.data.filter((item) => item.aliase === match.params.category)[0];
 
-        if (!category) return <Redirect exact to="/NotFound" />;
+        // if (!category) return <Redirect exact to="/NotFound" />;
         return (
             <WrapContent>
                 <Title>{category.name}</Title>
