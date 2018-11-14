@@ -93,7 +93,6 @@
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "sequelize": "^4.41.0",
-    "sharp": "^0.21.0",
     "sqip": "^0.3.3",
     "style-loader": "0.23.0",
     "styled-components": "^4.0.3",
