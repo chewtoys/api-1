@@ -1,4 +1,4 @@
-prettier.printWidth = 250
+prettier.printWidth = 500
 prettier.tabWidth = 2
 prettier.singleQuote = false
 prettier.trailingComma = all

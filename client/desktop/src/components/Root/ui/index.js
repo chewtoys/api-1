@@ -1,8 +1,10 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+import ScrollArea from "react-scrollbar";
 
 export const GlobalStyle = createGlobalStyle`
     :root {
-        --mainColor: ${props => props.mainColor ? props.mainColor : "hsla(0, 0%, 90%, 1)"};
+        --mainColor: ${props =>
+          props.mainColor ? props.mainColor : "hsla(0, 0%, 90%, 1)"};
         --white: hsla(0, 0%, 100%, 1);
         --black: hsla(0, 0%, 0%, 1);
         --green: hsla(122, 39%, 49%, 1);
@@ -26,21 +28,32 @@ export const GlobalStyle = createGlobalStyle`
         -moz-box-sizing: content-box;
         -ms-box-sizing: content-box;
     }
-
     a {
         outline: none; 
     }
-
     h1 {
         font-family: var(--fontName)
     }
-
     .scrollbar {
         border-radius: 5px;
     }
-
     .scroll-main--block {
         width: 100vw;
         height: 100vh;
     }
+`;
+
+export const Scroll = styled(ScrollArea)`
+  width: 100vw;
+  height: 100vh;
+`;
+
+export const Background = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: hsla(0, 0%, 0%, 0.75);
+  z-index: 1;
 `;

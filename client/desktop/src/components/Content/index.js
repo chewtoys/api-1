@@ -22,12 +22,12 @@ class Content extends React.PureComponent {
     };
 
     render() {
-        const { data, match } = this.props;
+        const { data, match, open } = this.props;
         const category = data.data.filter((item) => item.aliase === match.params.category)[0];
 
         if (!category) return <Redirect exact to="/NotFound" />;
         return (
-            <WrapContent>
+            <WrapContent open={open}>
                 <Title>{category.name}</Title>
                 {category.items.map((item, a) => {
                     return <Item key={item.id} {...item} />;
@@ -40,6 +40,7 @@ class Content extends React.PureComponent {
 export default withRouter(
     connect((store) => ({
         data: store.data,
-        settings: store.settings
+        settings: store.settings,
+        open: store.cart.open
     }))(Content)
 );
