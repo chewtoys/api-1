@@ -5,6 +5,7 @@
  * @body For our API we should follow [JSON:API](https://jsonapi.org/) standard. More info at https://jsonapi.org/
  */
 
+import Auth from './Auth';
 import Settings from './Settings';
 import Products from './Products';
 import Orders from './Orders';
@@ -16,6 +17,7 @@ export default class API {
     Orders: Orders;
 
     constructor() {
+        this.Auth = new Auth;
         this.Settings = new Settings;
         this.Products = new Products;
         this.Orders = new Orders;
