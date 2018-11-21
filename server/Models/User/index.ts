@@ -11,11 +11,6 @@ export default (sequelize: any, Sequelize: any) => {
      allowNull: false,
      notEmpty: true 
    },
-   login: {
-     type: Sequelize.STRING,
-     allowNull: true,
-     notEmpty: true
-   },
    name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -58,6 +53,11 @@ export default (sequelize: any, Sequelize: any) => {
    ok_url: {
      type: Sequelize.STRING,
      allowNull: true,
+     notEmpty: true
+   },
+   confirmed: {
+     type: Sequelize.BOOLEAN,
+     allowNull: false,
      notEmpty: true
    }
  });
