@@ -5,10 +5,10 @@
 import mysql, { Pool } from "mysql";
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: "node3.ortant.ru",
+    host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: "kfc",
+    database: process.env.MYSQL_DATABASE,
     dateStrings: true
 });
 
