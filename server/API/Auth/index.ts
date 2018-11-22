@@ -70,10 +70,7 @@ export default class Auth extends Main {
 
     // Отправка кода подтверждения
     const code = Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1));
-    const message = `
-      Благодарим вас за регистрацию в системе LAAPL DELIVERY!
-      Код подтверждения номера телефона: ${code}
-    `;
+    const message = `Код подтверждения: ${code}`;
 
     this.sms.send([query.phone], message);
 
