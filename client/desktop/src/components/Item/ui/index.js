@@ -71,7 +71,7 @@ export const Title = styled.div`
   border-radius: 3rem;
   box-shadow: var(--mainShadow);
   padding: 0.3rem 1rem;
-  min-height: 2rem;
+  min-height: 3rem;
   color: var(--black);
   font-size: 1rem;
   flex: 1;
@@ -187,7 +187,7 @@ export const Pay = styled.div`
     hsl(338, 100%, 60%) 100%
   );
   position: absolute;
-  bottom: 1rem;
+  bottom: 1.5rem;
   right: 1rem;
   color: var(--white);
   border-radius: 50%;
@@ -242,6 +242,7 @@ export const Close = styled.div`
 export const Spicy = styled.div`
   width: 3rem;
   height: 3rem;
+  padding: 0.1rem;
   position: absolute;
   top: 0.3rem;
   right: 0.7rem;

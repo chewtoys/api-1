@@ -2,27 +2,17 @@ import React from "react";
 import { Tooltip } from "react-tippy";
 import { YMaps } from "react-yandex-maps";
 import moment from "moment";
-import Autocomplite from "react-autocomplete";
-// UI
 import {
   WrapOrder,
   Arrow,
-  OrderTitle,
+  Title,
   OrderScrollArea,
   Block,
-  OrderNameBlock,
+  NameBlock,
+  Maps,
   Input,
-  MyMap,
-  FindMeBackground,
   TimeButton,
-  TimeSelect,
-  Point,
-  DisplayAddress,
-  DisplayLocality,
-  DisplayStreet,
-  MapControls,
-  Zoom,
-  FindMe
+  TimeSelect
 } from "./ui";
 // Fn
 import {
@@ -39,44 +29,52 @@ const Inputs = {
       type: "address",
       label: "Адрес",
       placeholder: "улица Можайского, 7, Иркутск",
-      id: "suggest"
+      id: "suggest",
+      inputType: "text"
     },
     {
       type: "entrance",
       label: "Подъезд",
-      placeholder: "1"
+      placeholder: "1",
+      inputType: "text"
     },
     {
       type: "apartment",
       label: "Квартира",
-      placeholder: "1"
+      placeholder: "1",
+      inputType: "text"
     },
     {
       type: "domofon",
       label: "Домофон",
-      placeholder: "Да/Нет"
+      placeholder: "Наличие или код",
+      inputType: "text"
     },
     {
       type: "comment",
       label: "Комментарий",
-      placeholder: "Любая информация, которая поможет найти вас быстрее"
+      placeholder: "Любая информация, которая поможет найти вас быстрее",
+      inputType: "text"
     }
   ],
   contacts: [
     {
       type: "number",
       label: "Телефон",
-      placeholder: "7 9XX XXXXXXX"
+      placeholder: "7 9XX XXXXXXX",
+      inputType: "text"
     },
     {
       type: "email",
       label: "Email",
-      placeholder: "example@laapl.ru"
+      placeholder: "example@laapl.ru",
+      inputType: "text"
     },
     {
       type: "name",
       label: "Имя",
-      placeholder: "Иван Иванов"
+      placeholder: "Иван Иванов",
+      inputType: "text"
     }
   ]
 };
@@ -165,19 +163,19 @@ class Order extends React.PureComponent {
 
   render() {
     const { isActive, zoom, point } = this.state;
-    
+
     return (
       <WrapOrder isActive={isActive}>
-        <OrderTitle onClick={this.openOrder}>
+        <Title onClick={this.openOrder}>
           Оформить заказ
           <Arrow>
             <use xlinkHref="#arrow" />
             <rect width="100%" height="100%" style={{ fill: "transparent" }} />
           </Arrow>
-        </OrderTitle>
+        </Title>
         <OrderScrollArea stopScrollPropagation={true} horizontal={false}>
-          <OrderNameBlock>Адрес доставки</OrderNameBlock>
-          <Block>
+          <NameBlock>Адрес доставки</NameBlock>
+          <Block.Address>
             <YMaps
               query={{
                 apikey: "94eb5873-7c63-4228-ab82-eea769147415",
@@ -186,7 +184,7 @@ class Order extends React.PureComponent {
               version="2.1-dev"
               preload={true}
             >
-              <MyMap
+              <Maps.Ymaps
                 onBoundschange={e => {
                   console.log(e.originalEvent.newCenter);
                   findGeo(this.ymaps, e.originalEvent.newCenter).then(res => {
@@ -221,88 +219,148 @@ class Order extends React.PureComponent {
                   this.ymaps = e;
                 }}
               >
-                <FindMeBackground>
-                  <Point>
+                <Maps.Background>
+                  <Maps.Point>
                     <use xlinkHref="#point" />
                     <rect
                       width="100%"
                       height="100%"
                       style={{ fill: "transparent" }}
                     />
-                  </Point>
-                  <DisplayAddress>
-                    <DisplayLocality>
+                  </Maps.Point>
+                  <Maps.DisplayAddress>
+                    <Maps.DisplayLocality>
                       {this.state.DisplayLocality}
-                    </DisplayLocality>
-                    <DisplayStreet>
+                    </Maps.DisplayLocality>
+                    <Maps.DisplayStreet>
                       {this.state.DisplayStreet}, {this.state.DisplayHouse}
-                    </DisplayStreet>
-                  </DisplayAddress>
-                  <MapControls>
-                    <Tooltip size="small" title="Отдалить">
-                      <Zoom onClick={this.descZoom}>
+                    </Maps.DisplayStreet>
+                  </Maps.DisplayAddress>
+                  <Maps.Controls>
+                    <Tooltip animateFill={false} size="small" title="Отдалить">
+                      <Maps.Zoom onClick={this.descZoom}>
                         <use xlinkHref="#desc" />
                         <rect
                           width="100%"
                           height="100%"
                           style={{ fill: "transparent" }}
                         />
-                      </Zoom>
+                      </Maps.Zoom>
                     </Tooltip>
-                    <Tooltip size="small" title="Моё местоположение">
-                      <FindMe onClick={this.findMe}>
+                    <Tooltip
+                      animateFill={false}
+                      size="small"
+                      title="Моё местоположение"
+                    >
+                      <Maps.FindMe onClick={this.findMe}>
                         <use xlinkHref="#location" />
                         <rect
                           width="100%"
                           height="100%"
                           style={{ fill: "transparent" }}
                         />
-                      </FindMe>
+                      </Maps.FindMe>
                     </Tooltip>
-                    <Tooltip size="small" title="Приблизить">
-                      <Zoom onClick={this.ascZoom}>
+                    <Tooltip
+                      animateFill={false}
+                      size="small"
+                      title="Приблизить"
+                    >
+                      <Maps.Zoom onClick={this.ascZoom}>
                         <use xlinkHref="#asc" />
                         <rect
                           width="100%"
                           height="100%"
                           style={{ fill: "transparent" }}
                         />
-                      </Zoom>
+                      </Maps.Zoom>
                     </Tooltip>
-                  </MapControls>
-                </FindMeBackground>
-              </MyMap>
+                  </Maps.Controls>
+                </Maps.Background>
+              </Maps.Ymaps>
             </YMaps>
             {Inputs.address.map((item, i) => {
-              if (item.type === "address") {
+              if (item.type === "address")
                 return (
-                  <Input
-                    key={i.toString()}
-                    type={item.type}
-                    label={item.label}
-                    placeholder={item.placeholder}
-                    id={item.id}
-                    value={this.state[item.type]}
-                    onChange={this.suggest}
-                  >
-                    <div />
-                  </Input>
+                  <Input.Wrap key={item.type} type={item.type}>
+                    <Input.Label>{item.label}</Input.Label>
+                    <Input.Input
+                      placeholder={item.placeholder}
+                      value={this.state[item.type]}
+                      onChange={this.suggest}
+                      type={item.inputType}
+                    />
+                  </Input.Wrap>
                 );
-              }
               return (
-                <Input
-                  key={i.toString()}
-                  value={this.state[item.type]}
-                  onChange={e => this.onChange(e, item.type)}
-                  type={item.type}
-                  label={item.label}
-                  placeholder={item.placeholder}
-                  id={item.id}
-                />
+                <Input.Wrap key={item.type} type={item.type}>
+                  <Input.Label>{item.label}</Input.Label>
+                  <Input.Input
+                    placeholder={item.placeholder}
+                    value={this.state[item.type]}
+                    onChange={e => this.onChange(e, item.type)}
+                    type={item.inputType}
+                  />
+                </Input.Wrap>
               );
             })}
-          </Block>
-          <OrderNameBlock>Контакты</OrderNameBlock>
+          </Block.Address>
+          <NameBlock>Контакты</NameBlock>
+          <Block.Contacts>
+            {Inputs.contacts.map((item, i) => {
+              if (item.type === "number")
+                return (
+                  <Input.Wrap key={item.type} type={item.type}>
+                    <Input.Label>{item.label}</Input.Label>
+                    <Input.InputNumber
+                      placeholder={item.placeholder}
+                      value={this.state[item.type]}
+                      onChange={e => this.onChange(e, item.type)}
+                      type={item.inputType}
+                      mask="0 000 0000000"
+                    />
+                    <Input.Plus>+</Input.Plus>
+                  </Input.Wrap>
+                );
+              return (
+                <Input.Wrap key={item.type} type={item.type}>
+                  <Input.Label>{item.label}</Input.Label>
+                  <Input.Input
+                    placeholder={item.placeholder}
+                    value={this.state[item.type]}
+                    onChange={e => this.onChange(e, item.type)}
+                    type={item.inputType}
+                  />
+                </Input.Wrap>
+              );
+            })}
+          </Block.Contacts>
+          <NameBlock>Время доставки</NameBlock>
+          <Block.Time>
+            <Input.Wrap type="time">
+              В течение
+              <Tooltip
+                interactive
+                animateFill={false}
+                hideOnClick={false}
+                theme="light"
+                html={TimeDelivery.map((item, i) => {
+                  return (
+                    <TimeSelect className="time__item" key={i.toString()}>
+                      {item}
+                    </TimeSelect>
+                  );
+                })}
+              >
+                <TimeButton>~60 мин.</TimeButton>
+              </Tooltip>
+            </Input.Wrap>
+          </Block.Time>
+        </OrderScrollArea>
+        >
+        {/* <OrderScrollArea stopScrollPropagation={true} horizontal={false}>
+          <NameBlock>Адрес доставки</NameBlock>
+          <NameBlock>Контакты</NameBlock>
           <Block>
             {Inputs.contacts.map((item, i) => {
               return (
@@ -317,7 +375,7 @@ class Order extends React.PureComponent {
               );
             })}
           </Block>
-          <OrderNameBlock>Время доставки</OrderNameBlock>
+          <NameBlock>Время доставки</NameBlock>
           <Block>
             <div>
               В течение
@@ -338,7 +396,7 @@ class Order extends React.PureComponent {
               </Tooltip>
             </div>
           </Block>
-        </OrderScrollArea>
+        </OrderScrollArea> */}
       </WrapOrder>
     );
   }

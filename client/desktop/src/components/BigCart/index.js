@@ -47,14 +47,6 @@ class BigCart extends React.PureComponent {
     });
   }
 
-  createPoint = (e, obj) => {
-    const cords = obj.properties
-      .get("metaDataProperty")
-      .GeocoderMetaData.InternalToponymInfo.Point.coordinates.reverse();
-    e.setCenter(cords, 17);
-    this.setState({ point: cords });
-  };
-
   render() {
     const { cart, closeCart, addToCart, removeFromCart } = this.props;
     const { data, count, total } = this.props.data;
@@ -73,7 +65,12 @@ class BigCart extends React.PureComponent {
             const spicy = item.title.search(/остр/i);
 
             return (
-              <Tooltip key={item.id} position="top" title={item.title}>
+              <Tooltip
+                animateFill={false}
+                key={item.id}
+                position="top"
+                title={item.title}
+              >
                 <Item count={item.count}>
                   <ItemHover />
                   <Add onClick={() => addToCart(item.id)}>+</Add>
