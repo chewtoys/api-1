@@ -8,11 +8,11 @@ import path = require('path');
 import sequelize = require('sequelize');
 
 const Sequelize = new sequelize(
-  'kfc',
+  process.env.MYSQL_DATABASE,
   process.env.MYSQL_USER,
   process.env.MYSQL_PASSWORD,
   {
-    host: 'node3.ortant.ru',
+    host: process.env.MYSQL_HOST,
     dialect: 'mysql',
     operatorsAliases: false
   }
