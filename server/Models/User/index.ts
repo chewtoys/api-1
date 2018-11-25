@@ -55,7 +55,12 @@ export default (sequelize: any, Sequelize: any) => {
      allowNull: true,
      notEmpty: true
    },
-   confirmed: {
+   phone_confirmed: {
+     type: Sequelize.BOOLEAN,
+     allowNull: false,
+     notEmpty: true
+   },
+   email_confirmed: {
      type: Sequelize.BOOLEAN,
      allowNull: false,
      notEmpty: true
