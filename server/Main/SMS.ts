@@ -63,9 +63,6 @@ export default class SMS {
     const code = String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)));
     const message = `Код подтверждения: ${code}`;
 
-<<<<<<< HEAD
-    axios({
-=======
     const sql = `
       INSERT INTO ?? (id_verification_type, value, code)
       VALUES ('1', ?, ?)
@@ -73,7 +70,6 @@ export default class SMS {
     this.db.query(sql, [this.table.codes, phone, code]);
 
     return axios({
->>>>>>> develop
       method: 'post',
       url: 'https://smsc.ru/sys/send.php',
       params: {
@@ -84,16 +80,6 @@ export default class SMS {
         fmt: 3,
         phones: phone,
         mes: message
-<<<<<<< HEAD
-      }
-    }).then((res: any) => {
-      if (typeof res.id !== 'undefined') {
-        this.db.query('INSERT INTO ?? (phone, code) VALUES(?, ?)', [this.table.codes, phone, code]);
-      }
-      else {
-        return false;
-=======
->>>>>>> develop
       }
     });
   }
