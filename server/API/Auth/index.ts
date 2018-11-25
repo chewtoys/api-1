@@ -9,12 +9,13 @@ import SMS from '../../Main/SMS';
 import Models from '../../Models';
 import bCrypt from 'bcrypt-nodejs';
 
-const { User, Code } = Models;
+const { User } = Models;
 
 export default class Auth extends Main {
   functions: Functions;
   response: responseAPI;
   sms: SMS;
+  table: tableList;
   [propName: string]: any;
 
   constructor() {
