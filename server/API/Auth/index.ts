@@ -59,7 +59,8 @@ export default class Auth extends Main {
         idusertype: (query.idusertype) ? query.idusertype : 1,
         password: bCrypt.hashSync(query.password, bCrypt.genSaltSync(10)),
         name: query.name,
-        confirmed: 0
+        phone_confirmed: 0,
+        email_confirmed: 0
       }
     });
 
@@ -70,13 +71,7 @@ export default class Auth extends Main {
     if (!created) throw new Error('Номер телефона уже зарегистрирован');
 
     // Отправка кода подтверждения
-    const code = Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1));
-    const message = `Код подтверждения: ${code}`;
-
-    this.sms.send([query.phone], message);
-
-    // Запись кода в базу
-    this.Db.query('INSERT INTO ?? (phone, code) VALUES(?, ?)', [this.table.codes, query.phone, code]);
+    this.sms.code(query.phone);
 
     this.response.result = true;
 
@@ -89,7 +84,7 @@ export default class Auth extends Main {
    * @param {number} code - код подтверждения
    * @param {boolean} [debug] - режим отладки
    */
-  public async confirm(query: any) {
+  public async confirm_phone(query: any) {
     // Проверка обязательных параметров
     if (!query.phone || !query.code) {
       if (query.debug) this.functions.paramsError();
@@ -97,13 +92,20 @@ export default class Auth extends Main {
     }
 
     // Получение кода из базы
-    const data: any = await this.Db.query('SELECT * FROM ?? WHERE phone = ?', [this.table.codes, query.phone]);
+    const sql = `
+      SELECT * FROM ??
+      WHERE id_verification_type = 1
+        AND value = ?
+        AND confirmed = 0
+      ORDER BY datetime DESC
+      LIMIT 1
+    `;
+    const data: any = await this.Db.query(sql, [this.table.codes, query.phone]);
 
     // Проверка номера и кода
-    if (!data.length) throw new Error('Номер телефона не зарегистрирован');
-    if (query.code != data[0].code) throw new Error('Неверный код');
+    if (!data.length || (query.code != data[0].code)) throw new Error('Неверный код');
 
-    // Меняем статус аккаунта на "подтвержденный"
+    // Меняем статус номера и кода на "подтвержденный"
     const user = await User.findOne({
       where: {
         phone: query.phone
@@ -111,8 +113,19 @@ export default class Auth extends Main {
     });
 
     user.update({
-      confirmed: true
+      phone_confirmed: true
     });
+
+    const update_sql = `
+      UPDATE ??
+      SET confirmed = 1
+      WHERE id_verification_type = 1
+        AND value = ?
+        AND confirmed = 0
+      ORDER BY datetime DESC
+      LIMIT 1
+    `;
+    this.Db.query(update_sql, [this.table.codes, query.phone]);
 
     this.response.result = true;
 
