@@ -260,3 +260,35 @@ export const TimeSelect = styled.div`
     text-decoration: underline hsla(220, 100%, 50%, 0.5);
   }
 `;
+
+const SuggestWrap = styled.div`
+  ${props => (props.focus ? `display: flex` : `display: none`)};
+  position: absolute;
+  top: 4.8rem;
+  left: 0.3rem;
+  right: 0.3rem;
+  background: var(--white);
+  border-radius: 1rem;
+  flex-direction: column;
+  z-index: 2;
+  box-shadow: 0 2px 10px hsla(0, 0%, 0%, 0.5);
+`;
+
+const SuggestItem = styled.div`
+  padding: 1rem;
+  cursor: pointer;
+  :hover {
+    background: hsla(0, 0%, 0%, 0.06);
+  }
+  :first-child {
+    border-radius: 1rem 1rem 0 0;
+  }
+  :last-child {
+    border-radius: 0 0 1rem 1re;
+  }
+`;
+
+export const Suggest = {
+  Wrap: SuggestWrap,
+  Item: SuggestItem
+};

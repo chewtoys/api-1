@@ -12,7 +12,8 @@ import {
   Maps,
   Input,
   TimeButton,
-  TimeSelect
+  TimeSelect,
+  Suggest
 } from "./ui";
 // Fn
 import {
@@ -104,7 +105,8 @@ class Order extends React.PureComponent {
     domofon: "",
     comment: "",
     point: [52.275946, 104.359649],
-    items: []
+    items: [],
+    suggestFocus: false
   };
 
   ymaps = null;
@@ -123,8 +125,11 @@ class Order extends React.PureComponent {
   findMe = () => {
     this.ymaps.geolocation.get({ mapStateAutoApply: true }).then(res => {
       const currPos = res.geoObjects.position;
-      // console.log(res.geoObjects);
-      this.setState({ point: currPos });
+      findGeo(this.ymaps, currPos)
+        .then(res => {
+          this.setState({ point: res.coordinates });
+        })
+        .catch(err => console.log(err));
     });
   };
 
@@ -132,8 +137,7 @@ class Order extends React.PureComponent {
     const value = e.target.value;
     this.ymaps
       .suggest(value, {
-        results: 5,
-        offset: [0, 10],
+        results: 3,
         boundedBy: [[52.419859, 104.027374], [52.217885, 104.598663]]
       })
       .then(res => {
@@ -161,6 +165,24 @@ class Order extends React.PureComponent {
     }
   };
 
+  onFocusSuggest = () => {
+    this.setState({
+      suggestFocus: true
+    });
+  };
+
+  onBlurSuggest = () => {
+    setTimeout(() => {
+      this.setState({ suggestFocus: false });
+    }, 300);
+  };
+
+  onSelectSuggest = value => {
+    findGeo(this.ymaps, value).then(res => {
+      this.setState({ point: res.coordinates });
+    });
+  };
+
   render() {
     const { isActive, zoom, point } = this.state;
 
@@ -174,6 +196,36 @@ class Order extends React.PureComponent {
           </Arrow>
         </Title>
         <OrderScrollArea stopScrollPropagation={true} horizontal={false}>
+          <NameBlock>Контакты</NameBlock>
+          <Block.Contacts>
+            {Inputs.contacts.map((item, i) => {
+              if (item.type === "number")
+                return (
+                  <Input.Wrap key={item.type} type={item.type}>
+                    <Input.Label>{item.label}</Input.Label>
+                    <Input.InputNumber
+                      placeholder={item.placeholder}
+                      value={this.state[item.type]}
+                      onChange={e => this.onChange(e, item.type)}
+                      type={item.inputType}
+                      mask="0 000 0000000"
+                    />
+                    <Input.Plus>+</Input.Plus>
+                  </Input.Wrap>
+                );
+              return (
+                <Input.Wrap key={item.type} type={item.type}>
+                  <Input.Label>{item.label}</Input.Label>
+                  <Input.Input
+                    placeholder={item.placeholder}
+                    value={this.state[item.type]}
+                    onChange={e => this.onChange(e, item.type)}
+                    type={item.inputType}
+                  />
+                </Input.Wrap>
+              );
+            })}
+          </Block.Contacts>
           <NameBlock>Адрес доставки</NameBlock>
           <Block.Address>
             <YMaps
@@ -186,24 +238,27 @@ class Order extends React.PureComponent {
             >
               <Maps.Ymaps
                 onBoundschange={e => {
-                  console.log(e.originalEvent.newCenter);
-                  findGeo(this.ymaps, e.originalEvent.newCenter).then(res => {
-                    console.log(res);
-                    this.setState({
-                      DisplayLocality: res.address.filter(
-                        item => item.kind === "locality"
-                      )[0].name,
-                      DisplayStreet: res.address.filter(
-                        item =>
-                          item.kind === "street" || item.kind === "district"
-                      )[0].name,
-                      DisplayHouse: res.address.filter(
-                        item => item.kind === "house"
-                      )[0].name,
-                      point: res.coordinates
-                    });
-                    // this.Map.setCenter(res.coordinates, zoom);
-                  });
+                  findGeo(this.ymaps, e.originalEvent.newCenter)
+                    .then(res => {
+                      // console.log(res);
+                      this.setState({
+                        DisplayLocality: res.address.filter(
+                          item => item.kind === "locality"
+                        )[0].name,
+                        DisplayStreet: res.address.filter(
+                          item =>
+                            item.kind === "street" || item.kind === "district"
+                        )[0].name,
+                        DisplayHouse: res.address.filter(
+                          item => item.kind === "house"
+                        )[0].name,
+                        point: res.coordinates,
+                        address: res.address.map(item => item.name).join(", "),
+                        items: []
+                      });
+                      // this.Map.setCenter(res.coordinates, zoom);
+                    })
+                    .catch(err => console.log(err));
                 }}
                 state={{
                   center: point,
@@ -289,7 +344,23 @@ class Order extends React.PureComponent {
                       value={this.state[item.type]}
                       onChange={this.suggest}
                       type={item.inputType}
+                      onFocus={this.onFocusSuggest}
+                      onBlur={this.onBlurSuggest}
                     />
+                    <Suggest.Wrap focus={this.state.suggestFocus}>
+                      {this.state.items.map((item, i) => {
+                        return (
+                          <Suggest.Item
+                            onClick={() =>
+                              this.onSelectSuggest(item.displayName)
+                            }
+                            key={i.toString()}
+                          >
+                            {item.displayName}
+                          </Suggest.Item>
+                        );
+                      })}
+                    </Suggest.Wrap>
                   </Input.Wrap>
                 );
               return (
@@ -305,36 +376,6 @@ class Order extends React.PureComponent {
               );
             })}
           </Block.Address>
-          <NameBlock>Контакты</NameBlock>
-          <Block.Contacts>
-            {Inputs.contacts.map((item, i) => {
-              if (item.type === "number")
-                return (
-                  <Input.Wrap key={item.type} type={item.type}>
-                    <Input.Label>{item.label}</Input.Label>
-                    <Input.InputNumber
-                      placeholder={item.placeholder}
-                      value={this.state[item.type]}
-                      onChange={e => this.onChange(e, item.type)}
-                      type={item.inputType}
-                      mask="0 000 0000000"
-                    />
-                    <Input.Plus>+</Input.Plus>
-                  </Input.Wrap>
-                );
-              return (
-                <Input.Wrap key={item.type} type={item.type}>
-                  <Input.Label>{item.label}</Input.Label>
-                  <Input.Input
-                    placeholder={item.placeholder}
-                    value={this.state[item.type]}
-                    onChange={e => this.onChange(e, item.type)}
-                    type={item.inputType}
-                  />
-                </Input.Wrap>
-              );
-            })}
-          </Block.Contacts>
           <NameBlock>Время доставки</NameBlock>
           <Block.Time>
             <Input.Wrap type="time">
