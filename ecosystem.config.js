@@ -1,8 +1,22 @@
 module.exports = {
   apps: [
     {
-      name: "kfc",
-      script: "./build/index.js",
+      name: "kfc-server",
+      script: "./build/server.js",
+      watch: ["build", "static"],
+      env: {
+        NODE_ENV: "development"
+      },
+      env_production: {
+        NODE_ENV: "production"
+      },
+      output: "./logs/out.log",
+      error: "./logs/error.log",
+      log: "./logs/combined.outerr.log"
+    },
+    {
+      name: "kfc-client",
+      script: "./build/client.js",
       watch: ["build", "static"],
       env: {
         NODE_ENV: "development"
