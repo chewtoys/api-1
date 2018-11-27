@@ -79,7 +79,7 @@ export default class Auth extends Main {
   }
 
   /**
-   * @description Подтверждение номера телефона
+   * @description Подтверждение номера телефона для зарегистрированного аккаунта
    * @param {string} phone - номер телефона
    * @param {number} code - код подтверждения
    * @param {boolean} [debug] - режим отладки
@@ -96,14 +96,15 @@ export default class Auth extends Main {
       SELECT * FROM ??
       WHERE id_verification_type = 1
         AND value = ?
+        AND code = ?
         AND confirmed = 0
       ORDER BY datetime DESC
       LIMIT 1
     `;
-    const data: any = await this.Db.query(sql, [this.table.codes, query.phone]);
+    const data: any = await this.Db.query(sql, [this.table.codes, query.phone, query.code]);
 
     // Проверка номера и кода
-    if (!data.length || (query.code != data[0].code)) throw new Error('Неверный код');
+    if (!data.length) throw new Error('Неверный код');
 
     // Меняем статус номера и кода на "подтвержденный"
     const user = await User.findOne({
@@ -129,6 +130,68 @@ export default class Auth extends Main {
 
     this.response.result = true;
 
+    return this.response;
+  }
+
+  /**
+   * @description Получение кода подтверждения
+   * @param {string} phone - номер телефона
+   * @param {boolean} [debug] - режим отладки
+   */
+  public async get_code(query: any) {
+    // Проверка обязательных параметров
+    if (!query.phone) {
+      if (query.debug) this.functions.paramsError();
+      else this.functions.unknownError();
+    }
+
+    this.sms.code(query.phone);
+
+    this.response.result = true;
+    return this.response;
+  }
+
+  /**
+   * @description Проверка кода подтверждения
+   * @param {string} phone - номер телефона
+   * @param {number} code - код подтверждения
+   * @param {boolean} [debug] - режим отладки
+   */
+  public async check_code(query: any) {
+    // Проверка обязательных параметров
+    if (!query.phone || !query.code) {
+      if (query.debug) this.functions.paramsError();
+      else this.functions.unknownError();
+    }
+
+    // Проверка кода
+    const sql = `
+      SELECT * FROM ??
+      WHERE id_verification_type = 1
+        AND value = ?
+        AND code = ?
+        AND confirmed = 0
+      ORDER BY datetime DESC
+      LIMIT 1
+    `;
+    const data: any = await this.Db.query(sql, [this.table.codes, query.phone, query.code]);
+
+    if (!data.length) throw new Error('Неверный код');
+
+    // Меняем статус кода на "подтвержденный"
+    const update_sql = `
+      UPDATE ??
+      SET confirmed = 1
+      WHERE id_verification_type = 1
+        AND value = ?
+        AND code = ?
+        AND confirmed = 0
+      ORDER BY datetime DESC
+      LIMIT 1
+    `;
+    this.Db.query(update_sql, [this.table.codes, query.phone, query.code]);
+
+    this.response.result = true;
     return this.response;
   }
 
