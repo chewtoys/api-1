@@ -49,7 +49,7 @@ class Server {
         });
         this.app.use(authRoute);
         this.app.use(apiRoute);
-        this.app.use(desktopRoute);
+        // this.app.use(desktopRoute);
     };
 
     /**
