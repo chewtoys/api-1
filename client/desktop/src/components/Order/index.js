@@ -13,7 +13,8 @@ import {
   Input,
   TimeButton,
   TimeSelect,
-  Suggest
+  Suggest,
+  Confirm
 } from "./ui";
 // Fn
 import {
@@ -211,6 +212,8 @@ class Order extends React.PureComponent {
                       mask="0 000 0000000"
                     />
                     <Input.Plus>+</Input.Plus>
+                    {/* <Confirm.Button>Потвердить</Confirm.Button> */}
+                    <Confirm.Input placeholder="0000" />
                   </Input.Wrap>
                 );
               return (

@@ -74,8 +74,8 @@ const BlockAddress = styled.div`
 const BlockContacts = styled.div`
   ${BlockCSS};
   grid-template:
-    "number email email" 4rem
-    "name name name" 4rem;
+    "number email email" 4.5rem
+    "name name name" 4.5rem;
 `;
 
 const BlockTime = styled.div`
@@ -222,7 +222,7 @@ const InputNumber = styled(IMaskInput)`
 const Plus = styled.span`
   color: hsla(0, 0%, 0%, 0.4);
   position: absolute;
-  bottom: 0.63rem;
+  bottom: 1.1rem;
   left: 1rem;
   ${InputNumber}:focus + & {
     color: hsla(0, 0%, 0%, 0.7);
@@ -291,4 +291,46 @@ const SuggestItem = styled.div`
 export const Suggest = {
   Wrap: SuggestWrap,
   Item: SuggestItem
+};
+
+const ConfirmButton = styled.div`
+  position: absolute;
+  /* top: 1rem; */
+  right: 0.6rem;
+  bottom: 0.6rem;
+  width: 7rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  background: linear-gradient(
+    45deg,
+    hsl(199, 75%, 56%) 0%,
+    hsl(230, 74%, 62%) 25%,
+    hsl(284, 46%, 49%) 51%,
+    hsl(338, 100%, 60%) 100%
+  );
+  cursor: pointer;
+`;
+
+const ConfirmInput = styled.input`
+  position: absolute;
+  /* top: 1rem; */
+  right: 0.6rem;
+  bottom: 0.6rem;
+  width: 7rem;
+  height: 2rem;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* color: var(--white); */
+  padding: 0 2rem;
+  border: 1px solid hsla(0, 0%, 0%, 0.3);
+  outline: none;
+`;
+
+export const Confirm = {
+  Button: ConfirmButton,
+  Input: ConfirmInput
 };
