@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "kfc-server",
+      name: "server",
       script: "./build/server.js",
       watch: ["build", "static"],
       env: {
@@ -15,7 +15,7 @@ module.exports = {
       log: "./logs/combined.outerr.log"
     },
     {
-      name: "kfc-client",
+      name: "client",
       script: "./build/client.js",
       watch: ["build", "static"],
       env: {
