@@ -101,12 +101,12 @@ router.post('/api/auth/logout', (req, res) => {
 
 // Локальная стратегия
 passport.use('local', new LocalStrategy({
-  usernameField: 'login',
+  usernameField: 'phone',
   passwordField: 'password'
-}, (login, password, done) => {
+}, (phone, password, done) => {
 
   User.findOne({
-    where: { login }
+    where: { phone }
   }).then((user: any) => {
     if (user) {
       if (bCrypt.compareSync(password, user.password)) {
