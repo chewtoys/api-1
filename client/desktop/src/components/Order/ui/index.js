@@ -294,23 +294,25 @@ export const Suggest = {
 };
 
 const ConfirmButton = styled.div`
+  ${props => (props.visible ? "display: flex" : "display: none")};
   position: absolute;
   /* top: 1rem; */
   right: 0.6rem;
   bottom: 0.6rem;
   width: 7rem;
   height: 2rem;
-  display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--white);
-  background: linear-gradient(
+  color: hsla(0, 0%, 0%, 0.6);
+  /* color: var(--white); */
+  background: hsla(0, 0%, 0%, 0.1);
+  /* background: linear-gradient(
     45deg,
     hsl(199, 75%, 56%) 0%,
     hsl(230, 74%, 62%) 25%,
     hsl(284, 46%, 49%) 51%,
     hsl(338, 100%, 60%) 100%
-  );
+  ); */
   cursor: pointer;
 `;
 
@@ -325,9 +327,13 @@ const ConfirmInput = styled.input`
   /* align-items: center; */
   /* justify-content: center; */
   /* color: var(--white); */
-  padding: 0 2rem;
-  border: 1px solid hsla(0, 0%, 0%, 0.3);
+  padding: 0 1rem;
   outline: none;
+  text-align: center;
+  ${props =>
+    props.verify
+      ? "border: 1px solid hsla(0, 0%, 0%, 0.3);"
+      : "border: 1px solid hsla(349, 100%, 45%, 0.3);"};
 `;
 
 export const Confirm = {

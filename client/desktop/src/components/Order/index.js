@@ -2,6 +2,7 @@ import React from "react";
 import { Tooltip } from "react-tippy";
 import { YMaps } from "react-yandex-maps";
 import moment from "moment";
+import axios from "axios";
 import {
   WrapOrder,
   Arrow,
@@ -107,7 +108,12 @@ class Order extends React.PureComponent {
     comment: "",
     point: [52.275946, 104.359649],
     items: [],
-    suggestFocus: false
+    suggestFocus: false,
+    confirmOpen: false,
+    code: "",
+    verify: {
+      code: null
+    }
   };
 
   ymaps = null;
@@ -184,6 +190,44 @@ class Order extends React.PureComponent {
     });
   };
 
+  onConfirm = () => {
+    this.setState({
+      confirmOpen: true
+    });
+    axios({
+      method: "POST",
+      url: "https://api.laapl.ru/api/auth/get_code",
+      params: {
+        phone: this.state.number.replace(" ", "")
+      }
+    });
+  };
+
+  onChangeConfirm = e => {
+    const value = e.target.value;
+    if (value.length === 5) {
+      this.setState({
+        code: value
+      });
+      axios({
+        method: "POST",
+        url: "https://api.laapl.ru/api/auth/check_code",
+        params: {
+          phone: this.state.number.replace(" ", ""),
+          code: value
+        }
+      }).then(res => {
+        const result = res.data.result;
+        this.setState({
+          verify: {
+            ...this.state.verify,
+            code: result
+          }
+        });
+      });
+    }
+  };
+
   render() {
     const { isActive, zoom, point } = this.state;
 
@@ -212,8 +256,21 @@ class Order extends React.PureComponent {
                       mask="0 000 0000000"
                     />
                     <Input.Plus>+</Input.Plus>
-                    {/* <Confirm.Button>Потвердить</Confirm.Button> */}
-                    <Confirm.Input placeholder="0000" />
+                    {this.state.confirmOpen && (
+                      <Confirm.Input
+                        onChange={this.onChangeConfirm}
+                        placeholder="Код из СМС"
+                        verify={this.state.verify.code}
+                      />
+                    )}
+                    {!this.state.confirmOpen && (
+                      <Confirm.Button
+                        onClick={this.onConfirm}
+                        visible={this.state.number.length === 13}
+                      >
+                        Подтвердить
+                      </Confirm.Button>
+                    )}
                   </Input.Wrap>
                 );
               return (
