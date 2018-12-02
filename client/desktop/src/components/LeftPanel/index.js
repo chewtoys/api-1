@@ -3,7 +3,7 @@ import connect from "react-redux/lib/connect/connect";
 import { withRouter } from "react-router-dom";
 import { Tooltip } from "react-tippy";
 // UI
-import { Panel, Nav, Background, Title } from "./ui";
+import { Panel, Nav, Background } from "./ui";
 
 const LeftPanael = ({ data, location }) => {
   return (
@@ -18,9 +18,7 @@ const LeftPanael = ({ data, location }) => {
               selected={location.pathname === "/" + cat.aliase}
             >
               <Tooltip position="right" title={cat.name}>
-                <Nav.Item bgImage={url}>
-                  {/* <Title>{cat.name}</Title> */}
-                </Nav.Item>
+                <Nav.Item bgImage={url} />
               </Tooltip>
             </Nav.Link>
           );

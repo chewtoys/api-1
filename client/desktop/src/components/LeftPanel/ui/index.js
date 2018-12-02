@@ -1,25 +1,5 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-const navTitleAnimation = keyframes`
-    0% {
-        visibility: visible;
-        width: 30px;
-        color: transparent;
-    }
-    25% {
-        width: auto;
-        color: var(--black);
-    }
-    26% {
-        color: var(--black);
-    }
-    100% {
-        visibility: visible;
-        width: auto;
-        color: var(--black);
-    }
-`;
 
 export const Panel = styled.div`
   position: fixed;
@@ -54,7 +34,7 @@ const NavLink = styled(Link)`
   padding: 0.5rem 0;
   display: inline-flex;
   transition: transform 0.2s ease;
-  transform: ${props => (props.selected ? "scale(1.3)" : "scale(1)")};
+  transform: ${props => (props.selected ? "scale(1.5)" : "scale(1)")};
   position: relative;
   z-index: 2;
   :first-child {
@@ -90,22 +70,5 @@ export const Background = styled.div`
   ${NavWrap}:hover & {
     opacity: 1;
     visibility: visible;
-  }
-`;
-
-export const Title = styled.div`
-  white-space: nowrap;
-  background: hsla(0, 0%, 100%, 1);
-  padding: 0.2rem 0.7rem;
-  border-radius: 1rem;
-  visibility: hidden;
-  margin-left: 2rem;
-  transform: initial;
-  display: none;
-  ${NavWrap}:hover & {
-    animation-duration: 0.3s;
-    animation-timing-function: ease;
-    animation-fill-mode: forwards;
-    animation-name: ${navTitleAnimation};
   }
 `;
