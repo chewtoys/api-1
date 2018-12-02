@@ -10,6 +10,7 @@ export const Panel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 `;
 
 const NavWrap = styled.nav`
@@ -17,12 +18,11 @@ const NavWrap = styled.nav`
   flex-direction: column;
   align-items: center;
   top: calc(50vh - 300px);
-  width: 100%;
 `;
 
 const NavItem = styled.div`
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.3rem;
+  height: 2.3rem;
   border-radius: 50%;
   background-color: hsla(0, 0%, 100%, 1);
   background-image: url(${props => props.bgImage});
@@ -31,7 +31,7 @@ const NavItem = styled.div`
 `;
 
 const NavLink = styled(Link)`
-  padding: 0.5rem 0;
+  padding: 0.6rem 0;
   display: inline-flex;
   transition: transform 0.2s ease;
   transform: ${props => (props.selected ? "scale(1.5)" : "scale(1)")};

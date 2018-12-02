@@ -41,3 +41,18 @@ export const GlobalStyle = createGlobalStyle`
         height: 100vh;
     }
 `;
+
+export const Scroll = styled(ScrollArea)`
+  width: 100vw;
+  height: 100vh;
+`;
+
+export const Background = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: hsla(0, 0%, 0%, 0.75);
+  z-index: 1;
+`;
