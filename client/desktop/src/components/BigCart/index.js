@@ -76,7 +76,7 @@ class BigCart extends React.PureComponent {
                   <Add onClick={() => addToCart(item.id)}>+</Add>
                   <Remove onClick={() => removeFromCart(item.id)}>—</Remove>
                   <Image
-                    src={`https://kfc.laapl.ru${item.poster}`}
+                    src={`https://laapl.ru${item.poster}`}
                     alt={item.title}
                   />
                   <Count>{item.count}</Count>

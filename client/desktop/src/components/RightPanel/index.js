@@ -28,7 +28,7 @@ const RightPanel = ({ settings, open, allData, removeFromCart, openCart }) => {
 
   return (
     <Panel>
-      <Logo image={`url(https://kfc.laapl.ru${url})`} />
+      <Logo image={`url(https://laapl.ru${url})`} />
       <Login>
         <svg xmlns="http://www.w3.org/2000/svg">
           <use xlinkHref="#login" />
@@ -45,7 +45,7 @@ const RightPanel = ({ settings, open, allData, removeFromCart, openCart }) => {
                 title={`${item.title} (${item.count} x ${item.price}₽)`}
               >
                 <Image
-                  src={`https://kfc.laapl.ru${item.poster}`}
+                  src={`https://laapl.ru${item.poster}`}
                   alt={item.title}
                 />
                 <Remove onClick={() => removeFromCart(item.id)}>

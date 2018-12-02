@@ -65,10 +65,10 @@ class Item extends React.PureComponent {
         <Poster>
           <Front>
             <IronImage
-              placeholder={`https://kfc.laapl.ru${poster
+              placeholder={`https://laapl.ru${poster
                 .split(".")[0]
                 .replace("products", "small")}.webP`}
-              src={`https://kfc.laapl.ru${poster}`}
+              src={`https://laapl.ru${poster}`}
               alt={title}
             />
             <Inner>
