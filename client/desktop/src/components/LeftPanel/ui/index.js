@@ -59,7 +59,7 @@ export const Background = styled.div`
   width: 50vw;
   background: linear-gradient(
     to right,
-    hsla(0, 0%, 0%, 0.95) 1%,
+    hsla(0, 0%, 0%, 0.8) 1%,
     transparent 100%
   );
   z-index: 1;
