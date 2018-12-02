@@ -2,7 +2,8 @@ import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     :root {
-        --mainColor: ${props => props.mainColor ? props.mainColor : "hsla(0, 0%, 90%, 1)"};
+        --mainColor: ${props =>
+          props.mainColor ? props.mainColor : "hsla(0, 0%, 90%, 1)"};
         --white: hsla(0, 0%, 100%, 1);
         --black: hsla(0, 0%, 0%, 1);
         --green: hsla(122, 39%, 49%, 1);
@@ -23,8 +24,7 @@ export const GlobalStyle = createGlobalStyle`
     }
     * {
         box-sizing: border-box;
-        -moz-box-sizing: content-box;
-        -ms-box-sizing: content-box;
+        -webkit-font-smoothing: none;
     }
 
     a {
