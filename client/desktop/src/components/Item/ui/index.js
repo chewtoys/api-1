@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const ItemWrap = styled.div`
+const ItemWrap = styled.div`
   display: inline-flex;
   position: relative;
   flex-direction: column;
   user-select: none;
 `;
 
-export const Poster = styled.div`
+const Poster = styled.div`
   width: 100%;
   position: relative;
   transition: transform 0.5s cubic-bezier(0.75, 0, 0.85, 1);
@@ -34,14 +34,14 @@ export const Poster = styled.div`
   }
 `;
 
-export const Input = styled.input`
+const Input = styled.input`
   display: none;
   :checked ~ ${Poster} {
     transform: rotateY(180deg);
   }
 `;
 
-export const Inner = styled.div`
+const Inner = styled.div`
   transform: translateZ(50px);
   position: absolute;
   top: 0;
@@ -52,7 +52,7 @@ export const Inner = styled.div`
   z-index: 10;
 `;
 
-export const Front = styled.div`
+const Front = styled.div`
   backface-visibility: hidden;
   border-radius: 1.6rem;
   box-shadow: var(--mainShadow);
@@ -64,7 +64,7 @@ export const Front = styled.div`
   transform-style: preserve-3d;
 `;
 
-export const Title = styled.div`
+const Title = styled.div`
   display: flex;
   margin-top: 10px;
   background: var(--white);
@@ -84,7 +84,7 @@ export const Title = styled.div`
   }
 `;
 
-export const Price = styled.div`
+const Price = styled.div`
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -95,7 +95,7 @@ export const Price = styled.div`
     0 5px 5px hsla(0, 0%, 0%, 0.4);
 `;
 
-export const Count = styled.div`
+const Count = styled.div`
   position: absolute;
   top: -13px;
   left: -13px;
@@ -116,7 +116,7 @@ export const Count = styled.div`
   color: ${props => (props.count === 0 ? `transparent` : `var(--red)`)};
 `;
 
-export const Info = styled.svg`
+const Info = styled.svg`
   position: absolute;
   bottom: 1rem;
   width: 45px;
@@ -140,7 +140,7 @@ export const Info = styled.svg`
   }
 `;
 
-export const Back = styled.div`
+const Back = styled.div`
   backface-visibility: hidden;
   border-radius: 1.6rem;
   box-shadow: var(--mainShadow);
@@ -160,25 +160,25 @@ export const Back = styled.div`
   text-shadow: 0 0 5px hsla(0, 0%, 0%, 0.2);
 `;
 
-export const Mass = styled.div`
+const Mass = styled.div`
   font-size: 3rem;
   font-weight: 600;
   line-height: 3rem;
 `;
 
-export const Energy = styled.div`
+const Energy = styled.div`
   font-size: 2rem;
   font-weight: 400;
   line-height: 2rem;
 `;
 
-export const EnergyValues = styled.div`
+const EnergyValues = styled.div`
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.5rem;
 `;
 
-export const Pay = styled.div`
+const Pay = styled.div`
   background: linear-gradient(
     45deg,
     hsl(199, 75%, 56%) 0%,
@@ -218,7 +218,7 @@ export const Pay = styled.div`
   }
 `;
 
-export const Close = styled.div`
+const Close = styled.div`
   position: absolute;
   bottom: 1rem;
   width: 3rem;
@@ -239,7 +239,7 @@ export const Close = styled.div`
   }
 `;
 
-export const Spicy = styled.div`
+const Spicy = styled.svg`
   width: 3rem;
   height: 3rem;
   padding: 0.1rem;
@@ -249,8 +249,25 @@ export const Spicy = styled.div`
   z-index: 10;
   filter: drop-shadow(0px 3px 3px hsla(0, 0%, 0%, 0.6));
   color: #ff5722;
-  & svg {
-    width: 3rem;
-    height: 3rem;
-  }
 `;
+
+export const Item = {
+  Wrap: ItemWrap,
+  Poster: Poster,
+  Inner: Inner,
+  Input: Input,
+  Front: Front,
+  Back: Back,
+  Title: Title,
+  Price: Price,
+  Count: Count,
+  Info: Info,
+  Close: Close,
+  Pay: Pay,
+  Spicy: Spicy,
+  Values: {
+    Mass: Mass,
+    Energy: Energy,
+    EnergyValues: EnergyValues
+  }
+};

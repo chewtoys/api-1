@@ -6,26 +6,9 @@ import { Tooltip } from "react-tippy";
 // Actions
 import { addToCart } from "../Root/actions/loadData";
 // UI
-import {
-  ItemWrap,
-  Poster,
-  Title,
-  Front,
-  Inner,
-  Price,
-  Count,
-  Info,
-  Input,
-  Back,
-  Pay,
-  Close,
-  Spicy,
-  Mass,
-  Energy,
-  EnergyValues
-} from "./ui";
+import { Item } from "./ui";
 
-class Item extends React.PureComponent {
+class Product extends React.PureComponent {
   state = {
     checked: false
   };
@@ -55,15 +38,15 @@ class Item extends React.PureComponent {
     const spicy = title.search(/остр/i);
 
     return (
-      <ItemWrap>
-        <Input
+      <Item.Wrap>
+        <Item.Input
           onChange={this.checkedToggle}
           checked={checked}
           type="checkbox"
           aria-hidden
         />
-        <Poster>
-          <Front>
+        <Item.Poster>
+          <Item.Front>
             <IronImage
               placeholder={`https://laapl.ru${poster
                 .split(".")[0]
@@ -71,46 +54,44 @@ class Item extends React.PureComponent {
               src={`https://laapl.ru${poster}`}
               alt={title}
             />
-            <Inner>
+            <Item.Inner>
               {spicy !== -1 && (
-                <Spicy>
-                  <Tooltip
-                    animateFill={false}
-                    distance="30"
-                    position="top"
-                    title="Острое"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg">
-                      <use xlinkHref="#spacy" />
-                      <rect
-                        width="100%"
-                        height="100%"
-                        style={{ fill: "transparent" }}
-                      />
-                    </svg>
-                  </Tooltip>
-                </Spicy>
+                <Tooltip
+                  animateFill={false}
+                  // distance="30"
+                  position="top"
+                  title="Острое"
+                >
+                  <Item.Spicy>
+                    <use xlinkHref="#spacy" />
+                    <rect
+                      width="100%"
+                      height="100%"
+                      style={{ fill: "transparent" }}
+                    />
+                  </Item.Spicy>
+                </Tooltip>
               )}
-              <Price>{price}₽</Price>
-              <Info onClick={this.checkedToggle} viewBox="0 0 24 24">
+              <Item.Price>{price}₽</Item.Price>
+              <Item.Info onClick={this.checkedToggle} viewBox="0 0 24 24">
                 <use xlinkHref="#info" />
                 <rect
                   width="100%"
                   height="100%"
                   style={{ fill: "transparent" }}
                 />
-              </Info>
-              <Count count={count}>{count}</Count>
-            </Inner>
-          </Front>
-          <Back>
-            <Mass>{mass} Г</Mass>
-            <Energy>{energy_value} ККАЛ</Energy>
-            <EnergyValues>
+              </Item.Info>
+              <Item.Count count={count}>{count}</Item.Count>
+            </Item.Inner>
+          </Item.Front>
+          <Item.Back>
+            <Item.Values.Mass>{mass} Г</Item.Values.Mass>
+            <Item.Values.Energy>{energy_value} ККАЛ</Item.Values.Energy>
+            <Item.Values.EnergyValues>
               Б:{protein} Ж:{fat} У:{starch}
-            </EnergyValues>
-            <Inner>
-              <Close onClick={this.checkedToggle}>
+            </Item.Values.EnergyValues>
+            <Item.Inner>
+              <Item.Close onClick={this.checkedToggle}>
                 <svg xmlns="http://www.w3.org/2000/svg">
                   <use xlinkHref="#close" />
                   <rect
@@ -119,11 +100,11 @@ class Item extends React.PureComponent {
                     style={{ fill: "transparent" }}
                   />
                 </svg>
-              </Close>
-            </Inner>
-          </Back>
-        </Poster>
-        <Pay onClick={() => this.props.addToCart(id)}>
+              </Item.Close>
+            </Item.Inner>
+          </Item.Back>
+        </Item.Poster>
+        <Item.Pay onClick={() => this.props.addToCart(id)}>
           <Tooltip animateFill={false} distance="25" title="Добавить в корзину">
             <svg xmlns="http://www.w3.org/2000/svg">
               <use xlinkHref="#cart" />
@@ -134,11 +115,11 @@ class Item extends React.PureComponent {
               />
             </svg>
           </Tooltip>
-        </Pay>
-        <Title>
+        </Item.Pay>
+        <Item.Title>
           <span>{title}</span>
-        </Title>
-      </ItemWrap>
+        </Item.Title>
+      </Item.Wrap>
     );
   }
 }
@@ -152,4 +133,4 @@ export default connect(
       },
       dispatch
     )
-)(Item);
+)(Product);
