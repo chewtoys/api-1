@@ -40,8 +40,7 @@ export default class Products extends Main {
         t2.price AS product_price
       FROM ?? AS t1
       INNER JOIN ?? AS t2 ON t1.idcategory = t2.idcategory
-      WHERE CURDATE() BETWEEN t1.bdate AND t1.edate
-        AND CURDATE() BETWEEN t2.bdate AND t2.edate
+      WHERE actual = 1
     `, [this.table.categories, this.table.products]);
 
     let idcategories: number[] = [];
