@@ -4,7 +4,6 @@ import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Route, Redirect, Switch } from "react-router";
 import { YMInitializer } from "react-yandex-metrika";
-import ScrollArea from "react-scrollbar";
 // Custom components
 import LeftPanel from "../LeftPanel";
 import Content from "../Content";
@@ -12,7 +11,7 @@ import RightPanel from "../RightPanel";
 import BigCart from "../BigCart";
 import { Sprites } from "../Sprites";
 // UI
-import { GlobalStyle } from "./ui";
+import { GlobalStyle, Scroll, Background } from "./ui";
 // Actions
 import { loadData } from "./actions/loadData";
 import { loadData as loadSettings } from "./actions/loadSettings";
@@ -39,10 +38,10 @@ class Root extends React.PureComponent {
     };
 
     render() {
-        const { dataComplite, settingsComplite } = this.props;
+        const { dataComplite, settingsComplite, open } = this.props;
         
         if (dataComplite && settingsComplite) return (
-            <ScrollArea className="scroll-main--block" contentClassName="content-test" horizontal={false}>
+            <Scroll contentClassName="content-test" horizontal={false}>
                 <Sprites />
                 <YMInitializer 
                     accounts={[50403535]}
@@ -62,8 +61,9 @@ class Root extends React.PureComponent {
                 <LeftPanel />
                 <RightPanel />
                 <BigCart />
+                {open && <Background />}
                 <GlobalStyle mainColor={this.state.color} />
-            </ScrollArea>
+            </Scroll>
         )
         return null
     };
@@ -75,7 +75,8 @@ export default withRouter(
             dataComplite: store.data.complite,
             data: store.data,
             settings: store.settings,
-            settingsComplite: store.settings.complite
+            settingsComplite: store.settings.complite,
+            open: store.cart.open
         }),
         (dispatch) =>
             bindActionCreators(

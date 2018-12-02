@@ -4,7 +4,9 @@ export default (sequelize: any, Sequelize: any) => {
    iduser: {
      autoIncrement: true,
      primaryKey: true,
-     type: Sequelize.INTEGER
+     type: Sequelize.INTEGER,
+     allowNull: false,
+     notEmpty: true
    },
    idusertype: {
      type: Sequelize.INTEGER,
@@ -57,11 +59,13 @@ export default (sequelize: any, Sequelize: any) => {
    },
    phone_confirmed: {
      type: Sequelize.BOOLEAN,
+     default: 0,
      allowNull: false,
      notEmpty: true
    },
    email_confirmed: {
      type: Sequelize.BOOLEAN,
+     default: 0,
      allowNull: false,
      notEmpty: true
    }
