@@ -198,7 +198,7 @@ class Order extends React.PureComponent {
       method: "POST",
       url: "https://api.laapl.ru/api/auth/get_code",
       params: {
-        phone: this.state.number.replace(" ", "")
+        phone: this.state.number.replace(/ /g, "")
       }
     });
   };
