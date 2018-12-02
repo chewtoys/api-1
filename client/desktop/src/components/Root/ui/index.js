@@ -1,4 +1,5 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+import ScrollArea from "react-scrollbar";
 
 export const GlobalStyle = createGlobalStyle`
     :root {
@@ -26,19 +27,15 @@ export const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         -webkit-font-smoothing: none;
     }
-
     a {
         outline: none; 
     }
-
     h1 {
         font-family: var(--fontName)
     }
-
     .scrollbar {
         border-radius: 5px;
     }
-
     .scroll-main--block {
         width: 100vw;
         height: 100vh;
