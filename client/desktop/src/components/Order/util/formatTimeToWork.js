@@ -6,7 +6,7 @@ export const formatTimeToWork = work => {
   const TimeDelivery = [];
   while (start <= work.end) {
     TimeDelivery.push(moment(start, "HH:mm").format("HH:mm"));
-    start = moment(start, "HH:mm").add(30, "m");
+    start = moment(start, "HH:mm").add(60, "m");
   }
   return TimeDelivery.filter(item => moment(item, "HH:mm") > localTime);
 };

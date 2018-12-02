@@ -3,6 +3,8 @@ import { Tooltip } from "react-tippy";
 import { YMaps } from "react-yandex-maps";
 import moment from "moment";
 import axios from "axios";
+import connect from "react-redux/lib/connect/connect";
+import { bindActionCreators } from "redux";
 import {
   WrapOrder,
   Arrow,
@@ -81,15 +83,9 @@ const Inputs = {
     }
   ]
 };
-const TimeDelivery = formatTimeToWork({
-  start: moment("10:00", "HH:mm"),
-  end: moment("23:00", "HH:mm")
-});
 
 const minZoom = 12;
 const maxZoom = 19;
-
-console.log(TimeDelivery);
 
 class Order extends React.PureComponent {
   state = {
@@ -113,10 +109,28 @@ class Order extends React.PureComponent {
     code: "",
     verify: {
       code: null
-    }
+    },
+    timeDelivery: []
   };
 
   ymaps = null;
+
+  componentDidMount() {
+    this.setState({
+      timeDelivery: formatTimeToWork({
+        start: moment(
+          this.props.settings.filter(item => item.name === "start_worktime")[0]
+            .value,
+          "HH:mm"
+        ),
+        end: moment(
+          this.props.settings.filter(item => item.name === "end_worktime")[0]
+            .value,
+          "HH:mm"
+        )
+      })
+    });
+  }
 
   openOrder = () => {
     this.setState({
@@ -445,7 +459,7 @@ class Order extends React.PureComponent {
                 animateFill={false}
                 hideOnClick={false}
                 theme="light"
-                html={TimeDelivery.map((item, i) => {
+                html={this.state.timeDelivery.map((item, i) => {
                   return (
                     <TimeSelect className="time__item" key={i.toString()}>
                       {item}
@@ -503,4 +517,6 @@ class Order extends React.PureComponent {
   }
 }
 
-export default Order;
+export default connect(store => ({
+  settings: store.settings.data
+}))(Order);
