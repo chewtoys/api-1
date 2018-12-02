@@ -6,24 +6,24 @@
  */
 
 import Auth from './Auth';
+import OAuth from './OAuth';
 import Settings from './Settings';
 import Products from './Products';
 import Orders from './Orders';
 
 export default class API {
-    [propName: string]: any;
+    Auth: Auth;
+    OAuth: OAuth;
     Settings: Settings;
     Products: Products;
     Orders: Orders;
+    [propName: string]: any;
 
     constructor() {
         this.Auth = new Auth;
+        this.OAuth = new OAuth;
         this.Settings = new Settings;
         this.Products = new Products;
         this.Orders = new Orders;
     }
-
-    // private async setBasename() {
-    //     await new Db().query(`USE ??`, [this.basename]);
-    // }
 }
