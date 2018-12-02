@@ -42,7 +42,7 @@ export const Input = styled.input`
 `;
 
 export const Inner = styled.div`
-  transform: translateZ(50px) scale(0.94);
+  transform: translateZ(50px);
   position: absolute;
   top: 0;
   left: 0;
@@ -86,8 +86,8 @@ export const Title = styled.div`
 
 export const Price = styled.div`
   position: absolute;
-  top: 0.7rem;
-  left: 0.7rem;
+  top: 1rem;
+  left: 1rem;
   font-weight: bold;
   font-size: 1.8rem;
   color: var(--white);
@@ -97,8 +97,8 @@ export const Price = styled.div`
 
 export const Count = styled.div`
   position: absolute;
-  top: -20px;
-  left: -20px;
+  top: -13px;
+  left: -13px;
   border-radius: 1rem;
   background: var(--white);
   padding: 7px 11px 7px 10px;
@@ -118,10 +118,10 @@ export const Count = styled.div`
 
 export const Info = styled.svg`
   position: absolute;
-  bottom: 10px;
+  bottom: 1rem;
   width: 45px;
   height: 45px;
-  left: 10px;
+  left: 1rem;
   border: 2px solid var(--white);
   border-radius: 50%;
   color: var(--white);
@@ -220,10 +220,10 @@ export const Pay = styled.div`
 
 export const Close = styled.div`
   position: absolute;
-  bottom: 10px;
+  bottom: 1rem;
   width: 3rem;
   height: 3rem;
-  left: 10px;
+  left: 1rem;
   border: 2px solid var(--white);
   border-radius: 50%;
   color: var(--white);
@@ -244,8 +244,8 @@ export const Spicy = styled.div`
   height: 3rem;
   padding: 0.1rem;
   position: absolute;
-  top: 0.3rem;
-  right: 0.7rem;
+  top: 0.5rem;
+  right: 1rem;
   z-index: 10;
   filter: drop-shadow(0px 3px 3px hsla(0, 0%, 0%, 0.6));
   color: #ff5722;
