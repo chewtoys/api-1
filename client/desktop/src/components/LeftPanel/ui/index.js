@@ -37,36 +37,30 @@ const NavWrap = styled.nav`
   flex-direction: column;
   align-items: center;
   top: calc(50vh - 300px);
+  width: 100%;
 `;
 
 const NavItem = styled.div`
   width: 2.5rem;
   height: 2.5rem;
-  display: inline-flex;
-  position: relative;
-  z-index: 2;
   border-radius: 50%;
   background-color: hsla(0, 0%, 100%, 1);
   background-image: url(${props => props.bgImage});
   background-size: cover;
-  transition: transform 0.4s ease;
   text-decoration: none;
-  align-items: center;
-  transform: ${props => (props.selected ? "scale(1.3)" : "scale(1)")};
 `;
 
 const NavLink = styled(Link)`
-  padding: 0.3rem 0;
-  :hover {
-    opacity: 1;
-    & ~ ${NavLink} {
-      opacity: 0.4;
-    }
-  }
+  padding: 0.5rem 0;
+  display: inline-flex;
+  transition: transform 0.2s ease;
+  transform: ${props => (props.selected ? "scale(1.3)" : "scale(1)")};
+  position: relative;
+  z-index: 2;
   :first-child {
     padding-top: 0;
   }
-  :last-child {
+  :nth-last-child(2) {
     padding-bottom: 0;
   }
 `;
