@@ -7,7 +7,7 @@ const FooterContent = () => {
   return (
     <Footer.Wrap>
       <Footer.Copyright>
-        ©️ {moment().format("YYYY")} LAAPL DELIVERY.
+        © {moment().format("YYYY")} LAAPL DELIVERY.
       </Footer.Copyright>
       <Footer.CopyrightGIPHY>
         ВЫРАЖАЕМ БЛАГОДАРНОСТЬ{" "}
