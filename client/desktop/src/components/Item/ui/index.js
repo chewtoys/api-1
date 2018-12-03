@@ -145,6 +145,7 @@ const Back = styled.div`
   border-radius: 1.6rem;
   box-shadow: var(--mainShadow);
   background-color: var(--white);
+  /* background-image: url(https://media.giphy.com/media/3o751XAQ4bPBBkSm88/giphy.gif); */
   background-image: url(${props => props.bgImage});
   background-position: center;
   background-size: cover;
