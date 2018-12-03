@@ -144,7 +144,10 @@ const Back = styled.div`
   backface-visibility: hidden;
   border-radius: 1.6rem;
   box-shadow: var(--mainShadow);
-  background: var(--white);
+  background-color: var(--white);
+  background-image: url(${props => props.bgImage});
+  background-position: center;
+  background-size: cover;
   position: absolute;
   top: 0;
   left: 0;
@@ -156,8 +159,9 @@ const Back = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: hsl(0, 0%, 30%);
-  text-shadow: 0 0 5px hsla(0, 0%, 0%, 0.2);
+  color: var(--white);
+  text-shadow: 0 0 8px hsla(0, 0%, 0%, 0.5), 0 0 15px hsla(0, 0%, 0%, 0.4),
+    0 5px 5px hsla(0, 0%, 0%, 0.4);
 `;
 
 const Mass = styled.div`

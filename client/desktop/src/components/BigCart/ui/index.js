@@ -193,7 +193,7 @@ export const Price = styled.div`
   pointer-events: none;
 `;
 
-export const Spacy = styled.div`
+export const Spacy = styled.svg`
   width: 2rem;
   height: 2rem;
   position: absolute;
@@ -203,8 +203,4 @@ export const Spacy = styled.div`
   filter: drop-shadow(0px 2px 1px hsla(0, 0%, 0%, 0.5));
   color: hsl(4, 90%, 58%);
   pointer-events: none;
-  & svg {
-    width: 2rem;
-    height: 2rem;
-  }
 `;
