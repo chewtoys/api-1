@@ -84,7 +84,7 @@ class BigCart extends React.PureComponent {
                   {spicy !== -1 && (
                     <Spacy>
                       <svg xmlns="http://www.w3.org/2000/svg">
-                        <use xlinkHref="#spacy" />
+                        <use xlinkHref="#chili" />
                         <rect
                           width="100%"
                           height="100%"

@@ -56,21 +56,14 @@ class Product extends React.PureComponent {
             />
             <Item.Inner>
               {spicy !== -1 && (
-                <Tooltip
-                  animateFill={false}
-                  // distance="30"
-                  position="top"
-                  title="Острое"
-                >
-                  <Item.Spicy>
-                    <use xlinkHref="#spacy" />
-                    <rect
-                      width="100%"
-                      height="100%"
-                      style={{ fill: "transparent" }}
-                    />
-                  </Item.Spicy>
-                </Tooltip>
+                <Item.Spicy>
+                  <use xlinkHref="#chili" />
+                  <rect
+                    width="100%"
+                    height="100%"
+                    style={{ fill: "transparent" }}
+                  />
+                </Item.Spicy>
               )}
               <Item.Price>{price}₽</Item.Price>
               <Item.Info onClick={this.checkedToggle} viewBox="0 0 24 24">

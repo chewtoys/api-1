@@ -201,7 +201,7 @@ export const Spacy = styled.div`
   right: 10px;
   z-index: 10;
   filter: drop-shadow(0px 2px 1px hsla(0, 0%, 0%, 0.5));
-  color: hsl(14, 100%, 57%);
+  color: hsl(4, 90%, 58%);
   pointer-events: none;
   & svg {
     width: 2rem;

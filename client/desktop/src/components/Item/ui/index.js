@@ -248,7 +248,7 @@ const Spicy = styled.svg`
   right: 1rem;
   z-index: 10;
   filter: drop-shadow(0px 3px 3px hsla(0, 0%, 0%, 0.6));
-  color: #ff5722;
+  color: hsl(4, 90%, 58%);
 `;
 
 export const Item = {
