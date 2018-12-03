@@ -83,14 +83,12 @@ class BigCart extends React.PureComponent {
                   <Price>{item.price}₽</Price>
                   {spicy !== -1 && (
                     <Spacy>
-                      <svg xmlns="http://www.w3.org/2000/svg">
-                        <use xlinkHref="#spacy" />
-                        <rect
-                          width="100%"
-                          height="100%"
-                          style={{ fill: "transparent" }}
-                        />
-                      </svg>
+                      <use xlinkHref="#chili" />
+                      <rect
+                        width="100%"
+                        height="100%"
+                        style={{ fill: "transparent" }}
+                      />
                     </Spacy>
                   )}
                 </Item>

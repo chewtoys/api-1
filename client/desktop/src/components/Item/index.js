@@ -3,6 +3,7 @@ import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import IronImage from "react-image-lazy-load-component";
 import { Tooltip } from "react-tippy";
+import axios from "axios";
 // Actions
 import { addToCart } from "../Root/actions/loadData";
 // UI
@@ -10,15 +11,30 @@ import { Item } from "./ui";
 
 class Product extends React.PureComponent {
   state = {
-    checked: false
+    checked: false,
+    bgBack: null
   };
 
   checkedToggle = () => {
-    this.setState(prevState => {
-      return {
-        checked: !prevState.checked
-      };
-    });
+    if (!this.state.checked) {
+      axios({
+        method: "GET",
+        url: "https://api.giphy.com/v1/gifs/random",
+        params: {
+          api_key: "uE0UHNpaKyipyIfRtArmPM4dp4vwMqH0",
+          tag: "shook"
+        }
+      }).then(res => {
+        this.setState({
+          checked: true,
+          bgBack: res.data.data.image_url
+        });
+      });
+    } else {
+      this.setState({
+        checked: false
+      });
+    }
   };
 
   render() {
@@ -34,7 +50,7 @@ class Product extends React.PureComponent {
       fat,
       starch
     } = this.props;
-    const { checked } = this.state;
+    const { checked, bgBack } = this.state;
     const spicy = title.search(/остр/i);
 
     return (
@@ -56,21 +72,14 @@ class Product extends React.PureComponent {
             />
             <Item.Inner>
               {spicy !== -1 && (
-                <Tooltip
-                  animateFill={false}
-                  // distance="30"
-                  position="top"
-                  title="Острое"
-                >
-                  <Item.Spicy>
-                    <use xlinkHref="#spacy" />
-                    <rect
-                      width="100%"
-                      height="100%"
-                      style={{ fill: "transparent" }}
-                    />
-                  </Item.Spicy>
-                </Tooltip>
+                <Item.Spicy>
+                  <use xlinkHref="#chili" />
+                  <rect
+                    width="100%"
+                    height="100%"
+                    style={{ fill: "transparent" }}
+                  />
+                </Item.Spicy>
               )}
               <Item.Price>{price}₽</Item.Price>
               <Item.Info onClick={this.checkedToggle} viewBox="0 0 24 24">
@@ -84,7 +93,7 @@ class Product extends React.PureComponent {
               <Item.Count count={count}>{count}</Item.Count>
             </Item.Inner>
           </Item.Front>
-          <Item.Back>
+          <Item.Back bgImage={bgBack}>
             <Item.Values.Mass>{mass} Г</Item.Values.Mass>
             <Item.Values.Energy>{energy_value} ККАЛ</Item.Values.Energy>
             <Item.Values.EnergyValues>
