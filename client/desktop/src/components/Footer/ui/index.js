@@ -30,6 +30,7 @@ const Giphy = styled.a`
   vertical-align: middle;
   position: relative;
   top: -1px;
+  filter: drop-shadow(0px 3px 3px hsla(0, 0%, 0%, 0.6));
 `;
 
 export const Footer = {

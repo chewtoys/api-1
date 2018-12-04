@@ -22,14 +22,21 @@ class Product extends React.PureComponent {
         url: "https://api.giphy.com/v1/gifs/random",
         params: {
           api_key: "uE0UHNpaKyipyIfRtArmPM4dp4vwMqH0",
-          tag: "shook"
+          tag: "shook",
+          rating: "g"
         }
-      }).then(res => {
-        this.setState({
-          checked: true,
-          bgBack: res.data.data.image_url
+      })
+        .then(res => {
+          this.setState({
+            checked: true,
+            bgBack: res.data.data.fixed_height_downsampled_url
+          });
+        })
+        .catch(err => {
+          this.setState({
+            checked: true
+          });
         });
-      });
     } else {
       this.setState({
         checked: false
@@ -51,7 +58,7 @@ class Product extends React.PureComponent {
       starch
     } = this.props;
     const { checked, bgBack } = this.state;
-    const spicy = title.search(/остр/i);
+    const spicy = title.search(/стры/i);
 
     return (
       <Item.Wrap>
