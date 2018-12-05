@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import redis from 'redis';
 import connectRedis from 'connect-redis';
+import Cron from './Main/Cron';
+import cron from 'cron';
 import { desktopRoute, apiRoute, authRoute } from "./Routes";
 
 const RedisClient = redis.createClient({
@@ -17,6 +19,7 @@ const RedisStore = connectRedis(session);
 
 class Server {
     app: express.Application;
+    Cron: Cron;
 
     constructor() {
         this.app = express();
@@ -38,6 +41,8 @@ class Server {
         this.app.use(passport.initialize());
         this.app.use(passport.session());
 
+        this.Cron = new Cron();
+
         this.routing();
     };
 
@@ -57,6 +62,10 @@ class Server {
      */
     
     public start() {
+        new cron.CronJob('0 0 0 * * *', () => {
+          this.Cron.updateProductsPopularity();
+        }, null, true, 'Asia/Irkutsk');
+
         this.app.listen(3000);
         // console.log('env = ', process.env)
     };
