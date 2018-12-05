@@ -220,7 +220,8 @@ export default class Orders extends Main {
 
     this.response.result = true;
     this.response.data = {
-      url: res.data.PaymentURL
+      url: res.data.PaymentURL,
+      delivery_cost: this.delivery_cost
     };
     return this.response;
   }
