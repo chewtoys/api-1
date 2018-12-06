@@ -2,10 +2,11 @@ import styled from "styled-components";
 import giphy from "../img/giphy.png";
 
 const FooterWrap = styled.div`
-  height: 4rem;
+  /* height: 4rem; */
   padding: 1rem 7rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   color: var(--white);
   text-shadow: 0 0 8px hsla(0, 0%, 0%, 0.5), 0 0 15px hsla(0, 0%, 0%, 0.4);
   font-weight: 100;
@@ -33,9 +34,27 @@ const Giphy = styled.a`
   filter: drop-shadow(0px 3px 3px hsla(0, 0%, 0%, 0.6));
 `;
 
+const Content = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Block = styled.div`
+  display: inline-flex;
+`;
+
+const Logo = styled.svg`
+  width: 4rem;
+  height: 2rem;
+  color: red;
+`;
+
 export const Footer = {
   Wrap: FooterWrap,
+  Content: Content,
+  Block: Block,
   Copyright: Copyright,
   CopyrightGIPHY: CopyrightGIPHY,
-  Link: Giphy
+  Link: Giphy,
+  Logo: Logo
 };

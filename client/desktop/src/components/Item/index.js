@@ -55,7 +55,8 @@ class Product extends React.PureComponent {
       energy_value,
       protein,
       fat,
-      starch
+      starch,
+      bad_img
     } = this.props;
     const { checked, bgBack } = this.state;
     const spicy = title.search(/стры/i);
@@ -70,13 +71,7 @@ class Product extends React.PureComponent {
         />
         <Item.Poster>
           <Item.Front>
-            <IronImage
-              placeholder={`https://laapl.ru${poster
-                .split(".")[0]
-                .replace("products", "small")}.webP`}
-              src={`https://laapl.ru${poster}`}
-              alt={title}
-            />
+            <IronImage placeholder={bad_img} src={poster} alt={title} />
             <Item.Inner>
               {spicy !== -1 && (
                 <Item.Spicy>

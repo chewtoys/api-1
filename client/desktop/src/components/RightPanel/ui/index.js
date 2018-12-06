@@ -11,6 +11,7 @@ export const Panel = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
+  z-index: 2;
 `;
 
 export const Logo = styled.div`

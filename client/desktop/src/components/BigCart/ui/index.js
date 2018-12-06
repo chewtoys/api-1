@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Scroll from "react-scrollbar";
+import kosmo from "../img/kosmo.jpg";
 
 const CartWrap = styled.div`
   position: fixed;
@@ -31,9 +32,18 @@ const CartClose = styled.svg`
   cursor: pointer;
 `;
 
+const CartHeader = styled.div`
+  background-image: url(${kosmo});
+  background-size: cover;
+  height: 6rem;
+  margin: 1rem;
+  border-radius: 1rem;
+`;
+
 export const Cart = {
   Wrap: CartWrap,
   Title: CartTitle,
+  Header: CartHeader,
   Close: CartClose
 };
 

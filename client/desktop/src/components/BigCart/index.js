@@ -48,6 +48,7 @@ class BigCart extends React.PureComponent {
           </Cart.Close>
         </Cart.Title>
         <ScrollArea stopScrollPropagation={true} horizontal={false}>
+          <Cart.Header />
           {data.map((item, i) => {
             const spicy = item.title.search(/остр/i);
 
@@ -58,10 +59,7 @@ class BigCart extends React.PureComponent {
                 position="top"
                 title={item.title}
               >
-                <Item.Wrap
-                  bgImage={`https://laapl.ru${item.poster}`}
-                  count={item.count}
-                >
+                <Item.Wrap bgImage={item.poster} count={item.count}>
                   <Item.Hover />
                   <Item.Asc onClick={() => addToCart(item.id)}>
                     <Item.Icon>
