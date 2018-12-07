@@ -7,7 +7,7 @@ export const WrapContent = styled.div`
   justify-content: space-between;
   grid-gap: 2rem 1rem;
   position: relative;
-  ${props => (props.open ? `filter: blur(3px)` : ``)}
+  ${props => (props.open ? `filter: blur(3px)` : ``)};
 `;
 
 export const Title = styled.h1`
