@@ -36,7 +36,9 @@ export default class Products extends Main {
         t2.starch AS product_starch,
         t2.mass AS product_mass,
         t2.description AS product_description,
-        t2.poster AS product_poster,
+        t2.big_img AS product_big_img,
+        t2.small_img AS product_small_img,
+        t2.bad_img AS product_bad_img,
         t2.price AS product_price
       FROM ?? AS t1
       INNER JOIN ?? AS t2 ON t1.idcategory = t2.idcategory
@@ -64,7 +66,9 @@ export default class Products extends Main {
               name: item.product_name,
               title: item.product_title,
               description: item.product_description,
-              poster: item.product_poster,
+              big_img: item.product_big_img,
+              small_img: item.product_small_img,
+              bad_img: item.product_bad_img,
               specification: item.product_specification,
               energy_value: item.product_energy,
               fat: item.product_fat,
