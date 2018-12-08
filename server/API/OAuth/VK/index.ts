@@ -25,7 +25,6 @@ export default class VK extends Passport {
           vk_id: profile.id
         },
         defaults: {
-          idusertype: 1,
           name: profile.name.givenName,
           avatar: profile.photos[1].value,
           vk_url: profile.profileUrl

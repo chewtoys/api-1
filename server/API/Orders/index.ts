@@ -86,7 +86,6 @@ export default class Orders extends Main {
         phone: body.phone
       },
       defaults: {
-        idusertype: 1,
         email: body.email,
         name: body.name,
         phone_confirmed: 1,

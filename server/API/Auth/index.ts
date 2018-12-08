@@ -7,6 +7,7 @@ import Main from '../../Main';
 import Functions from '../../Main/Functions';
 import SMS from '../../Main/SMS';
 import Models from '../../Models';
+import { Request, Response } from 'express';
 
 export default class Auth extends Main {
   functions: Functions;
@@ -27,6 +28,17 @@ export default class Auth extends Main {
 
     this.response = { result: false };
     this.user = Models.User;
+  }
+
+  /**
+   * @description Выход
+   */
+  public async logout(req: Request, res: Response) {
+    req.logout();
+    res.clearCookie('connect.sid');
+    
+    this.response.result = true;
+    return res.json(this.response);
   }
 
   /**
