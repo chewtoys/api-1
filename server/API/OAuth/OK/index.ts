@@ -25,7 +25,6 @@ export default class OK extends Passport {
           ok_id: profile.id
         },
         defaults: {
-          idusertype: 1,
           name: profile.name.givenName,
           avatar: profile.photos[1].value,
           ok_url: profile.profileUrl

@@ -22,6 +22,11 @@ router.get('/api/oauth/ok/callback', (req, res, next) => {
   new API().OAuth.OK.callback(req, res, next);
 });
 
+// Роут для выхода
+router.post('/api/auth/logout', (req, res) => {
+  new API().Auth.logout(req, res);
+});
+
 // // Локальная авторизация
 // router.post('/api/auth/login', (req, res, next) => {
 //   passport.authenticate('local', (err, user, info) => {
@@ -58,15 +63,6 @@ router.get('/api/oauth/ok/callback', (req, res, next) => {
 //   }
 // });
 
-// // Роут для выхода
-// router.post('/api/auth/logout', (req, res) => {
-//   req.logout();
-//   res.clearCookie('connect.sid');
-//   return res.json({
-//     result: true
-//   });
-// });
-
 // // Локальная стратегия
 // passport.use('local', new LocalStrategy({
 //   usernameField: 'phone',
@@ -88,55 +84,5 @@ router.get('/api/oauth/ok/callback', (req, res, next) => {
 //   });
 
 // }));
-
-// // Стратегия для одноклассников
-// passport.use('ok', new OKStrategy({
-//   clientID: process.env.OK_APP_ID,
-//   clientPublic: process.env.OK_APP_PUBLIC,
-//   clientSecret: process.env.OK_APP_SECRET,
-//   callbackURL: '/api/oauth/ok/callback'
-// }, (accessToken, refreshToken, params, profile, done) => {
-//   User.findOrCreate({
-//     where: {
-//       ok_id: profile.id
-//     },
-//     defaults: {
-//       idusertype: 1,
-//       name: profile.name.givenName,
-//       avatar: profile.photos[1].value,
-//       ok_url: profile.profileUrl
-//     }
-//   }).spread((user: any, created: any) => {
-//     if (user) {
-//       if (!created) {
-//         user.update({
-//           name: profile.name.givenName,
-//           avatar: profile.photos[1].value,
-//           ok_url: profile.profileUrl
-//         }).then(() => {
-//           return done(null, user);
-//         });
-//       } else {
-//         return done(null, user);
-//       }
-//     } else {
-//       return done(null, false);
-//     }
-//   });
-// }));
-
-// passport.serializeUser((user: any, done: any) => {
-//   done(null, user.iduser);
-// });
-
-// passport.deserializeUser((id: number, done: any) => {
-//   User.findById(id).then((user: any) => {
-//     if (user) {
-//       return done(null, user.get());
-//     } else {
-//       return done(null, null);
-//     }
-//   });
-// });
 
 export default router;
