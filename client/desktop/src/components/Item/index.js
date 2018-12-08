@@ -16,6 +16,7 @@ class Product extends React.PureComponent {
   };
 
   checkedToggle = () => {
+    console.log(this.props);
     if (!this.state.checked) {
       axios({
         method: "GET",
@@ -46,7 +47,7 @@ class Product extends React.PureComponent {
 
   render() {
     const {
-      poster,
+      big_img,
       title,
       price,
       id,
@@ -71,7 +72,7 @@ class Product extends React.PureComponent {
         />
         <Item.Poster>
           <Item.Front>
-            <IronImage placeholder={bad_img} src={poster} alt={title} />
+            <IronImage placeholder={bad_img} src={big_img} alt={title} />
             <Item.Inner>
               {spicy !== -1 && (
                 <Item.Spicy>

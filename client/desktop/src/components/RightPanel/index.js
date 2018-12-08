@@ -41,7 +41,7 @@ const RightPanel = ({ settings, open, allData, removeFromCart, openCart }) => {
                 position="left"
                 title={`${item.title} (${item.count} x ${item.price}₽)`}
               >
-                <Image src={item.poster} alt={item.title} />
+                <Image src={item.big_img} alt={item.title} />
                 <Remove onClick={() => removeFromCart(item.id)}>
                   <svg xmlns="http://www.w3.org/2000/svg">
                     <use xlinkHref="#remove" />

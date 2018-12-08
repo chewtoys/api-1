@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         font-family: var(--fontName);
-        background: var(--mainColor);
+        background: ${props => props.theme.mainColorBackground};
         transition: background .2s ease;
         overflow: hidden;
     }

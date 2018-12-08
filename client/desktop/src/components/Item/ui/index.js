@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { darken } from "polished";
 
 const ItemWrap = styled.div`
   display: inline-flex;
@@ -110,10 +111,23 @@ const Count = styled.div`
   transition-duration: 0.4s;
   transition-timing-function: ease;
   transition-property: transform, opacity, visibility;
-  visibility: ${props => (props.count === 0 ? `hidden` : `visible`)};
-  transform: ${props => (props.count === 0 ? `scale(.7)` : `scale(1)`)};
-  opacity: ${props => (props.count === 0 ? 0 : 1)};
-  color: ${props => (props.count === 0 ? `transparent` : `var(--red)`)};
+  ${props => {
+    if (props.count === 0) {
+      return `
+        visibility: hidden;
+        transform: scale(.7);
+        opacity: 0;
+        color: transparent
+      `;
+    } else {
+      return `
+        visibility: visible;
+        transform: scale(1);
+        opacity: 1;
+        color: ${props.theme.mainColorBackground}
+      `;
+    }
+  }};
 `;
 
 const Info = styled.svg`
@@ -144,7 +158,7 @@ const Back = styled.div`
   backface-visibility: hidden;
   border-radius: 1.6rem;
   box-shadow: var(--mainShadow);
-  background-color: var(--white);
+  background-color: ${props => darken(0.2, props.theme.mainColorBackground)};
   /* background-image: url(https://media.giphy.com/media/3o751XAQ4bPBBkSm88/giphy.gif); */
   background-image: url(${props => props.bgImage});
   background-position: center;

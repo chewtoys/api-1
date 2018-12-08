@@ -40,24 +40,26 @@ const CartHeader = styled.div`
   border-radius: 1rem;
 `;
 
+const CartContent = styled.div`
+  display: grid;
+  padding: 1rem 1rem 1.5rem;
+  grid-template-columns: repeat(auto-fill, 23%);
+  justify-content: space-between;
+  grid-gap: 1rem 1rem;
+  position: relative;
+`;
+
 export const Cart = {
   Wrap: CartWrap,
   Title: CartTitle,
   Header: CartHeader,
-  Close: CartClose
+  Close: CartClose,
+  Content: CartContent
 };
 
 export const ScrollArea = styled(Scroll)`
   height: calc(100% - 7rem);
   padding: 0;
-  & > div:first-child {
-    display: grid;
-    padding: 1rem 1rem 1.5rem;
-    grid-template-columns: repeat(auto-fill, 23%);
-    justify-content: space-between;
-    grid-gap: 1rem 1rem;
-    position: relative;
-  }
 `;
 
 const ItemWrap = styled.div`
@@ -133,7 +135,7 @@ const Count = styled.div`
   top: -15px;
   left: -12px;
   color: var(--white);
-  background: var(--mainColor);
+  background: ${props => props.theme.mainColorBackground};
   padding: 7px 11px 7px 10px;
   font-size: 13px;
   border-radius: 1rem;

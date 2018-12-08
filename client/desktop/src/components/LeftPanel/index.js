@@ -17,7 +17,7 @@ const LeftPanael = ({ data, location }) => {
               selected={location.pathname === "/" + cat.aliase}
             >
               <Tooltip position="right" title={cat.name}>
-                <Nav.Item bgImage={cat.items[0].poster} />
+                <Nav.Item bgImage={cat.items[0].big_img} />
               </Tooltip>
             </Nav.Link>
           );

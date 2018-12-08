@@ -4,6 +4,7 @@ import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import { Route, Redirect, Switch } from "react-router";
 import { YMInitializer } from "react-yandex-metrika";
+import { ThemeProvider } from "styled-components";
 // Custom components
 import LeftPanel from "../LeftPanel";
 import Content from "../Content";
@@ -21,7 +22,13 @@ import "react-tippy/dist/tippy.css";
 
 class Root extends React.PureComponent {
   state = {
-    color: null
+    color: null,
+    theme: {
+      mainColorBackground: "white",
+      mainColorText: "white",
+      otherColorBackground: "black",
+      otherColorText: "black"
+    }
   };
 
   componentDidMount() {
@@ -35,7 +42,11 @@ class Root extends React.PureComponent {
         item => item.name === "background"
       )[0].value;
       this.setState({
-        color
+        color,
+        theme: {
+          ...this.state.theme,
+          mainColorBackground: color
+        }
       });
     }
   }
@@ -45,30 +56,32 @@ class Root extends React.PureComponent {
 
     if (dataComplite && settingsComplite)
       return (
-        <Scroll contentClassName="content-test" horizontal={false}>
-          <Sprites />
-          <YMInitializer
-            accounts={[50403535]}
-            options={{
-              webvisor: true,
-              clickmap: true,
-              trackLinks: true,
-              accurateTrackBounce: true
-            }}
-            version="2"
-          />
-          <Switch>
-            <Redirect exact from="/" to={this.props.data.data[0].aliase} />
-            <Route path="/:category" component={Content} />
-          </Switch>
-          <Footer />
+        <ThemeProvider theme={this.state.theme}>
+          <Scroll contentClassName="content-test" horizontal={false}>
+            <Sprites />
+            <YMInitializer
+              accounts={[50403535]}
+              options={{
+                webvisor: true,
+                clickmap: true,
+                trackLinks: true,
+                accurateTrackBounce: true
+              }}
+              version="2"
+            />
+            <Switch>
+              <Redirect exact from="/" to={this.props.data.data[0].aliase} />
+              <Route path="/:category" component={Content} />
+            </Switch>
+            <Footer />
 
-          <LeftPanel />
-          <RightPanel />
-          <BigCart />
-          {open && <Background />}
-          <GlobalStyle mainColor={this.state.color} />
-        </Scroll>
+            <LeftPanel />
+            <RightPanel />
+            <BigCart />
+            {open && <Background />}
+            <GlobalStyle mainColor={this.state.color} />
+          </Scroll>
+        </ThemeProvider>
       );
     return null;
   }

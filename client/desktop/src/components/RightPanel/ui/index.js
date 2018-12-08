@@ -41,7 +41,7 @@ export const Login = styled.svg`
   align-items: center;
   cursor: pointer;
   z-index: 100;
-  color: var(--red);
+  color: ${props => props.theme.mainColorBackground};
   margin: 5px 0;
   /* & svg {
       width: 40px;
@@ -122,7 +122,7 @@ export const Count = styled.div`
   top: -8px;
   left: -8px;
   background: var(--white);
-  color: var(--red);
+  color: ${props => props.theme.mainColorBackground};
   padding: 3px 7px 3px 6px;
   font-size: 10px;
   border-radius: 15px;
@@ -159,7 +159,7 @@ export const Cart = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 100;
-  color: var(--red);
+  color: ${props => props.theme.mainColorBackground};
   margin: 5px 0;
   position: relative;
   user-select: none;
