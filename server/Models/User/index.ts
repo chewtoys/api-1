@@ -8,11 +8,6 @@ export default (sequelize: any, Sequelize: any) => {
      allowNull: false,
      notEmpty: true
    },
-   idusertype: {
-     type: Sequelize.INTEGER,
-     allowNull: false,
-     notEmpty: true 
-   },
    name: {
     type: Sequelize.STRING,
     allowNull: false,
