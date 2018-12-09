@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { Route, Redirect, Switch } from "react-router";
 import { YMInitializer } from "react-yandex-metrika";
 import { ThemeProvider } from "styled-components";
+import { darken } from "polished";
 // Custom components
 import LeftPanel from "../LeftPanel";
 import Content from "../Content";
@@ -24,10 +25,8 @@ class Root extends React.PureComponent {
   state = {
     color: null,
     theme: {
-      mainColorBackground: "white",
-      mainColorText: "white",
-      otherColorBackground: "black",
-      otherColorText: "black"
+      mainColor: "white",
+      mainColorDark: "white"
     }
   };
 
@@ -45,7 +44,8 @@ class Root extends React.PureComponent {
         color,
         theme: {
           ...this.state.theme,
-          mainColorBackground: color
+          mainColor: color,
+          mainColorDark: darken(0.15, color)
         }
       });
     }

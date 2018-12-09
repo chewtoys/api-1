@@ -123,7 +123,7 @@ const FooterContent = ({ open }) => {
       </Footer.Content>
       <Footer.Bottom>
         <Footer.Copyright>
-          © {moment().format("YYYY")} LAAPL DELIVERY
+          © {moment().format("YYYY")} LAAPL DELIVERY 18+
         </Footer.Copyright>
         <Footer.Policy href="https://laapl.ru/policy-privacy" target="_blanc">
           Политика конфиденциальности

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { darken } from "polished";
+import { Tooltip } from "react-tippy";
 
 const ItemWrap = styled.div`
   display: inline-flex;
@@ -24,13 +24,13 @@ const Poster = styled.div`
     height: 100%;
     position: absolute;
     border-radius: 1.6rem;
-    background-color: var(--white);
+    background-color: white;
     & .iron-image {
       width: 100%;
       height: 100%;
       position: absolute;
       border-radius: 1.6rem;
-      background-color: var(--white);
+      background-color: white;
     }
   }
 `;
@@ -43,7 +43,7 @@ const Input = styled.input`
 `;
 
 const Inner = styled.div`
-  transform: translateZ(50px);
+  transform: translateZ(3rem);
   position: absolute;
   top: 0;
   left: 0;
@@ -56,7 +56,7 @@ const Inner = styled.div`
 const Front = styled.div`
   backface-visibility: hidden;
   border-radius: 1.6rem;
-  box-shadow: var(--mainShadow);
+  box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
   position: absolute;
   top: 0;
   left: 0;
@@ -67,13 +67,12 @@ const Front = styled.div`
 
 const Title = styled.div`
   display: flex;
-  margin-top: 10px;
-  background: var(--white);
+  margin-top: 1rem;
+  background: white;
   border-radius: 3rem;
-  box-shadow: var(--mainShadow);
+  box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
   padding: 0.3rem 1rem;
   min-height: 3rem;
-  color: var(--black);
   font-size: 1rem;
   flex: 1;
   align-items: center;
@@ -91,19 +90,19 @@ const Price = styled.div`
   left: 1rem;
   font-weight: bold;
   font-size: 1.8rem;
-  color: var(--white);
+  color: white;
   text-shadow: 0 0 8px hsla(0, 0%, 0%, 0.5), 0 0 15px hsla(0, 0%, 0%, 0.4),
     0 5px 5px hsla(0, 0%, 0%, 0.4);
 `;
 
 const Count = styled.div`
   position: absolute;
-  top: -13px;
-  left: -13px;
+  top: -1rem;
+  left: -1rem;
   border-radius: 1rem;
-  background: var(--white);
+  background: white;
   padding: 7px 11px 7px 10px;
-  font-size: 13px;
+  font-size: 0.9rem;
   transition: visibility 0.2s ease;
   font-weight: 600;
   box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
@@ -124,7 +123,7 @@ const Count = styled.div`
         visibility: visible;
         transform: scale(1);
         opacity: 1;
-        color: ${props.theme.mainColorBackground}
+        color: black
       `;
     }
   }};
@@ -133,21 +132,21 @@ const Count = styled.div`
 const Info = styled.svg`
   position: absolute;
   bottom: 1rem;
-  width: 45px;
-  height: 45px;
+  width: 3rem;
+  height: 3rem;
   left: 1rem;
-  border: 2px solid var(--white);
+  border: 2px solid white;
   border-radius: 50%;
-  color: var(--white);
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 1s ease;
+  transition: all 0.4s ease;
   filter: drop-shadow(0px 3px 2px hsla(0, 0%, 0%, 0.8));
-  padding: 5px;
+  padding: 0.3rem;
   ${ItemWrap}:hover & {
     visibility: visible;
     opacity: 1;
@@ -157,8 +156,8 @@ const Info = styled.svg`
 const Back = styled.div`
   backface-visibility: hidden;
   border-radius: 1.6rem;
-  box-shadow: var(--mainShadow);
-  background-color: ${props => darken(0.2, props.theme.mainColorBackground)};
+  box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
+  background-color: ${props => props.theme.mainColorDark};
   /* background-image: url(https://media.giphy.com/media/3o751XAQ4bPBBkSm88/giphy.gif); */
   background-image: url(${props => props.bgImage});
   background-position: center;
@@ -174,7 +173,7 @@ const Back = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: var(--white);
+  color: white;
   text-shadow: 0 0 8px hsla(0, 0%, 0%, 0.5), 0 0 15px hsla(0, 0%, 0%, 0.4),
     0 5px 5px hsla(0, 0%, 0%, 0.4);
 `;
@@ -197,36 +196,21 @@ const EnergyValues = styled.div`
   line-height: 1.5rem;
 `;
 
-const Pay = styled.div`
-  background: linear-gradient(
-    45deg,
-    hsl(199, 75%, 56%) 0%,
-    hsl(230, 74%, 62%) 25%,
-    hsl(284, 46%, 49%) 51%,
-    hsl(338, 100%, 60%) 100%
-  );
+const Pay = styled(Tooltip)`
+  width: 4rem;
+  height: 4rem;
   position: absolute;
   bottom: 1.5rem;
   right: 1rem;
-  color: var(--white);
-  border-radius: 50%;
-  width: 4rem;
-  height: 4rem;
-  box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
-  line-height: 10px;
+  border-radius: 50%;
+  overflow: hidden;
   user-select: none;
+  box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
   transform: scale(0.8);
   opacity: 0;
   visibility: hidden;
-  transition: transform 0.4s ease, opacity 0.3s ease;
-  & svg {
-    width: 20px;
-    height: 20px;
-  }
+  transition: transform 0.4s ease, opacity 0.3s ease, visibility 0.3s ease;
   ${ItemWrap}:hover & {
     transform: scale(1);
     opacity: 1;
@@ -237,25 +221,36 @@ const Pay = styled.div`
   }
 `;
 
-const Close = styled.div`
+const PayIcon = styled.svg`
+  background: linear-gradient(
+    45deg,
+    hsl(199, 75%, 56%) 0%,
+    hsl(230, 74%, 62%) 25%,
+    hsl(284, 46%, 49%) 51%,
+    hsl(338, 100%, 60%) 100%
+  );
+  color: white;
+  width: 4rem;
+  height: 4rem;
+  padding: 1.2rem;
+`;
+
+const Close = styled.svg`
   position: absolute;
   bottom: 1rem;
   width: 3rem;
   height: 3rem;
   left: 1rem;
-  border: 2px solid var(--white);
+  border: 2px solid white;
   border-radius: 50%;
-  color: var(--white);
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   backface-visibility: hidden;
   filter: drop-shadow(0px 3px 2px hsla(0, 0%, 0%, 0.8));
-  & svg {
-    width: 30px;
-    height: 30px;
-  }
+  padding: 0.5rem;
 `;
 
 const Spicy = styled.svg`
@@ -267,7 +262,6 @@ const Spicy = styled.svg`
   right: 1rem;
   z-index: 10;
   filter: drop-shadow(0px 3px 3px hsla(0, 0%, 0%, 0.6));
-  color: hsl(4, 90%, 58%);
 `;
 
 export const Item = {
@@ -283,10 +277,7 @@ export const Item = {
   Info: Info,
   Close: Close,
   Pay: Pay,
+  PayIcon: PayIcon,
   Spicy: Spicy,
-  Values: {
-    Mass: Mass,
-    Energy: Energy,
-    EnergyValues: EnergyValues
-  }
+  Values: { Mass: Mass, Energy: Energy, EnergyValues: EnergyValues }
 };

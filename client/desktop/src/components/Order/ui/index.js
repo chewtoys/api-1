@@ -9,7 +9,7 @@ export const WrapOrder = styled.div`
   left: 0;
   width: 100%;
   height: 39rem;
-  background: var(--white);
+  background: white;
   border-radius: 1.6rem 1.6rem 0 0;
   box-shadow: 0px -2px 10px -1px hsla(0, 0%, 0%, 0.5);
   z-index: 10000;
@@ -124,7 +124,7 @@ const DisplayAddress = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: var(--white);
+  color: white;
   text-shadow: 0 0 6px hsla(0, 0%, 0%, 0.5), 0 0 12px hsla(0, 0%, 0%, 0.4),
     0 3px 5px hsla(0, 0%, 0%, 0.4);
 `;
@@ -267,7 +267,7 @@ const SuggestWrap = styled.div`
   top: 4.8rem;
   left: 0.3rem;
   right: 0.3rem;
-  background: var(--white);
+  background: white;
   border-radius: 1rem;
   flex-direction: column;
   z-index: 2;
@@ -304,7 +304,7 @@ const ConfirmButton = styled.div`
   align-items: center;
   justify-content: center;
   color: hsla(0, 0%, 0%, 0.6);
-  /* color: var(--white); */
+  /* color: white; */
   background: hsla(0, 0%, 0%, 0.1);
   /* background: linear-gradient(
     45deg,
@@ -326,7 +326,7 @@ const ConfirmInput = styled.input`
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: center; */
-  /* color: var(--white); */
+  /* color: white; */
   padding: 0 1rem;
   outline: none;
   text-align: center;

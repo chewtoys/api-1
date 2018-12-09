@@ -16,7 +16,6 @@ class Product extends React.PureComponent {
   };
 
   checkedToggle = () => {
-    console.log(this.props);
     if (!this.state.checked) {
       axios({
         method: "GET",
@@ -85,14 +84,16 @@ class Product extends React.PureComponent {
                 </Item.Spicy>
               )}
               <Item.Price>{price}₽</Item.Price>
-              <Item.Info onClick={this.checkedToggle} viewBox="0 0 24 24">
-                <use xlinkHref="#info" />
-                <rect
-                  width="100%"
-                  height="100%"
-                  style={{ fill: "transparent" }}
-                />
-              </Item.Info>
+              {(mass || energy_value) && (
+                <Item.Info onClick={this.checkedToggle}>
+                  <use xlinkHref="#info" />
+                  <rect
+                    width="100%"
+                    height="100%"
+                    style={{ fill: "transparent" }}
+                  />
+                </Item.Info>
+              )}
               <Item.Count count={count}>{count}</Item.Count>
             </Item.Inner>
           </Item.Front>
@@ -104,29 +105,26 @@ class Product extends React.PureComponent {
             </Item.Values.EnergyValues>
             <Item.Inner>
               <Item.Close onClick={this.checkedToggle}>
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <use xlinkHref="#close" />
-                  <rect
-                    width="100%"
-                    height="100%"
-                    style={{ fill: "transparent" }}
-                  />
-                </svg>
+                <use xlinkHref="#close" />
+                <rect
+                  width="100%"
+                  height="100%"
+                  style={{ fill: "transparent" }}
+                />
               </Item.Close>
             </Item.Inner>
           </Item.Back>
         </Item.Poster>
-        <Item.Pay onClick={() => this.props.addToCart(id)}>
-          <Tooltip animateFill={false} distance="25" title="Добавить в корзину">
-            <svg xmlns="http://www.w3.org/2000/svg">
-              <use xlinkHref="#cart" />
-              <rect
-                width="100%"
-                height="100%"
-                style={{ fill: "transparent" }}
-              />
-            </svg>
-          </Tooltip>
+        <Item.Pay
+          animateFill={false}
+          transitionFlip={false}
+          title="Добавить в корзину"
+          hideOnClick={false}
+        >
+          <Item.PayIcon onClick={() => this.props.addToCart(id)}>
+            <use xlinkHref="#cart" />
+            <rect width="100%" height="100%" fill="transparent" />
+          </Item.PayIcon>
         </Item.Pay>
         <Item.Title>
           <span>{title}</span>
@@ -137,7 +135,7 @@ class Product extends React.PureComponent {
 }
 
 export default connect(
-  store => ({}),
+  null,
   dispatch =>
     bindActionCreators(
       {

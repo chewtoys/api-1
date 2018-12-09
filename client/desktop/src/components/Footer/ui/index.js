@@ -10,7 +10,7 @@ const FooterWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: var(--white);
+  color: white;
   text-shadow: 0 0 8px hsla(0, 0%, 0%, 0.5), 0 0 15px hsla(0, 0%, 0%, 0.4);
   font-weight: 100;
   ${props => (props.open ? "filter: blur(2px)" : "")};
@@ -142,7 +142,7 @@ const AboutContent = styled.div`
 
 const Policy = styled.a`
   display: inline-flex;
-  color: var(--white);
+  color: white;
   text-decoration: none;
 `;
 

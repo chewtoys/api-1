@@ -7,9 +7,9 @@ const CartWrap = styled.div`
   right: 7rem;
   width: 45rem;
   height: 42rem;
-  background: var(--white);
+  background: white;
   border-radius: 1.6rem 1.6rem 0 0;
-  box-shadow: var(--mainShadow);
+  box-shadow: 0px -2px 10px -1px hsla(0, 0%, 0%, 0.5);
   bottom: ${props => (props.isOpen ? `0` : `calc(-100vh - 1rem)`)};
   transition: bottom 0.3s ease;
   z-index: 2;
@@ -87,8 +87,10 @@ const ItemWrap = styled.div`
         display: block;
         top: -4px;
         left: 10%;
-        background: hsl(72, 23%, 44%);
-        box-shadow: var(--mainShadow);
+        background-image: url(${kosmo});
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0px 2px 15px -2px hsla(0,0%,0%,0.8);
         transition: top .3s ease;
     }
     `
@@ -134,8 +136,8 @@ const Count = styled.div`
   position: absolute;
   top: -15px;
   left: -12px;
-  color: var(--white);
-  background: ${props => props.theme.mainColorBackground};
+  color: white;
+  background: ${props => props.theme.mainColor};
   padding: 7px 11px 7px 10px;
   font-size: 13px;
   border-radius: 1rem;
@@ -157,7 +159,7 @@ const Action = styled.div`
   /* width: 50%; */
   bottom: 0;
   z-index: 5;
-  color: var(--white);
+  color: white;
   font-size: 3rem;
   display: flex;
   justify-content: center;
@@ -200,7 +202,7 @@ const Price = styled.div`
   left: 10px;
   font-weight: bold;
   font-size: 1.3rem;
-  color: var(--white);
+  color: white;
   z-index: 10;
   text-shadow: 0 0 10px hsla(0, 0%, 0%, 0.4), 0 3px 5px hsla(0, 0%, 0%, 0.4);
   pointer-events: none;
@@ -221,7 +223,7 @@ const Spacy = styled.svg`
 const Icon = styled.svg`
   width: 6rem;
   height: 6rem;
-  color: var(--white);
+  color: white;
   filter: drop-shadow(0px 2px 1px hsla(0, 0%, 0%, 0.5));
 `;
 
