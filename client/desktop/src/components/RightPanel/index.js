@@ -8,7 +8,7 @@ import { formatData } from "../BigCart";
 import { removeFromCart, addToCart } from "../Root/actions/loadData";
 import { openCart } from "../BigCart/actions/cart";
 // UI
-import { Panel, Background } from "./ui";
+import { Panel, Background, Item } from "./ui";
 
 const RightPanel = ({
   settings,
@@ -31,46 +31,38 @@ const RightPanel = ({
       <Panel.Space open={open}>
         {data.map(item => {
           return (
-            <Panel.Item key={item.id}>
-              <Tooltip
-                position="left"
-                title={`${item.title} (${item.count} x ${item.price}₽)`}
-                hideOnClick={false}
-              >
-                <Panel.Image src={item.big_img} alt={item.title} />
-                <Panel.Hover>
-                  <Panel.Desc onClick={() => removeFromCart(item.id)}>
-                    <Panel.ActionIcon>
-                      <use xlinkHref="#desc" />
-                      <rect
-                        width="100%"
-                        height="100%"
-                        style={{ fill: "transparent" }}
-                      />
-                    </Panel.ActionIcon>
-                  </Panel.Desc>
-                  <Panel.Asc onClick={() => addToCart(item.id)}>
-                    <Panel.ActionIcon>
-                      <use xlinkHref="#asc" />
-                      <rect
-                        width="100%"
-                        height="100%"
-                        style={{ fill: "transparent" }}
-                      />
-                    </Panel.ActionIcon>
-                  </Panel.Asc>
-                  {/* <svg xmlns="http://www.w3.org/2000/svg">
-                    <use xlinkHref="#remove" />
+            <Item.Wrap
+              key={item.id}
+              position="left"
+              title={`${item.title} (${item.count} x ${item.price}₽)`}
+              hideOnClick={false}
+              style={{ display: null }}
+            >
+              <Item.Image src={item.big_img} alt={item.title} />
+              <Item.Hover>
+                <Item.Desc onClick={() => removeFromCart(item.id)}>
+                  <Item.ActionIcon>
+                    <use xlinkHref="#desc" />
                     <rect
                       width="100%"
                       height="100%"
                       style={{ fill: "transparent" }}
                     />
-                  </svg> */}
-                </Panel.Hover>
-                <Panel.Count count={item.count}>{item.count}</Panel.Count>
-              </Tooltip>
-            </Panel.Item>
+                  </Item.ActionIcon>
+                </Item.Desc>
+                <Item.Asc onClick={() => addToCart(item.id)}>
+                  <Item.ActionIcon>
+                    <use xlinkHref="#asc" />
+                    <rect
+                      width="100%"
+                      height="100%"
+                      style={{ fill: "transparent" }}
+                    />
+                  </Item.ActionIcon>
+                </Item.Asc>
+              </Item.Hover>
+              <Item.Count count={item.count}>{item.count}</Item.Count>
+            </Item.Wrap>
           );
         })}
         {data.length > 5 && (

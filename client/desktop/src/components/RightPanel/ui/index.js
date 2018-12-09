@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Tooltip } from "react-tippy";
 
 const PanelWrap = styled.div`
   position: fixed;
@@ -57,7 +58,7 @@ const Space = styled.div`
   z-index: 2;
 `;
 
-const Item = styled.div`
+const ItemWrap = styled(Tooltip)`
   width: 3.5rem;
   height: 3.5rem;
   margin-top: 0.7rem;
@@ -93,7 +94,7 @@ const Hover = styled.div`
   opacity: 0;
   transition: all 0.4s ease;
   cursor: pointer;
-  ${Item}:hover & {
+  ${ItemWrap}:hover & {
     opacity: 1;
   }
 `;
@@ -233,24 +234,6 @@ const Total = styled.div`
   transition: all 0.1s ease;
 `;
 
-export const Panel = {
-  Wrap: PanelWrap,
-  AppLogo: AppLogo,
-  Login: Login,
-  Space: Space,
-  Item: Item,
-  Image: Image,
-  Hover: Hover,
-  Count: Count,
-  More: More,
-  Cart: Cart,
-  CartIcon: CartIcon,
-  Total: Total,
-  Asc: Asc,
-  Desc: Desc,
-  ActionIcon: ActionIcon
-};
-
 export const Background = styled.div`
   position: absolute;
   top: 0;
@@ -272,3 +255,26 @@ export const Background = styled.div`
     visibility: visible;
   }
 `;
+
+// const TooltipWrap
+
+export const Panel = {
+  Wrap: PanelWrap,
+  AppLogo: AppLogo,
+  Login: Login,
+  Space: Space,
+  More: More,
+  Cart: Cart,
+  CartIcon: CartIcon,
+  Total: Total
+};
+
+export const Item = {
+  Wrap: ItemWrap,
+  Image: Image,
+  Hover: Hover,
+  Count: Count,
+  Asc: Asc,
+  Desc: Desc,
+  ActionIcon: ActionIcon
+};

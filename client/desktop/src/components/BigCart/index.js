@@ -8,9 +8,9 @@ import Order from "../Order";
 import { Cart, ScrollArea, Item } from "./ui";
 // Actions
 import { closeCart } from "./actions/cart";
-import { addToCart, removeFromCart } from "../Root/actions/loadData";
+import { addToCart, removeFromCart, clearCart } from "../Root/actions/loadData";
 // Fn
-import { formatData } from "./util";
+import { formatData, declOfNum } from "./util";
 
 class BigCart extends React.PureComponent {
   componentDidMount() {
@@ -48,7 +48,22 @@ class BigCart extends React.PureComponent {
           </Cart.Close>
         </Cart.Title>
         <ScrollArea stopScrollPropagation={true} horizontal={false}>
-          <Cart.Header />
+          <Cart.Header>
+            <Cart.HeaderInfo>
+              {data.length === 0 && "Пустовато"}
+              {data.length !== 0 &&
+                `${count} ${declOfNum(count, [
+                  "товар",
+                  "товара",
+                  "товаров"
+                ])} на сумму ${total}₽`}
+            </Cart.HeaderInfo>
+            {data.length !== 0 && (
+              <Cart.HeaderCleat onClick={this.props.clearCart}>
+                Очистить
+              </Cart.HeaderCleat>
+            )}
+          </Cart.Header>
           <Cart.Content>
             {data.map((item, i) => {
               const spicy = item.title.search(/остр/i);
@@ -99,8 +114,6 @@ class BigCart extends React.PureComponent {
               );
             })}
           </Cart.Content>
-
-          {data.length === 0 && "Здесь ничего нет"}
         </ScrollArea>
         <Order />
       </Cart.Wrap>
@@ -120,6 +133,7 @@ export default connect(
       {
         closeCart: closeCart,
         addToCart: addToCart,
+        clearCart: clearCart,
         removeFromCart: removeFromCart
       },
       dispatch

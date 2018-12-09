@@ -38,6 +38,28 @@ const CartHeader = styled.div`
   height: 6rem;
   margin: 1rem;
   border-radius: 1rem;
+  display: flex;
+  color: hsla(0, 0%, 100%, 0.8);
+  font-size: 1.3rem;
+  font-weight: 100;
+  text-shadow: 0 0 8px hsla(0, 0%, 0%, 0.5), 0 0 15px hsla(0, 0%, 0%, 0.4);
+`;
+
+const HeaderInfo = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
+const HeaderCleat = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  margin: 2.2rem 0;
+  border-left: 1px solid hsla(0, 0%, 100%, 0.2);
+  cursor: pointer;
 `;
 
 const CartContent = styled.div`
@@ -53,6 +75,8 @@ export const Cart = {
   Wrap: CartWrap,
   Title: CartTitle,
   Header: CartHeader,
+  HeaderInfo: HeaderInfo,
+  HeaderCleat: HeaderCleat,
   Close: CartClose,
   Content: CartContent
 };
