@@ -73,9 +73,7 @@ const BlockAddress = styled.div`
 
 const BlockContacts = styled.div`
   ${BlockCSS};
-  grid-template:
-    "number email email" 4.5rem
-    "name name name" 4.5rem;
+  grid-template: "number email name" 4.5rem;
 `;
 
 const BlockTime = styled.div`
@@ -299,7 +297,7 @@ const ConfirmButton = styled.div`
   /* top: 1rem; */
   right: 0.6rem;
   bottom: 0.6rem;
-  width: 7rem;
+  width: 6rem;
   height: 2rem;
   align-items: center;
   justify-content: center;
@@ -321,7 +319,7 @@ const ConfirmInput = styled.input`
   /* top: 1rem; */
   right: 0.6rem;
   bottom: 0.6rem;
-  width: 7rem;
+  width: 6rem;
   height: 2rem;
   /* display: flex; */
   /* align-items: center; */

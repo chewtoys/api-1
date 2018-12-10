@@ -5,6 +5,9 @@ import moment from "moment";
 import axios from "axios";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
+// Custom Components
+import OrderContact from "../OrderContact";
+// UI
 import {
   WrapOrder,
   Arrow,
@@ -86,6 +89,10 @@ const Inputs = {
 
 const minZoom = 12;
 const maxZoom = 19;
+
+export const OrderContext = React.createContext({
+  zoom: 11
+});
 
 class Order extends React.PureComponent {
   state = {
@@ -247,6 +254,8 @@ class Order extends React.PureComponent {
 
     return (
       <WrapOrder isActive={isActive}>
+        <OrderContext.Provider value={this.state} />
+        <OrderContact />
         <Title onClick={this.openOrder}>
           Оформить заказ
           <Arrow>
@@ -273,7 +282,7 @@ class Order extends React.PureComponent {
                     {this.state.confirmOpen && (
                       <Confirm.Input
                         onChange={this.onChangeConfirm}
-                        placeholder="Код из СМС"
+                        placeholder="Код"
                         verify={this.state.verify.code}
                       />
                     )}
@@ -473,45 +482,6 @@ class Order extends React.PureComponent {
           </Block.Time>
         </OrderScrollArea>
         >
-        {/* <OrderScrollArea stopScrollPropagation={true} horizontal={false}>
-          <NameBlock>Адрес доставки</NameBlock>
-          <NameBlock>Контакты</NameBlock>
-          <Block>
-            {Inputs.contacts.map((item, i) => {
-              return (
-                <Input
-                  key={i.toString()}
-                  value={this.state[item.type]}
-                  onChange={e => this.onChange(e, item.type)}
-                  type={item.type}
-                  label={item.label}
-                  placeholder={item.placeholder}
-                />
-              );
-            })}
-          </Block>
-          <NameBlock>Время доставки</NameBlock>
-          <Block>
-            <div>
-              В течение
-              <Tooltip
-                interactive
-                animateFill={false}
-                hideOnClick={false}
-                theme="light"
-                html={TimeDelivery.map((item, i) => {
-                  return (
-                    <TimeSelect className="time__item" key={i.toString()}>
-                      {item}
-                    </TimeSelect>
-                  );
-                })}
-              >
-                <TimeButton>~60 мин.</TimeButton>
-              </Tooltip>
-            </div>
-          </Block>
-        </OrderScrollArea> */}
       </WrapOrder>
     );
   }

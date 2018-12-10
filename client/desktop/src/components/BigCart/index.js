@@ -115,7 +115,7 @@ class BigCart extends React.PureComponent {
             })}
           </Cart.Content>
         </ScrollArea>
-        <Order />
+        {count !== 0 && <Order />}
       </Cart.Wrap>
     );
   }

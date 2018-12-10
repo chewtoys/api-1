@@ -9,38 +9,40 @@ import Item from "../Item";
 import { WrapContent, Title } from "./ui";
 
 class Content extends React.PureComponent {
-    static contextTypes = {
-        scrollArea: PropTypes.object
-    };
+  static contextTypes = {
+    scrollArea: PropTypes.object
+  };
 
-    componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
-            setTimeout(() => {
-                this.context.scrollArea.scrollTop();
-            }, 50);
-        };
-    };
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      setTimeout(() => {
+        this.context.scrollArea.scrollTop();
+      }, 0);
+    }
+  }
 
-    render() {
-        const { data, match, open } = this.props;
-        const category = data.data.filter((item) => item.aliase === match.params.category)[0];
+  render() {
+    const { data, match, open } = this.props;
+    const category = data.data.filter(
+      item => item.aliase === match.params.category
+    )[0];
 
-        // if (!category) return <Redirect exact to="/NotFound" />;
-        return (
-            <WrapContent open={open}>
-                <Title>{category.name}</Title>
-                {category.items.map((item, a) => {
-                    return <Item key={item.id} {...item} />;
-                })}
-            </WrapContent>
-        );
-    };
-};
+    if (!category) return <Redirect exact to="/NotFound" />;
+    return (
+      <WrapContent open={open}>
+        <Title>{category.name}</Title>
+        {category.items.map((item, a) => {
+          return <Item key={item.id} {...item} />;
+        })}
+      </WrapContent>
+    );
+  }
+}
 
 export default withRouter(
-    connect((store) => ({
-        data: store.data,
-        settings: store.settings,
-        open: store.cart.open
-    }))(Content)
+  connect(store => ({
+    data: store.data,
+    settings: store.settings,
+    open: store.cart.open
+  }))(Content)
 );
