@@ -66,7 +66,7 @@ class Server {
           this.Cron.updateProductsPopularity();
         }, null, true, 'Asia/Irkutsk');
 
-        this.app.listen(3000);
+        this.app.listen(1001);
         // console.log('env = ', process.env)
     };
 };
