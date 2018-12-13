@@ -2,7 +2,7 @@ import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import IronImage from "react-image-lazy-load-component";
-import { Tooltip } from "react-tippy";
+// import { Tooltip } from "react-tippy";
 import axios from "axios";
 // Actions
 import { addToCart } from "../Root/actions/loadData";

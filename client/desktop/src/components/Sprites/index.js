@@ -284,6 +284,9 @@ export const Sprites = () => {
           />
         </g>
       </symbol>
+      <symbol id="check" viewBox="0 0 100 100">
+        <polygon fill="currentcolor" points="77.6,29.5 37.7,69.5 20.9,51.5 19.3,53.1 37.7,72.7 38.1,72.2 38.1,72.3 79.3,31.2 "/>
+      </symbol>
     </svg>
   );
 };

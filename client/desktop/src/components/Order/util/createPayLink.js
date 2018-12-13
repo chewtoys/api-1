@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const createPayLink = e => {
-  const { data, count, total } = e;
+  const { data, total } = e;
 
   axios({
     method: "POST",

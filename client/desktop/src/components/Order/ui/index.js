@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import styled, { css } from "styled-components";
 import Scroll from "react-scrollbar";
 import { IMaskInput } from "react-imask";
@@ -46,7 +46,7 @@ export const Arrow = styled.svg`
 
 export const OrderScrollArea = styled(Scroll)`
   height: calc(100% - 4rem);
-  padding: 0 1rem 1rem;
+  padding: 0;
 `;
 
 export const NameBlock = styled.h3`
@@ -63,9 +63,6 @@ const BlockCSS = css`
 const BlockAddress = styled.div`
   ${BlockCSS};
   grid-template:
-    "map map map" 4rem
-    "map map map" 4rem
-    "map map map" 4rem
     "address address address" 4rem
     "entrance apartment domofon" 4rem
     "comment comment comment" 4rem;
