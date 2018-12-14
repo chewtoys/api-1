@@ -1,5 +1,5 @@
 /**
- * @todo Нужен рефокторинг когда. Доделать валидацию полей, оптимизировать ее и добавить анимацию.
+ * @todo Нужен рефакторинг когда. Доделать валидацию полей, оптимизировать ее и добавить анимацию.
  */
 import React from "react";
 import connect from "react-redux/lib/connect/connect";
@@ -10,6 +10,8 @@ import { formChange, changePoint } from "../Order/actions/formChange";
 import { Block, Input, Suggest } from "./ui";
 // Fn
 import { findGeo } from "../../util";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class OrderAddress extends React.PureComponent {
   state = {
@@ -19,7 +21,7 @@ class OrderAddress extends React.PureComponent {
       address: 2,
       entrance: 2,
       apartment: 2,
-      domofon: 2,
+      intercom: 2,
       comment: 2
     }
   };
@@ -98,7 +100,7 @@ class OrderAddress extends React.PureComponent {
       address,
       entrance,
       apartment,
-      domofon,
+      intercom,
       comment
     } = this.props.form.values;
     const { formChange } = this.props;
@@ -106,9 +108,9 @@ class OrderAddress extends React.PureComponent {
     return (
       <Block.Address>
         <Input.Wrap type="address">
-          <Input.Label>Адрес</Input.Label>
+          <Input.Label>{TextComponents["form.label.address"]}</Input.Label>
           <Input.Input
-            placeholder="улица Можайского, 7, Иркутск"
+            placeholder={TextComponents["form.input.placeholder.address"]}
             value={address}
             onChange={this.suggest}
             type="text"
@@ -136,9 +138,9 @@ class OrderAddress extends React.PureComponent {
           </Suggest.Wrap>
         </Input.Wrap>
         <Input.Wrap type="entrance">
-          <Input.Label>Подъезд</Input.Label>
+          <Input.Label>{TextComponents["form.label.entrance"]}</Input.Label>
           <Input.Input
-            placeholder="1"
+            placeholder={TextComponents["form.input.placeholder.entrance"]}
             value={entrance}
             onChange={e => formChange(e.target.value, "entrance")}
             type="text"
@@ -153,9 +155,9 @@ class OrderAddress extends React.PureComponent {
           </Input.Valid>
         </Input.Wrap>
         <Input.Wrap type="apartment">
-          <Input.Label>Квартира</Input.Label>
+          <Input.Label>{TextComponents["form.label.apartment"]}</Input.Label>
           <Input.Input
-            placeholder="1"
+            placeholder={TextComponents["form.input.placeholder.apartment"]}
             value={apartment}
             onChange={e => formChange(e.target.value, "apartment")}
             type="text"
@@ -171,27 +173,27 @@ class OrderAddress extends React.PureComponent {
             <rect width="100%" height="100%" fill="transparent" />
           </Input.Valid>
         </Input.Wrap>
-        <Input.Wrap type="domofon">
-          <Input.Label>Домофон</Input.Label>
+        <Input.Wrap type="intercom">
+          <Input.Label>{TextComponents["form.label.intercom"]}</Input.Label>
           <Input.Input
-            placeholder="Наличие или код"
-            value={domofon}
-            onChange={e => formChange(e.target.value, "domofon")}
+            placeholder={TextComponents["form.input.placeholder.intercom"]}
+            value={intercom}
+            onChange={e => formChange(e.target.value, "intercom")}
             type="text"
-            onBlur={e => this.validInput(e.target.value, "domofon")}
+            onBlur={e => this.validInput(e.target.value, "intercom")}
           />
-          <Input.Valid validation={this.state.validation.domofon}>
-            {this.state.validation.domofon === 1 && <use xlinkHref="#check" />}
-            {this.state.validation.domofon === 0 && (
+          <Input.Valid validation={this.state.validation.intercom}>
+            {this.state.validation.intercom === 1 && <use xlinkHref="#check" />}
+            {this.state.validation.intercom === 0 && (
               <use xlinkHref="#closewindow" />
             )}
             <rect width="100%" height="100%" fill="transparent" />
           </Input.Valid>
         </Input.Wrap>
         <Input.Wrap type="comment">
-          <Input.Label>Комментарий</Input.Label>
+          <Input.Label>{TextComponents["form.label.comment"]}</Input.Label>
           <Input.Input
-            placeholder="Любая информация, которая поможет найти вас быстрее"
+            placeholder={TextComponents["form.input.placeholder.comment"]}
             value={comment}
             onChange={e => formChange(e.target.value, "comment")}
             type="text"

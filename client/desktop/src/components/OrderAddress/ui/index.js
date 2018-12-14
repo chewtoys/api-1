@@ -12,7 +12,7 @@ const BlockAddress = styled.div`
   ${BlockCSS};
   grid-template:
     "address address address" 3rem
-    "entrance apartment domofon" 3rem
+    "entrance apartment intercom" 3rem
     "comment comment comment" 3rem;
 `;
 

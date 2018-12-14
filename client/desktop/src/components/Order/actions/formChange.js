@@ -9,7 +9,7 @@ const initStore = {
     address: "",
     entrance: "",
     apartment: "",
-    domofon: "",
+    intercom: "",
     comment: "",
     time: "",
     point: [52.275946, 104.359649]

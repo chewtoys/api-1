@@ -6,6 +6,8 @@ import { bindActionCreators } from "redux";
 import { formChange } from "../Order/actions/formChange";
 // UI
 import { Block, Input, Confirm } from "./ui";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class OrderContact extends React.Component {
   state = {
@@ -113,9 +115,9 @@ class OrderContact extends React.Component {
     return (
       <Block.Contacts>
         <Input.Wrap type="number">
-          <Input.Label>Телефон</Input.Label>
+          <Input.Label>{TextComponents["form.label.number"]}</Input.Label>
           <Input.InputNumber
-            placeholder="7 9XX XXXXXXX"
+            placeholder={TextComponents["form.input.placeholder.number"]}
             value={number}
             onChange={e => this.props.formChange(e.target.value, "number")}
             type="text"
@@ -126,7 +128,9 @@ class OrderContact extends React.Component {
           {this.state.confirmOpen && this.state.validation.number !== 1 && (
             <Confirm.Input
               onChange={this.onChangeConfirm}
-              placeholder="Код"
+              placeholder={
+                TextComponents["form.input.placeholder.number.confirm.input"]
+              }
               verify={this.state.validation.number}
               autoFocus={true}
             />
@@ -136,7 +140,7 @@ class OrderContact extends React.Component {
               onClick={this.onConfirm}
               visible={number.length === 13}
             >
-              Подтвердить
+              {TextComponents["form.input.number.confirm.button"]}
             </Confirm.Button>
           )}
           {this.state.validation.number === 1 && (
@@ -147,9 +151,9 @@ class OrderContact extends React.Component {
           )}
         </Input.Wrap>
         <Input.Wrap type="username">
-          <Input.Label>Имя</Input.Label>
+          <Input.Label>{TextComponents["form.label.username"]}</Input.Label>
           <Input.Input
-            placeholder="Иван Иванов"
+            placeholder={TextComponents["form.input.placeholder.username"]}
             value={username}
             onChange={e => this.props.formChange(e.target.value, "username")}
             onBlur={e => this.validUsername(e.target.value)}
@@ -164,9 +168,9 @@ class OrderContact extends React.Component {
           </Input.Valid>
         </Input.Wrap>
         <Input.Wrap type="email">
-          <Input.Label>Email</Input.Label>
+          <Input.Label>{TextComponents["form.label.email"]}</Input.Label>
           <Input.Input
-            placeholder="email@laapl.ru"
+            placeholder={TextComponents["form.input.placeholder.email"]}
             value={email}
             onChange={e => this.props.formChange(e.target.value, "email")}
             onBlur={e => this.validEmail(e.target.value)}

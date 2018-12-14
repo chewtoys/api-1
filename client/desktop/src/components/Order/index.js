@@ -11,6 +11,8 @@ import OrderTime from "../OrderTime";
 import { Ordering } from "./ui";
 // FN
 import { formatData } from "../../util";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class Order extends React.PureComponent {
   state = {
@@ -54,7 +56,7 @@ class Order extends React.PureComponent {
       time,
       comment
     } = this.props.form.values;
-    const { count, total, data } = formatData(this.props.data);
+    const { data } = formatData(this.props.data);
     axios({
       method: "POST",
       url: "https://api.laapl.ru/api/orders/create",
@@ -86,10 +88,10 @@ class Order extends React.PureComponent {
     return (
       <Ordering.Wrap isActive={isActive}>
         <Ordering.Title onClick={this.openOrder}>
-          Оформить заказ
+          {TextComponents["order.title"]}
           <Ordering.Arrow>
             <use xlinkHref="#arrow" />
-            <rect width="100%" height="100%" style={{ fill: "transparent" }} />
+            <rect width="100%" height="100%" fill="transparent" />
           </Ordering.Arrow>
         </Ordering.Title>
         <Ordering.Content stopScrollPropagation={true} horizontal={false}>
@@ -98,7 +100,7 @@ class Order extends React.PureComponent {
           <OrderAddress />
           <OrderTime />
           <Ordering.NextButton onClick={this.nextButtonClick}>
-            Продолжить
+            {TextComponents["order.button.next"]}
           </Ordering.NextButton>
         </Ordering.Content>
       </Ordering.Wrap>

@@ -9,6 +9,8 @@ import { formChange, changePoint } from "../Order/actions/formChange";
 import { Maps } from "./ui";
 // Fn
 import { findGeo } from "../../util";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 const minZoom = 12;
 const maxZoom = 19;
@@ -16,9 +18,9 @@ const maxZoom = 19;
 class OrderMap extends React.PureComponent {
   state = {
     zoom: 17,
-    DisplayLocality: "Иркутск",
-    DisplayStreet: "улица Можайского",
-    DisplayHouse: "7",
+    locality: TextComponents["form.map.default.value.locality"],
+    street: TextComponents["form.map.default.value.street"],
+    house: TextComponents["form.map.default.value.house"],
     point: [52.275946, 104.359649]
   };
 
@@ -30,7 +32,6 @@ class OrderMap extends React.PureComponent {
       findGeo(this.ymaps, currPos)
         .then(res => {
           this.props.changePoint(res.coordinates);
-          // this.setState({ point: res.coordinates });
         })
         .catch(err => console.log(err));
     });
@@ -53,7 +54,7 @@ class OrderMap extends React.PureComponent {
   };
 
   render() {
-    const { zoom } = this.state;
+    const { zoom, locality, street, house } = this.state;
     const { point } = this.props.form.values;
     return (
       <YMaps
@@ -70,15 +71,14 @@ class OrderMap extends React.PureComponent {
               .then(res => {
                 // console.log(res);
                 this.setState({
-                  DisplayLocality: res.address.filter(
+                  locality: res.address.filter(
                     item => item.kind === "locality"
                   )[0].name,
-                  DisplayStreet: res.address.filter(
+                  street: res.address.filter(
                     item => item.kind === "street" || item.kind === "district"
                   )[0].name,
-                  DisplayHouse: res.address.filter(
-                    item => item.kind === "house"
-                  )[0].name,
+                  house: res.address.filter(item => item.kind === "house")[0]
+                    .name,
                   items: []
                 });
                 this.props.changePoint(res.coordinates);
@@ -114,15 +114,17 @@ class OrderMap extends React.PureComponent {
               />
             </Maps.Point>
             <Maps.DisplayAddress>
-              <Maps.DisplayLocality>
-                {this.state.DisplayLocality}
-              </Maps.DisplayLocality>
+              <Maps.DisplayLocality>{locality}</Maps.DisplayLocality>
               <Maps.DisplayStreet>
-                {this.state.DisplayStreet}, {this.state.DisplayHouse}
+                {street}, {house}
               </Maps.DisplayStreet>
             </Maps.DisplayAddress>
             <Maps.Controls>
-              <Tooltip animateFill={false} size="small" title="Отдалить">
+              <Tooltip
+                animateFill={false}
+                size="small"
+                title={TextComponents["form.map.control.zoom.desc"]}
+              >
                 <Maps.Zoom onClick={this.descZoom}>
                   <use xlinkHref="#desc" />
                   <rect width="100%" height="100%" fill="transparent" />
@@ -131,14 +133,18 @@ class OrderMap extends React.PureComponent {
               <Tooltip
                 animateFill={false}
                 size="small"
-                title="Моё местоположение"
+                title={TextComponents["form.map.control.find_me"]}
               >
                 <Maps.FindMe onClick={this.findMe}>
                   <use xlinkHref="#location" />
                   <rect width="100%" height="100%" fill="transparent" />
                 </Maps.FindMe>
               </Tooltip>
-              <Tooltip animateFill={false} size="small" title="Приблизить">
+              <Tooltip
+                animateFill={false}
+                size="small"
+                title={TextComponents["form.map.control.zoom.asc"]}
+              >
                 <Maps.Zoom onClick={this.ascZoom}>
                   <use xlinkHref="#asc" />
                   <rect width="100%" height="100%" fill="transparent" />

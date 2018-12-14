@@ -11,6 +11,8 @@ import { closeCart } from "./actions/cart";
 import { addToCart, removeFromCart, clearCart } from "../Root/actions/loadData";
 // Fn
 import { formatData, declOfNum } from "../../util";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class BigCart extends React.PureComponent {
   componentDidMount() {
@@ -41,22 +43,22 @@ class BigCart extends React.PureComponent {
     return (
       <Cart.Wrap isOpen={cart.open} id="cart" className="cart">
         <Cart.Title>
-          Корзина
+          {TextComponents["big.cart.title"]}
           <Cart.Close onClick={closeCart}>
             <use xlinkHref="#closewindow" />
-            <rect width="100%" height="100%" style={{ fill: "transparent" }} />
+            <rect width="100%" height="100%" fill="transparent" />
           </Cart.Close>
         </Cart.Title>
         <ScrollArea stopScrollPropagation={true} horizontal={false}>
           <Cart.Header>
             <Cart.HeaderInfo>
-              {data.length === 0 && "Пустовато"}
+              {data.length === 0 && TextComponents["big.cart.empty"]}
               {data.length !== 0 &&
                 `${count} ${declOfNum(count, [
-                  "товар",
-                  "товара",
-                  "товаров"
-                ])} на сумму ${total}₽`}
+                  TextComponents["big.cart.product.single"],
+                  TextComponents["big.cart.product.case"],
+                  TextComponents["big.cart.product.multiple"]
+                ])} ${TextComponents["big.cart.sum"]} ${total}₽`}
             </Cart.HeaderInfo>
             {data.length !== 0 && (
               <Cart.HeaderCleat onClick={this.props.clearCart}>
@@ -80,21 +82,13 @@ class BigCart extends React.PureComponent {
                     <Item.Asc onClick={() => addToCart(item.id)}>
                       <Item.Icon>
                         <use xlinkHref="#asc" />
-                        <rect
-                          width="100%"
-                          height="100%"
-                          style={{ fill: "transparent" }}
-                        />
+                        <rect width="100%" height="100%" fill="transparent" />
                       </Item.Icon>
                     </Item.Asc>
                     <Item.Desc onClick={() => removeFromCart(item.id)}>
                       <Item.Icon>
                         <use xlinkHref="#desc" />
-                        <rect
-                          width="100%"
-                          height="100%"
-                          style={{ fill: "transparent" }}
-                        />
+                        <rect width="100%" height="100%" fill="transparent" />
                       </Item.Icon>
                     </Item.Desc>
                     <Item.Count>{item.count}</Item.Count>
@@ -102,11 +96,7 @@ class BigCart extends React.PureComponent {
                     {spicy !== -1 && (
                       <Item.Spacy>
                         <use xlinkHref="#chili" />
-                        <rect
-                          width="100%"
-                          height="100%"
-                          style={{ fill: "transparent" }}
-                        />
+                        <rect width="100%" height="100%" fill="transparent" />
                       </Item.Spacy>
                     )}
                   </Item.Wrap>

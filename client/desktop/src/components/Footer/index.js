@@ -7,13 +7,15 @@ import { Footer, Soc, Bank, About } from "./ui";
 import delivery from "../../img/delivery.gif";
 import contact from "../../img/contact.gif";
 import rekvezity from "../../img/rekvezity.gif";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 const FooterContent = ({ open }) => {
   return (
     <Footer.Wrap open={open}>
       <Footer.Content>
         <Footer.Block>
-          <Footer.Title>О нас</Footer.Title>
+          <Footer.Title>{TextComponents["footer.about.title"]}</Footer.Title>
           <Footer.Item
             interactive
             position="top"
@@ -22,12 +24,14 @@ const FooterContent = ({ open }) => {
               <About.Wrap>
                 <About.Poster bgImage={delivery} />
                 <About.Content>
-                  LAAPL DELIVERY - сервис доставки еды из ресторанов на дом.
+                  {TextComponents["footer.about.company"].map(item => {
+                    return <div>{item}</div>;
+                  })}
                 </About.Content>
               </About.Wrap>
             }
           >
-            Компания
+            {TextComponents["footer.about.link.company"]}
           </Footer.Item>
           <Footer.Item
             interactive
@@ -37,14 +41,14 @@ const FooterContent = ({ open }) => {
               <About.Wrap>
                 <About.Poster bgImage={contact} />
                 <About.Content>
-                  Номер: +7 (950) 1111 756
-                  <br />
-                  Email: laapl@laapl.ru
+                  {TextComponents["footer.about.contacts"].map(item => {
+                    return <div>{item}</div>;
+                  })}
                 </About.Content>
               </About.Wrap>
             }
           >
-            Контакты
+            {TextComponents["footer.about.link.contacts"]}
           </Footer.Item>
           <Footer.Item
             interactive
@@ -54,68 +58,50 @@ const FooterContent = ({ open }) => {
               <About.Wrap>
                 <About.Poster bgImage={rekvezity} />
                 <About.Content>
-                  Полное наименование организации: ИНДИВИДУАЛЬНЫЙ
-                  ПРЕДПРИНИМАТЕЛЬ ЛАПУНОВ АЛЕКСЕЙ АЛЕКСАНДРОВИЧ
-                  <br />
-                  Юридический адрес организации: 665466, РОССИЯ, ИРКУТСКАЯ ОБЛ,
-                  Г УСОЛЬЕ-СИБИРСКОЕ, ПР-КТ КОСМОНАВТОВ, Д 52, КВ 60
-                  <br />
-                  ИНН: 381915499636
-                  <br />
-                  ОГРН: 318385000096922
+                  {TextComponents["footer.about.requisite"].map(item => {
+                    return <div>{item}</div>;
+                  })}
                 </About.Content>
               </About.Wrap>
             }
           >
-            Реквизиты
+            {TextComponents["footer.about.link.requisite"]}
           </Footer.Item>
         </Footer.Block>
         <Footer.Block>
-          <Footer.Title>Наш банк</Footer.Title>
+          <Footer.Title>{TextComponents["footer.partners.title"]}</Footer.Title>
           <Bank.Wrap>
             <Bank.Logo href="https://tinkoff.ru" target="_blanc" />
             <Bank.Content>
-              <Bank.Item>АО "ТИНЬКОФФ БАНК"</Bank.Item>
-              <Bank.Item>РС: 40802810700000766948</Bank.Item>
-              <Bank.Item>БИК: 044525974</Bank.Item>
+              {TextComponents["footer.bank"].map(item => {
+                return <Bank.Item>{item}</Bank.Item>;
+              })}
             </Bank.Content>
           </Bank.Wrap>
         </Footer.Block>
         <Footer.Block>
-          <Footer.Title>Наши партнёры</Footer.Title>
+          <Footer.Title>{TextComponents["footer.bank.title"]}</Footer.Title>
           <Footer.Link href="https://giphy.com" target="_blanc" />
         </Footer.Block>
         <Footer.Block>
-          <Footer.Title>Наши новости</Footer.Title>
+          <Footer.Title>{TextComponents["footer.news.title"]}</Footer.Title>
           <Soc.Wrap>
             <Soc.Link href="https://vk.com/laaplru" target="_blanc">
               <Soc.Logo>
                 <use xlinkHref="#vkLogo" />
-                <rect
-                  width="100%"
-                  height="100%"
-                  style={{ fill: "transparent" }}
-                />
+                <rect width="100%" height="100%" fill="transparent" />
               </Soc.Logo>
             </Soc.Link>
             <Soc.Link href="https://twitter.com/laaplru" target="_blanc">
               <Soc.Logo style={{ transform: "scale(1.4)" }}>
                 <use xlinkHref="#twitterLogo" />
-                <rect
-                  width="100%"
-                  height="100%"
-                  style={{ fill: "transparent" }}
-                />
+                <rect width="100%" height="100%" fill="transparent" />
               </Soc.Logo>
             </Soc.Link>
             <Soc.Link href="https://instagram.com/laaplru" target="_blanc">
               <Soc.Logo style={{ transform: "scale(1.4)" }}>
                 <use xlinkHref="#instagramLogo" />
-                <rect
-                  width="100%"
-                  height="100%"
-                  style={{ fill: "transparent" }}
-                />
+                <rect width="100%" height="100%" fill="transparent" />
               </Soc.Logo>
             </Soc.Link>
           </Soc.Wrap>
@@ -123,10 +109,10 @@ const FooterContent = ({ open }) => {
       </Footer.Content>
       <Footer.Bottom>
         <Footer.Copyright>
-          © {moment().format("YYYY")} LAAPL DELIVERY 18+
+          © {moment().format("YYYY")} {TextComponents["footer.copyright"]}
         </Footer.Copyright>
         <Footer.Policy href="https://laapl.ru/policy-privacy" target="_blanc">
-          Политика конфиденциальности
+          {TextComponents["footer.policy.link"]}
         </Footer.Policy>
       </Footer.Bottom>
     </Footer.Wrap>

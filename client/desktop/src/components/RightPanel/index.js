@@ -9,6 +9,8 @@ import { removeFromCart, addToCart } from "../Root/actions/loadData";
 import { openCart } from "../BigCart/actions/cart";
 // UI
 import { Panel, Background, Item } from "./ui";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 const RightPanel = ({
   settings,
@@ -23,7 +25,7 @@ const RightPanel = ({
 
   return (
     <Panel.Wrap>
-      <Panel.AppLogo image={`https://laapl.ru${url}`} />
+      <Panel.AppLogo image={url} />
       {/* <Login>
                 <use xlinkHref="#login" />
                 <rect width="100%" height="100%" style={{ fill: "transparent" }} />
@@ -43,21 +45,13 @@ const RightPanel = ({
                 <Item.Desc onClick={() => removeFromCart(item.id)}>
                   <Item.ActionIcon>
                     <use xlinkHref="#desc" />
-                    <rect
-                      width="100%"
-                      height="100%"
-                      style={{ fill: "transparent" }}
-                    />
+                    <rect width="100%" height="100%" fill="transparent" />
                   </Item.ActionIcon>
                 </Item.Desc>
                 <Item.Asc onClick={() => addToCart(item.id)}>
                   <Item.ActionIcon>
                     <use xlinkHref="#asc" />
-                    <rect
-                      width="100%"
-                      height="100%"
-                      style={{ fill: "transparent" }}
-                    />
+                    <rect width="100%" height="100%" fill="transparent" />
                   </Item.ActionIcon>
                 </Item.Asc>
               </Item.Hover>
@@ -75,12 +69,16 @@ const RightPanel = ({
           position="left"
           distance="25"
           hideOnClick={false}
-          title={`${open ? "Зыкрыть" : "Открыть"} корзину`}
+          title={
+            open
+              ? TextComponents["panel.right.button.cart.close"]
+              : TextComponents["panel.right.button.cart.open"]
+          }
         >
           <Panel.Total>{total}₽</Panel.Total>
           <Panel.CartIcon>
             <use xlinkHref="#cart" />
-            <rect width="100%" height="100%" style={{ fill: "transparent" }} />
+            <rect width="100%" height="100%" fill="transparent" />
           </Panel.CartIcon>
         </Tooltip>
       </Panel.Cart>

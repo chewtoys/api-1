@@ -8,6 +8,8 @@ import axios from "axios";
 import { addToCart } from "../Root/actions/loadData";
 // UI
 import { Item } from "./ui";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class Product extends React.PureComponent {
   state = {
@@ -98,10 +100,17 @@ class Product extends React.PureComponent {
             </Item.Inner>
           </Item.Front>
           <Item.Back bgImage={bgBack}>
-            <Item.Values.Mass>{mass} Г</Item.Values.Mass>
-            <Item.Values.Energy>{energy_value} ККАЛ</Item.Values.Energy>
+            <Item.Values.Mass>
+              {mass} {TextComponents["item.gram"]}
+            </Item.Values.Mass>
+            <Item.Values.Energy>
+              {energy_value} {TextComponents["item.kcal"]}
+            </Item.Values.Energy>
             <Item.Values.EnergyValues>
-              Б:{protein} Ж:{fat} У:{starch}
+              {TextComponents["item.protein"]}
+              {protein} {TextComponents["item.fat"]}
+              {fat} {TextComponents["item.starch"]}
+              {starch}
             </Item.Values.EnergyValues>
             <Item.Inner>
               <Item.Close onClick={this.checkedToggle}>
@@ -118,7 +127,7 @@ class Product extends React.PureComponent {
         <Item.Pay
           animateFill={false}
           transitionFlip={false}
-          title="Добавить в корзину"
+          title={TextComponents["item.pay.button"]}
           hideOnClick={false}
         >
           <Item.PayIcon onClick={() => this.props.addToCart(id)}>

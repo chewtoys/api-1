@@ -8,6 +8,8 @@ import { Block } from "./ui";
 import { formatTimeToWork } from "../../util";
 // Actions
 import { formChange } from "../Order/actions/formChange";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class OrderTime extends React.PureComponent {
   state = {
@@ -51,7 +53,8 @@ class OrderTime extends React.PureComponent {
       <>
         <Block.Wrap>
           <Block.Title>
-            Выберите время доставки<span>{moment().format("DD.MM.YYYY")}</span>
+            {TextComponents["form.time.title"]}
+            <span>{moment().format("DD.MM.YYYY")}</span>
           </Block.Title>
           {items.map((item, i) => {
             return (
@@ -60,7 +63,7 @@ class OrderTime extends React.PureComponent {
                 select={select === i}
                 key={item}
               >
-                В {item}
+                {item}
               </Block.Item>
             );
           })}
