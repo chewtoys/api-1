@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 // IMG
-import giphy from "../img/giphy.png";
-import tinkoff from "../img/tinkoff-bank.png";
+import giphy from "../../../img/giphy.png";
+import tinkoff from "../../../img/tinkoff-bank.png";
 
 const FooterWrap = styled.div`
   /* height: 4rem; */

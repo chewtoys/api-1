@@ -10,7 +10,7 @@ import { Cart, ScrollArea, Item } from "./ui";
 import { closeCart } from "./actions/cart";
 import { addToCart, removeFromCart, clearCart } from "../Root/actions/loadData";
 // Fn
-import { formatData, declOfNum } from "./util";
+import { formatData, declOfNum } from "../../util";
 
 class BigCart extends React.PureComponent {
   componentDidMount() {

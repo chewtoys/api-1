@@ -5,7 +5,7 @@ import moment from "moment";
 // UI
 import { Block } from "./ui";
 // FN
-import { formatTimeToWork } from "../Order/util";
+import { formatTimeToWork } from "../../util";
 // Actions
 import { formChange } from "../Order/actions/formChange";
 
@@ -17,6 +17,7 @@ class OrderTime extends React.PureComponent {
 
   componentDidMount() {
     const { settings } = this.props;
+
     const time_work = {
       start: moment(
         settings.filter(item => item.name === "start_worktime")[0].value,

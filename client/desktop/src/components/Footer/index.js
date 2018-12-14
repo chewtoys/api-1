@@ -4,9 +4,9 @@ import connect from "react-redux/lib/connect/connect";
 // UI
 import { Footer, Soc, Bank, About } from "./ui";
 // IMG
-import delivery from "./img/delivery.gif";
-import contact from "./img/contact.gif";
-import rekvezity from "./img/rekvezity.gif";
+import delivery from "../../img/delivery.gif";
+import contact from "../../img/contact.gif";
+import rekvezity from "../../img/rekvezity.gif";
 
 const FooterContent = ({ open }) => {
   return (

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 // IMG
-import kosmo from "../img/kosmo.jpg";
+import kosmo from "../../../img/kosmo.jpg";
 
 const Title = styled.div`
   padding: 0 1rem 1rem;

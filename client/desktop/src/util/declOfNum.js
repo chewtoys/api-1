@@ -9,4 +9,3 @@ export const declOfNum = (number, titles) => {
       : cases[number % 10 < 5 ? number % 10 : 5]
   ];
 };
-// declOfNum(count, ['найдена', 'найдено', 'найдены']);

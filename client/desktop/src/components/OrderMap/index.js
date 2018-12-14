@@ -8,7 +8,7 @@ import { formChange, changePoint } from "../Order/actions/formChange";
 // UI
 import { Maps } from "./ui";
 // Fn
-import { findGeo } from "../Order/util";
+import { findGeo } from "../../util";
 
 const minZoom = 12;
 const maxZoom = 19;
@@ -54,7 +54,7 @@ class OrderMap extends React.PureComponent {
 
   render() {
     const { zoom } = this.state;
-    const { point } = this.props.form;
+    const { point } = this.props.form.values;
     return (
       <YMaps
         query={{

@@ -19,6 +19,8 @@ class OrderContact extends React.Component {
   };
 
   onConfirm = () => {
+    const { number } = this.props.form.values;
+
     this.setState({
       confirmOpen: true
     });
@@ -26,12 +28,14 @@ class OrderContact extends React.Component {
       method: "POST",
       url: "https://api.laapl.ru/api/auth/get_code",
       params: {
-        phone: this.props.form.number.replace(/ /g, "")
+        phone: number.replace(/ /g, "")
       }
     });
   };
 
   onChangeConfirm = e => {
+    const { number } = this.props.form.values;
+
     const value = e.target.value;
     if (value.length === 5) {
       this.setState({
@@ -41,7 +45,7 @@ class OrderContact extends React.Component {
         method: "POST",
         url: "https://api.laapl.ru/api/auth/check_code",
         params: {
-          phone: this.props.form.number.replace(/ /g, ""),
+          phone: number.replace(/ /g, ""),
           code: value
         }
       }).then(res => {
@@ -104,13 +108,15 @@ class OrderContact extends React.Component {
   };
 
   render() {
+    const { number, username, email } = this.props.form.values;
+
     return (
       <Block.Contacts>
         <Input.Wrap type="number">
           <Input.Label>Телефон</Input.Label>
           <Input.InputNumber
             placeholder="7 9XX XXXXXXX"
-            value={this.props.form.number}
+            value={number}
             onChange={e => this.props.formChange(e.target.value, "number")}
             type="text"
             mask="0 000 0000000"
@@ -128,7 +134,7 @@ class OrderContact extends React.Component {
           {!this.state.confirmOpen && this.state.validation.number !== 1 && (
             <Confirm.Button
               onClick={this.onConfirm}
-              visible={this.props.form.number.length === 13}
+              visible={number.length === 13}
             >
               Подтвердить
             </Confirm.Button>
@@ -144,7 +150,7 @@ class OrderContact extends React.Component {
           <Input.Label>Имя</Input.Label>
           <Input.Input
             placeholder="Иван Иванов"
-            value={this.props.form.username}
+            value={username}
             onChange={e => this.props.formChange(e.target.value, "username")}
             onBlur={e => this.validUsername(e.target.value)}
             type="text"
@@ -161,7 +167,7 @@ class OrderContact extends React.Component {
           <Input.Label>Email</Input.Label>
           <Input.Input
             placeholder="email@laapl.ru"
-            value={this.props.form.email}
+            value={email}
             onChange={e => this.props.formChange(e.target.value, "email")}
             onBlur={e => this.validEmail(e.target.value)}
             type="text"

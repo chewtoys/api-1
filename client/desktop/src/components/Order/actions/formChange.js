@@ -2,16 +2,18 @@ const CHANGE = "form/CHANGE";
 const CHANGE_POINT = "form/CHANGE_POINT";
 
 const initStore = {
-  email: "",
-  username: "",
-  number: "",
-  address: "",
-  entrance: "",
-  apartment: "",
-  domofon: "",
-  comment: "",
-  time: "",
-  point: [52.275946, 104.359649]
+  values: {
+    email: "",
+    username: "",
+    number: "",
+    address: "",
+    entrance: "",
+    apartment: "",
+    domofon: "",
+    comment: "",
+    time: "",
+    point: [52.275946, 104.359649]
+  }
 };
 
 export default (store = initStore, action) => {
@@ -19,13 +21,19 @@ export default (store = initStore, action) => {
     case CHANGE:
       return {
         ...store,
-        [action.key]: action.value
+        values: {
+          ...store.values,
+          [action.key]: action.value
+        }
       };
 
     case CHANGE_POINT:
       return {
         ...store,
-        point: action.value
+        values: {
+          ...store.values,
+          point: action.value
+        }
       };
 
     default:

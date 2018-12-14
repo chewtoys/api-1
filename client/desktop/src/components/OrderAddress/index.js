@@ -9,7 +9,7 @@ import { formChange, changePoint } from "../Order/actions/formChange";
 // UI
 import { Block, Input, Suggest } from "./ui";
 // Fn
-import { findGeo } from "../Order/util";
+import { findGeo } from "../../util";
 
 class OrderAddress extends React.PureComponent {
   state = {
@@ -25,6 +25,7 @@ class OrderAddress extends React.PureComponent {
   };
 
   suggest = e => {
+    const { formChange } = this.props;
     const value = e.target.value;
     window.ymaps
       .suggest(value, {
@@ -37,7 +38,7 @@ class OrderAddress extends React.PureComponent {
         });
         // console.log(res);
       });
-    this.props.formChange(value, "address");
+    formChange(value, "address");
   };
 
   onFocusSuggest = () => {
@@ -93,13 +94,22 @@ class OrderAddress extends React.PureComponent {
   };
 
   render() {
+    const {
+      address,
+      entrance,
+      apartment,
+      domofon,
+      comment
+    } = this.props.form.values;
+    const { formChange } = this.props;
+
     return (
       <Block.Address>
         <Input.Wrap type="address">
           <Input.Label>Адрес</Input.Label>
           <Input.Input
             placeholder="улица Можайского, 7, Иркутск"
-            value={this.props.form.address}
+            value={address}
             onChange={this.suggest}
             type="text"
             onFocus={this.onFocusSuggest}
@@ -129,8 +139,8 @@ class OrderAddress extends React.PureComponent {
           <Input.Label>Подъезд</Input.Label>
           <Input.Input
             placeholder="1"
-            value={this.props.form.entrance}
-            onChange={e => this.props.formChange(e.target.value, "entrance")}
+            value={entrance}
+            onChange={e => formChange(e.target.value, "entrance")}
             type="text"
             onBlur={e => this.validInput(e.target.value, "entrance")}
           />
@@ -146,8 +156,8 @@ class OrderAddress extends React.PureComponent {
           <Input.Label>Квартира</Input.Label>
           <Input.Input
             placeholder="1"
-            value={this.props.form.apartment}
-            onChange={e => this.props.formChange(e.target.value, "apartment")}
+            value={apartment}
+            onChange={e => formChange(e.target.value, "apartment")}
             type="text"
             onBlur={e => this.validInput(e.target.value, "apartment")}
           />
@@ -165,8 +175,8 @@ class OrderAddress extends React.PureComponent {
           <Input.Label>Домофон</Input.Label>
           <Input.Input
             placeholder="Наличие или код"
-            value={this.props.form.domofon}
-            onChange={e => this.props.formChange(e.target.value, "domofon")}
+            value={domofon}
+            onChange={e => formChange(e.target.value, "domofon")}
             type="text"
             onBlur={e => this.validInput(e.target.value, "domofon")}
           />
@@ -182,8 +192,8 @@ class OrderAddress extends React.PureComponent {
           <Input.Label>Комментарий</Input.Label>
           <Input.Input
             placeholder="Любая информация, которая поможет найти вас быстрее"
-            value={this.props.form.comment}
-            onChange={e => this.props.formChange(e.target.value, "comment")}
+            value={comment}
+            onChange={e => formChange(e.target.value, "comment")}
             type="text"
             onBlur={e => this.validInput(e.target.value, "comment")}
           />

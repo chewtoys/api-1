@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Scroll from "react-scrollbar";
-import kosmo from "../img/kosmo.jpg";
+import kosmo from "../../../img/kosmo.jpg";
 
 const CartWrap = styled.div`
   position: fixed;

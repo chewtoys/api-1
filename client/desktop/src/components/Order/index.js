@@ -10,7 +10,7 @@ import OrderTime from "../OrderTime";
 // UI
 import { Ordering } from "./ui";
 // FN
-import { formatData } from "../BigCart/util";
+import { formatData } from "../../util";
 
 class Order extends React.PureComponent {
   state = {
@@ -53,7 +53,7 @@ class Order extends React.PureComponent {
       domofon,
       time,
       comment
-    } = this.props.form;
+    } = this.props.form.values;
     const { count, total, data } = formatData(this.props.data);
     axios({
       method: "POST",
