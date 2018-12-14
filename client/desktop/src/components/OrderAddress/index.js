@@ -1,3 +1,6 @@
+/**
+ * @todo Нужен рефокторинг когда. Доделать валидацию полей, оптимизировать ее и добавить анимацию.
+ */
 import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
