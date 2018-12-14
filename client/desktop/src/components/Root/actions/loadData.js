@@ -4,6 +4,7 @@ const REQ_LOAD_DATA = "main/REQ_LOAD_DATA";
 const RES_LOAD_DATA = "main/RES_LOAD_DATA";
 const ADD_TO_CART = "cart/ADD_TO_CART";
 const REMOVE_FROM_CART = "cart/REMOVE_FROM_CART";
+const CLEAR_CART = "cart/CLEAR_CART";
 
 const initState = {
   loading: false,
@@ -70,6 +71,22 @@ export default (state = initState, action) => {
         })
       };
 
+    case CLEAR_CART:
+      return {
+        ...state,
+        data: state.data.map(cat => {
+          return {
+            ...cat,
+            items: cat.items.map(prod => {
+              return {
+                ...prod,
+                count: 0
+              };
+            })
+          };
+        })
+      };
+
     default:
       return state;
   }
@@ -115,5 +132,11 @@ export const removeFromCart = id => {
   return {
     type: REMOVE_FROM_CART,
     id
+  };
+};
+
+export const clearCart = id => {
+  return {
+    type: CLEAR_CART
   };
 };

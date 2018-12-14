@@ -24,10 +24,11 @@ const NavItem = styled.div`
   width: 2.3rem;
   height: 2.3rem;
   border-radius: 50%;
-  background-color: hsla(0, 0%, 100%, 1);
+  background-color: white;
   background-image: url(${props => props.bgImage});
   background-size: cover;
   text-decoration: none;
+  box-shadow: 0px 2px 15px -2px hsla(0, 0%, 0%, 0.8);
 `;
 
 const NavLink = styled(Link)`
