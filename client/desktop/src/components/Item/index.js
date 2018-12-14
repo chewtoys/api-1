@@ -2,12 +2,14 @@ import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import { bindActionCreators } from "redux";
 import IronImage from "react-image-lazy-load-component";
-import { Tooltip } from "react-tippy";
+// import { Tooltip } from "react-tippy";
 import axios from "axios";
 // Actions
 import { addToCart } from "../Root/actions/loadData";
 // UI
 import { Item } from "./ui";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
 class Product extends React.PureComponent {
   state = {
@@ -22,14 +24,21 @@ class Product extends React.PureComponent {
         url: "https://api.giphy.com/v1/gifs/random",
         params: {
           api_key: "uE0UHNpaKyipyIfRtArmPM4dp4vwMqH0",
-          tag: "shook"
+          tag: "shook",
+          rating: "g"
         }
-      }).then(res => {
-        this.setState({
-          checked: true,
-          bgBack: res.data.data.image_url
+      })
+        .then(res => {
+          this.setState({
+            checked: true,
+            bgBack: res.data.data.fixed_height_downsampled_url
+          });
+        })
+        .catch(err => {
+          this.setState({
+            checked: true
+          });
         });
-      });
     } else {
       this.setState({
         checked: false
@@ -39,7 +48,7 @@ class Product extends React.PureComponent {
 
   render() {
     const {
-      poster,
+      big_img,
       title,
       price,
       id,
@@ -48,10 +57,11 @@ class Product extends React.PureComponent {
       energy_value,
       protein,
       fat,
-      starch
+      starch,
+      bad_img
     } = this.props;
     const { checked, bgBack } = this.state;
-    const spicy = title.search(/остр/i);
+    const spicy = title.search(/стры/i);
 
     return (
       <Item.Wrap>
@@ -63,13 +73,7 @@ class Product extends React.PureComponent {
         />
         <Item.Poster>
           <Item.Front>
-            <IronImage
-              placeholder={`https://laapl.ru${poster
-                .split(".")[0]
-                .replace("products", "small")}.webP`}
-              src={`https://laapl.ru${poster}`}
-              alt={title}
-            />
+            <IronImage placeholder={bad_img} src={big_img} alt={title} />
             <Item.Inner>
               {spicy !== -1 && (
                 <Item.Spicy>
@@ -82,48 +86,54 @@ class Product extends React.PureComponent {
                 </Item.Spicy>
               )}
               <Item.Price>{price}₽</Item.Price>
-              <Item.Info onClick={this.checkedToggle} viewBox="0 0 24 24">
-                <use xlinkHref="#info" />
-                <rect
-                  width="100%"
-                  height="100%"
-                  style={{ fill: "transparent" }}
-                />
-              </Item.Info>
-              <Item.Count count={count}>{count}</Item.Count>
-            </Item.Inner>
-          </Item.Front>
-          <Item.Back bgImage={bgBack}>
-            <Item.Values.Mass>{mass} Г</Item.Values.Mass>
-            <Item.Values.Energy>{energy_value} ККАЛ</Item.Values.Energy>
-            <Item.Values.EnergyValues>
-              Б:{protein} Ж:{fat} У:{starch}
-            </Item.Values.EnergyValues>
-            <Item.Inner>
-              <Item.Close onClick={this.checkedToggle}>
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <use xlinkHref="#close" />
+              {(mass || energy_value) && (
+                <Item.Info onClick={this.checkedToggle}>
+                  <use xlinkHref="#info" />
                   <rect
                     width="100%"
                     height="100%"
                     style={{ fill: "transparent" }}
                   />
-                </svg>
+                </Item.Info>
+              )}
+              <Item.Count count={count}>{count}</Item.Count>
+            </Item.Inner>
+          </Item.Front>
+          <Item.Back bgImage={bgBack}>
+            <Item.Values.Mass>
+              {mass} {TextComponents["item.gram"]}
+            </Item.Values.Mass>
+            <Item.Values.Energy>
+              {energy_value} {TextComponents["item.kcal"]}
+            </Item.Values.Energy>
+            <Item.Values.EnergyValues>
+              {TextComponents["item.protein"]}
+              {protein} {TextComponents["item.fat"]}
+              {fat} {TextComponents["item.starch"]}
+              {starch}
+            </Item.Values.EnergyValues>
+            <Item.Inner>
+              <Item.Close onClick={this.checkedToggle}>
+                <use xlinkHref="#close" />
+                <rect
+                  width="100%"
+                  height="100%"
+                  style={{ fill: "transparent" }}
+                />
               </Item.Close>
             </Item.Inner>
           </Item.Back>
         </Item.Poster>
-        <Item.Pay onClick={() => this.props.addToCart(id)}>
-          <Tooltip animateFill={false} distance="25" title="Добавить в корзину">
-            <svg xmlns="http://www.w3.org/2000/svg">
-              <use xlinkHref="#cart" />
-              <rect
-                width="100%"
-                height="100%"
-                style={{ fill: "transparent" }}
-              />
-            </svg>
-          </Tooltip>
+        <Item.Pay
+          animateFill={false}
+          transitionFlip={false}
+          title={TextComponents["item.pay.button"]}
+          hideOnClick={false}
+        >
+          <Item.PayIcon onClick={() => this.props.addToCart(id)}>
+            <use xlinkHref="#cart" />
+            <rect width="100%" height="100%" fill="transparent" />
+          </Item.PayIcon>
         </Item.Pay>
         <Item.Title>
           <span>{title}</span>
@@ -134,7 +144,7 @@ class Product extends React.PureComponent {
 }
 
 export default connect(
-  store => ({}),
+  null,
   dispatch =>
     bindActionCreators(
       {

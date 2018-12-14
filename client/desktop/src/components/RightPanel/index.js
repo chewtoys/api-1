@@ -5,77 +5,84 @@ import { Tooltip } from "react-tippy";
 // Fn
 import { formatData } from "../BigCart";
 // Actions
-import { removeFromCart } from "../Root/actions/loadData";
+import { removeFromCart, addToCart } from "../Root/actions/loadData";
 import { openCart } from "../BigCart/actions/cart";
 // UI
-import {
-  Panel,
-  Logo,
-  Login,
-  Space,
-  Item,
-  Image,
-  Remove,
-  Count,
-  More,
-  Cart,
-  Total
-} from "./ui";
+import { Panel, Background, Item } from "./ui";
+// Lang
+import TextComponents from "../../lang/ru.json";
 
-const RightPanel = ({ settings, open, allData, removeFromCart, openCart }) => {
+const RightPanel = ({
+  settings,
+  open,
+  allData,
+  removeFromCart,
+  addToCart,
+  openCart
+}) => {
   const url = settings.filter(item => item.name === "logo")[0].value;
   const { data, count, total } = formatData(allData, 4);
 
   return (
-    <Panel>
-      <Logo image={`url(https://kfc.laapl.ru${url})`} />
+    <Panel.Wrap>
+      <Panel.AppLogo image={url} />
       {/* <Login>
                 <use xlinkHref="#login" />
                 <rect width="100%" height="100%" style={{ fill: "transparent" }} />
             </Login> */}
-      <Space open={open}>
+      <Panel.Space open={open}>
         {data.map(item => {
           return (
-            <Item key={item.id}>
-              <Tooltip
-                position="left"
-                title={`${item.title} (${item.count} x ${item.price}₽)`}
-              >
-                <Image
-                  src={`https://kfc.laapl.ru${item.poster}`}
-                  alt={item.title}
-                />
-                <Remove onClick={() => removeFromCart(item.id)}>
-                  <svg xmlns="http://www.w3.org/2000/svg">
-                    <use xlinkHref="#remove" />
-                    <rect
-                      width="100%"
-                      height="100%"
-                      style={{ fill: "transparent" }}
-                    />
-                  </svg>
-                </Remove>
-                <Count count={item.count}>{item.count}</Count>
-              </Tooltip>
-            </Item>
+            <Item.Wrap
+              key={item.id}
+              position="left"
+              title={`${item.title} (${item.count} x ${item.price}₽)`}
+              hideOnClick={false}
+              style={{ display: null }}
+            >
+              <Item.Image src={item.big_img} alt={item.title} />
+              <Item.Hover>
+                <Item.Desc onClick={() => removeFromCart(item.id)}>
+                  <Item.ActionIcon>
+                    <use xlinkHref="#desc" />
+                    <rect width="100%" height="100%" fill="transparent" />
+                  </Item.ActionIcon>
+                </Item.Desc>
+                <Item.Asc onClick={() => addToCart(item.id)}>
+                  <Item.ActionIcon>
+                    <use xlinkHref="#asc" />
+                    <rect width="100%" height="100%" fill="transparent" />
+                  </Item.ActionIcon>
+                </Item.Asc>
+              </Item.Hover>
+              <Item.Count count={item.count}>{item.count}</Item.Count>
+            </Item.Wrap>
           );
         })}
-        {data.length > 5 && <More>+{count}</More>}
-      </Space>
-      <Cart total={total} onClick={!open ? openCart : null}>
+        {data.length > 5 && (
+          <Panel.More onClick={!open ? openCart : null}>+{count}</Panel.More>
+        )}
+      </Panel.Space>
+      <Background />
+      <Panel.Cart total={total} onClick={!open ? openCart : null}>
         <Tooltip
           position="left"
           distance="25"
-          title={`${open ? "Зыкрыть" : "Открыть"} корзину`}
+          hideOnClick={false}
+          title={
+            open
+              ? TextComponents["panel.right.button.cart.close"]
+              : TextComponents["panel.right.button.cart.open"]
+          }
         >
-          <Total>{total}₽</Total>
-          <svg xmlns="http://www.w3.org/2000/svg">
+          <Panel.Total>{total}₽</Panel.Total>
+          <Panel.CartIcon>
             <use xlinkHref="#cart" />
-            <rect width="100%" height="100%" style={{ fill: "transparent" }} />
-          </svg>
+            <rect width="100%" height="100%" fill="transparent" />
+          </Panel.CartIcon>
         </Tooltip>
-      </Cart>
-    </Panel>
+      </Panel.Cart>
+    </Panel.Wrap>
   );
 };
 
@@ -89,6 +96,7 @@ export default connect(
     bindActionCreators(
       {
         removeFromCart: removeFromCart,
+        addToCart: addToCart,
         openCart: openCart
       },
       dispatch

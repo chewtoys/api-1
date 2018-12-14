@@ -2,24 +2,15 @@ import styled, { createGlobalStyle } from "styled-components";
 import ScrollArea from "react-scrollbar";
 
 export const GlobalStyle = createGlobalStyle`
-    :root {
-        --mainColor: ${props =>
-          props.mainColor ? props.mainColor : "hsla(0, 0%, 90%, 1)"};
-        --white: hsla(0, 0%, 100%, 1);
-        --black: hsla(0, 0%, 0%, 1);
-        --green: hsla(122, 39%, 49%, 1);
-        --red: hsl(358, 91%, 34%);
-        --fontName: "Roboto";
-        --mainShadow: 0px 2px 10px -1px rgba(0, 0, 0, .4);
-    }
     html {
         font-size: 15px;
     }
     body {
         margin: 0;
         padding: 0;
-        font-family: var(--fontName);
-        background: var(--mainColor);
+        font-family: "Roboto";
+        background: ${props => props.theme.mainColor};
+        color: black;
         transition: background .2s ease;
         overflow: hidden;
     }
@@ -31,14 +22,17 @@ export const GlobalStyle = createGlobalStyle`
         outline: none; 
     }
     h1 {
-        font-family: var(--fontName)
+        font-family: "Roboto"
     }
     .scrollbar {
-        border-radius: 5px;
+        border-radius: .3rem;
     }
     .scroll-main--block {
         width: 100vw;
         height: 100vh;
+    }
+    .scrollarea .scrollbar-container:hover {
+        background: hsla(0, 0%, 0%, .3) !important;
     }
 `;
 
