@@ -33,9 +33,19 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
-    poster: {
+    big_img: {
       type: Sequelize.STRING,
       allowNull: false,
+      notEmpty: true
+    },
+    small_img: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      notEmpty: true
+    },
+    bad_img: {
+      type: Sequelize.STRING,
+      allowNull: true,
       notEmpty: true
     },
     price: {

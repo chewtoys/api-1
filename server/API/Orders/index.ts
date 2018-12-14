@@ -71,11 +71,11 @@ export default class Orders extends Main {
     // Валидация данных
     const phone_reg = /^[0-9]{11}$/;
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
-    const name_reg = /^[a-zа-яё]{2,32}$/i;
+    // const name_reg = /^[a-zа-яё]{2,32}$/i;
 
     if (!phone_reg.test(body.phone)) throw new Error('Некорректный номер телефона');
     if (!email_reg.test(body.email)) throw new Error('Некорректный email');
-    if (!name_reg.test(body.name)) throw new Error('Некорректное имя');
+    if (!body.name.length) throw new Error('Некорректное имя');
     if (!body.address.length) throw new Error('Укажите адрес');
     if (!body.entrance.length) throw new Error('Укажите номер подъезда');
     if (!body.items.length) throw new Error('Заказ пуст');
