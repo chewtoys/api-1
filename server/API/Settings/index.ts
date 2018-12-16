@@ -1,3 +1,8 @@
+/**
+ * Класс для работы с настройками
+ * @author Nikita Bersenev
+ */
+
 import Main from '../../Main';
 import Functions from '../../Main/Functions';
 
@@ -5,7 +10,6 @@ export default class Settings extends Main {
   functions: Functions;
   response: responseAPI;
   table: tableList;
-  [propName: string]: any;
 
   constructor() {
     super();
@@ -20,65 +24,19 @@ export default class Settings extends Main {
   };
 
   /**
-   * @description Get all settings
-   * @param params 
+   * @description Получение настроек проекта
+   * @param {number} idproject - id проекта
+   * @param {string} [name] - название параметра
+   * @param {boolean} [debug] - режим отладки
    */
-  public async getAll(params: any) {
-
-    /**
-     * REQUIRED:
-     * @param idproject - project id
-     * OPTIONAL:
-     * @param debug - debug mode
-     */
-
-    // check of required parameters
-    if (!params.idproject) {
-      if (params.debug) this.functions.paramsError();
-      else this.functions.unknownError();
-    }  
-    
-    const sql: string = `
-      SELECT
-        idsetting,
-        name, 
-        value,
-        start_date,
-        end_date
-      FROM ??
-      WHERE CURDATE() BETWEEN start_date AND end_date
-    `;
-
-    const data: any = await this.Db.query(sql, [this.table.settings]);
-
-    this.response.result = true;
-    this.response.data = data;
-
-    return this.response;
-  };
-
-  /**
-   * @description Get setting by name
-   * @param params 
-   */
-  public async get(params: any) {
-
-    /**
-     * REQUIRED:
-     * @param idproject - project id
-     * @param name - setting name
-     * OPTIONAL:
-     * @param debug - debug mode
-     */
-
-
-    // check of required parameters
-    if (!params.idproject || !params.name) {
-      if (params.debug) this.functions.paramsError();
+  public async get(query: any) {
+    // Проверка обязательных параметров
+    if (!query.idproject) {
+      if (query.debug) this.functions.paramsError();
       else this.functions.unknownError();
     }  
 
-    const sql: string = `
+    let sql: string = `
       SELECT
         idsetting,
         name,
@@ -86,15 +44,19 @@ export default class Settings extends Main {
         start_date,
         end_date
       FROM ??
-      WHERE name = '${params.name}'
-        AND CURDATE() BETWEEN start_date AND end_date
+      WHERE CURDATE() BETWEEN start_date AND end_date
     `;
+    let params = [this.table.settings];
 
-    const data: any = await this.Db.query(sql, [this.table.settings]);
+    if (query.name) {
+      sql += ` AND name = ?`;
+      params.push(query.name);
+    }
+
+    const data: any = await this.Db.query(sql, params);
 
     this.response.result = true;
     this.response.data = data;
-
     return this.response;
-  };
+  }
 };
