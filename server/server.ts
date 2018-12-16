@@ -8,7 +8,7 @@ import redis from 'redis';
 import connectRedis from 'connect-redis';
 import Cron from './Main/Cron';
 import cron from 'cron';
-import { desktopRoute, apiRoute, authRoute } from "./Routes";
+import router from "./Routes";
 
 const RedisClient = redis.createClient({
   host: 'localhost',
@@ -52,9 +52,7 @@ class Server {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
         });
-        this.app.use(authRoute);
-        this.app.use(apiRoute);
-        // this.app.use(desktopRoute);
+        this.app.use(router);
     };
 
     /**

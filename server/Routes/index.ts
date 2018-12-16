@@ -1,5 +1,21 @@
-import desktopRoute from "./Desktop";
-import apiRoute from "./Api";
-import authRoute from './Auth';
+/**
+ * @description Маршрутизация 
+ * @author Nikita Bersenev
+ */
 
-export { desktopRoute, apiRoute, authRoute };
+import { Router } from "express";
+import Auth from './Auth';
+import OAuth from './OAuth';
+import Orders from './Orders';
+import Products from './Products';
+import Settings from './Settings';
+
+const router = Router();
+
+Auth(router);
+OAuth(router);
+Orders(router);
+Products(router);
+Settings(router);
+
+export default router;

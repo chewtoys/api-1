@@ -1,31 +1,13 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import API from '../../API';
-import passportLocal from 'passport-local';
-import bCrypt from 'bcrypt-nodejs';
-import Models from '../../Models';
 
-const router = Router();
+export default (router: Router) => {
 
-router.get('/api/oauth/vk', (req, res, next) => {
-  new API().OAuth.VK.login(req, res, next);
-});
+  router.post('/api/auth/logout', (req: Request, res: Response, next: NextFunction) => {
+    new API().Auth.logout(req, res);
+  });
 
-router.get('/api/oauth/vk/callback', (req, res, next) => {
-  new API().OAuth.VK.callback(req, res, next);
-});
-
-router.get('/api/oauth/ok', (req, res, next) => {
-  new API().OAuth.OK.login(req, res, next);
-});
-
-router.get('/api/oauth/ok/callback', (req, res, next) => {
-  new API().OAuth.OK.callback(req, res, next);
-});
-
-// Роут для выхода
-router.post('/api/auth/logout', (req, res) => {
-  new API().Auth.logout(req, res);
-});
+}
 
 // // Локальная авторизация
 // router.post('/api/auth/login', (req, res, next) => {
@@ -84,5 +66,3 @@ router.post('/api/auth/logout', (req, res) => {
 //   });
 
 // }));
-
-export default router;
