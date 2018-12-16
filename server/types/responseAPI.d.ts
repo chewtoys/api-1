@@ -1,4 +1,4 @@
 declare interface responseAPI {
     result: boolean;
-    data?: Array<any> | Object;
+    data?: any;
 }

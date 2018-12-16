@@ -9,12 +9,14 @@ import OAuth from './OAuth';
 import Orders from './Orders';
 import Products from './Products';
 import Settings from './Settings';
+import io from 'socket.io-client';
 
-const router = Router();
+const router: Router = Router();
+const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
 
 Auth(router);
 OAuth(router);
-Orders(router);
+Orders(router, SocketBot);
 Products(router);
 Settings(router);
 
