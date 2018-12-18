@@ -1,13 +1,28 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import API from '../../API';
+import { Router, Request, Response, NextFunction } from "express";
+import API from "../../API";
 
 export default (router: Router) => {
+  router.post(
+    "/auth/get_code",
+    (req: Request, res: Response, next: NextFunction) => {
+      new API().Auth.get_code(req.query);
+    }
+  );
 
-  router.post('/api/auth/logout', (req: Request, res: Response, next: NextFunction) => {
-    new API().Auth.logout(req, res);
-  });
+  router.post(
+    "/auth/check_code",
+    (req: Request, res: Response, next: NextFunction) => {
+      new API().Auth.check_code(req.query);
+    }
+  );
 
-}
+  router.post(
+    "/auth/logout",
+    (req: Request, res: Response, next: NextFunction) => {
+      new API().Auth.logout(req, res);
+    }
+  );
+};
 
 // // Локальная авторизация
 // router.post('/api/auth/login', (req, res, next) => {
@@ -19,7 +34,7 @@ export default (router: Router) => {
 //         result: false,
 //         error_code: parseInt(info.message, 10),
 //         error_text: 'Неверный логин и/или пароль!'
-//       }); 
+//       });
 //     }
 
 //     req.logIn(user, (err) => {
@@ -40,7 +55,7 @@ export default (router: Router) => {
 //     });
 //   } else {
 //     return res.json({
-//       result: false 
+//       result: false
 //     });
 //   }
 // });

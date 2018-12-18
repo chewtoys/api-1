@@ -3,11 +3,11 @@
  * @author Nikita Bersenev
  */
 
-import Main from '../../Main';
-import Functions from '../../Main/Functions';
-import SMS from '../../Main/SMS';
-import Models from '../../Models';
-import { Request, Response } from 'express';
+import Main from "../../Main";
+import Functions from "../../Main/Functions";
+import SMS from "../../Main/SMS";
+import Models from "../../Models";
+import { Request, Response } from "express";
 
 export default class Auth extends Main {
   functions: Functions;
@@ -19,11 +19,11 @@ export default class Auth extends Main {
   constructor() {
     super();
 
-    this.functions = new Functions;
-    this.sms = new SMS;
+    this.functions = new Functions();
+    this.sms = new SMS();
 
     this.table = {
-      codes: 'verification_codes'
+      codes: "verification_codes"
     };
 
     this.response = { result: false };
@@ -35,8 +35,8 @@ export default class Auth extends Main {
    */
   public async logout(req: Request, res: Response) {
     req.logout();
-    res.clearCookie('connect.sid');
-    
+    res.clearCookie("connect.sid");
+
     this.response.result = true;
     return res.json(this.response);
   }
@@ -82,9 +82,13 @@ export default class Auth extends Main {
       ORDER BY datetime DESC
       LIMIT 1
     `;
-    const data: any = await this.Db.query(sql, [this.table.codes, query.phone, query.code]);
+    const data: any = await this.Db.query(sql, [
+      this.table.codes,
+      query.phone,
+      query.code
+    ]);
 
-    if (!data.length) throw new Error('Неверный код');
+    if (!data.length) throw new Error("Неверный код");
 
     // Меняем статус кода на "подтвержденный"
     const update_sql = `
@@ -119,7 +123,7 @@ export default class Auth extends Main {
   //   }
 
   //   const phone_reg = /^[0-9]{11}$/i;
-    
+
   //   if (!phone_reg.test(query.phone)) throw new Error('Неверный номер телефона');
   //   if (query.password.length < 6 || query.password.length > 32) throw new Error('В пароле должно быть от 6 до 32 символов');
 
@@ -205,5 +209,4 @@ export default class Auth extends Main {
 
   //   return this.response;
   // }
-
 }
