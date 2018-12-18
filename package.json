@@ -73,6 +73,7 @@
     "passport-local": "^1.0.0",
     "passport-odnoklassniki": "^0.2.0",
     "passport-vkontakte": "^0.3.2",
+    "pm2": "^3.2.3",
     "pnp-webpack-plugin": "1.1.0",
     "polished": "^2.3.1",
     "postcss-flexbugs-fixes": "4.1.0",
