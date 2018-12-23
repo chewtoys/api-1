@@ -113,7 +113,7 @@ export default class Orders extends Main {
 
     if (params.Success && params.Status == 'AUTHORIZED') {
       // Изменение статуса заказа на "Оплачен"
-      const SocketBot: SocketIOClient.Socket = await io.connect(process.env.SOCKET_BOT);
+      const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
 
       this.setState({
         idorder: params.OrderId,
