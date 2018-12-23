@@ -43,4 +43,9 @@ export default (router: Router, SocketBot: SocketIOClient.Socket) => {
       }
     }
   );
+
+  router.all('/orders/notifications', (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.params);
+    console.log(req.query);
+  });
 };
