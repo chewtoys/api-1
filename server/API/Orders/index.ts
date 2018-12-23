@@ -1,10 +1,10 @@
 import Main from '../../Main';
 import Functions from '../../Main/Functions';
 import Models from '../../Models';
+import { Request, Response } from 'express';
 import axios from 'axios';
 import moment from 'moment';
-import { Socket } from 'net';
-import { REPL_MODE_STRICT } from 'repl';
+import io from 'socket.io-client';
 
 export default class Orders extends Main {  
   functions: Functions;
@@ -14,6 +14,7 @@ export default class Orders extends Main {
   user: any;
   order: any;
   product: any;
+  payment: any;
 
   constructor() {
     super();
@@ -23,6 +24,7 @@ export default class Orders extends Main {
     this.user = Models.User;
     this.order = Models.Order;
     this.product = Models.Product;
+    this.payment = Models.Payment;
     this.response = {
       result: false
     };
@@ -35,6 +37,91 @@ export default class Orders extends Main {
       products: 'products',
       saved_addresses: 'saved_addresses'
     };
+  }
+
+  /**
+   * Обработка нотификаций от банка
+   * @param {string} TerminalKey - идентификатор магазина
+   * @param {string} OrderId - ID заказа
+   * @param {boolean} Success - успешность
+   * @param {string} Status - статус платежа
+   * @param {number} PaymentId - идентификатор платежа
+   * @param {string} ErrorCode - код ошибки, если произошла ошибка
+   * @param {number} Amount - сумма транзакции в копейках
+   * @param {number} CardId - идентификатор привязанной карты
+   * @param {string} Pan - маскированный номер карты
+   * @param {string} Token - подпись запроса
+   * @param {string} ExpDate - срок действия карты
+   */
+  public async notifications(req: Request, res: Response) {
+    const params = req.body;
+    const required = [
+      'TerminalKey',
+      'OrderId',
+      'Success',
+      'Status',
+      'PaymentId',
+      'ErrorCode',
+      'Amount',
+      'CardId',
+      'Pan',
+      'Token',
+      'ExpDate'
+    ];
+
+    for (let key of required) {
+      if (typeof params[key] === 'undefined') {
+        throw new Error('Переданы не все параметры');
+      }
+    }
+
+    /**
+     * здесь будет проверка токена
+     */
+
+    const result = await this.payment.findOrCreate({
+      where: {
+        id_payment: params.PaymentId,
+        terminal_key: params.TerminalKey
+      },
+      defaults: {
+        id_order: params.OrderId,
+        success: params.Success,
+        status: params.Status,
+        error_code: params.ErrorCode,
+        amount: params.Amount / 100,
+        card_id: params.CardId,
+        pan: params.Pan,
+        token: params.Token,
+        exp_date: params.ExpDate
+      }
+    });
+
+    const payment: any = result[0];
+    const created: boolean = result[1];
+
+    if (!payment) throw new Error('Неизвестная ошибка');
+
+    if (!created) {
+      payment.update({
+        success: params.Success,
+        status: params.Status,
+        error_code: params.ErrorCode,
+        token: params.Token
+      });
+    }
+
+    if (params.Success && params.Status == 'AUTHORIZED') {
+      // Изменение статуса заказа на "Оплачен"
+      const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
+
+      this.setState({
+        idorder: params.OrderId,
+        idstate: 2
+      }, SocketBot);
+    }
+
+    return res.status(200).end('OK');
   }
 
   /**
