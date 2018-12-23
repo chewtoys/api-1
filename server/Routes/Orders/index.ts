@@ -44,7 +44,12 @@ export default (router: Router, SocketBot: SocketIOClient.Socket) => {
     }
   );
 
+<<<<<<< HEAD
   router.all('/api/orders/notifications', (req: Request, res: Response, next: NextFunction) => {
     console.log(req.body);
+=======
+  router.post('/api/orders/notifications', async (req: Request, res: Response, next: NextFunction) => {
+    return await new API().Orders.notifications(req, res);
+>>>>>>> release/v0.7.0
   });
 };
