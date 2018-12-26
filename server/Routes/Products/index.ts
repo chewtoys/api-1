@@ -6,6 +6,7 @@ export default (router: Router) => {
     "/products/getItems",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
+        console.log("rout getItems");
         return res.json(await new API().Products.getItems());
       } catch (err) {
         return res.json({
