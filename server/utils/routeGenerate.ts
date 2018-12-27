@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 
 /**
  * @description Генерация роута
@@ -8,15 +8,11 @@ import { Router } from "express";
  */
 const routeGenerate = (
   path: string,
-  fn: (queryOrBody: object) => Promise<any[]>,
+  fn: (queryOrBody: any) => Promise<any[]>,
   param?: string[]
 ) => {
   const router = Router();
-  const answer: answerJSON = {
-    data: undefined,
-    err: undefined,
-    meta: undefined
-  };
+  let answer: answerJSON;
   let reqTime: number;
   /**
    * @description Проверка обязательных параметров
@@ -31,7 +27,9 @@ const routeGenerate = (
       }
     });
     if (notTransmitted.length) {
-      throw Error(`Не передан(ы) параметр(ы): ${notTransmitted.join(", ")}`);
+      throw new Error(
+        `Не передан(ы) параметр(ы): ${notTransmitted.join(", ")}`
+      );
     }
   };
   /**
@@ -46,7 +44,7 @@ const routeGenerate = (
     }
   };
   /**
-   * @description Проверка на параметрына конкурентность и наличие обязательных из param
+   * @description Проверка на параметры на конкурентность и наличие обязательных из param
    * @param query req.query
    * @param body req.body
    */
@@ -67,12 +65,21 @@ const routeGenerate = (
     }
   };
 
-  router.use((req, res, next) => {
+  const preRoute = (req: Request, res: Response, next: NextFunction) => {
+    answer = {
+      data: undefined,
+      err: undefined,
+      meta: undefined
+    };
     reqTime = Date.now();
     next();
-  });
+  };
 
-  router.post(path, async (req, res, next) => {
+  const middleRoute = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       checkForAvailability(req.query, req.body);
       let queryOrBody: object;
@@ -92,9 +99,9 @@ const routeGenerate = (
       };
       next();
     }
-  });
+  };
 
-  router.use((req, res) => {
+  const postRoute = (req: Request, res: Response) => {
     answer.meta = {
       time: Date.now() - reqTime,
       count: answer.data ? answer.data.length : undefined
@@ -104,7 +111,9 @@ const routeGenerate = (
     } else {
       res.status(200).json(answer);
     }
-  });
+  };
+
+  router.post(path, preRoute, middleRoute, postRoute);
 
   return router;
 };
