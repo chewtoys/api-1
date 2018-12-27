@@ -67,6 +67,8 @@ const query = (sql: string, params?: string[]) =>
   });
 
 export default class DB {
-  constructor() {}
+  constructor() {
+    console.log("db");
+  }
   query = async (sql: string, params?: string[]) => await query(sql, params);
 }

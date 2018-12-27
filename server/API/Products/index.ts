@@ -1,14 +1,11 @@
 import Main from "../../Main";
+import { routeGenerate } from "../../utils";
 
 export default class Products extends Main {
-  response: responseAPI;
   table: tableList;
 
   constructor() {
     super();
-    this.response = {
-      result: false
-    };
     this.table = {
       categories: "categories",
       products: "products"
@@ -19,7 +16,6 @@ export default class Products extends Main {
    * @description Получение списка всех актуальных продуктов
    */
   public async getItems() {
-    console.log("api getItems");
     const data: any = await this.Db.query(
       `
       SELECT
@@ -85,9 +81,11 @@ export default class Products extends Main {
       }
     });
 
-    this.response.data = modifdata;
-    this.response.result = true;
-
-    return this.response;
+    return modifdata;
   }
 }
+
+export const routeProduct = routeGenerate(
+  "/products/get",
+  async () => await new Products().getItems()
+);

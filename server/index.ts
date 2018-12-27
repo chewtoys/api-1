@@ -10,6 +10,7 @@ import connectRedis from "connect-redis";
 import Cron from "./Main/Cron";
 import { CronJob } from "cron";
 import router from "./Routes";
+import { routeProduct } from "./API/Products/";
 
 const RedisClient = redis.createClient({
   host: "localhost",
@@ -64,6 +65,7 @@ class Server {
       next();
     });
     this.app.use(router);
+    this.app.use(routeProduct);
   }
 
   /**
@@ -77,7 +79,7 @@ class Server {
      */
     new CronJob(
       "0 0 0 * * *",
-      async () => await this.Cron.updateProductsPopularity(),
+      this.Cron.updateProductsPopularity,
       null,
       true,
       "Asia/Irkutsk"

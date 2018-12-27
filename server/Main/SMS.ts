@@ -3,8 +3,8 @@
  * @author Nikita Bersenev
  */
 
-import axios from 'axios';
-import Db from './DataBase';
+import axios from "axios";
+import Db from "./DataBase";
 
 export default class SMS {
   login: string;
@@ -12,16 +12,16 @@ export default class SMS {
   sender: string;
   table: tableList;
   db: Db;
-  [propName: string]: any;
+  // [propName: string]: any;
 
   constructor() {
     this.login = process.env.SMS_USER;
     this.password = process.env.SMS_PASSWORD;
-    this.sender = 'LAAPL';
+    this.sender = "LAAPL";
     this.table = {
-      codes: 'verification_codes'
+      codes: "verification_codes"
     };
-    this.db = new Db;
+    this.db = new Db();
   }
 
   /**
@@ -36,22 +36,22 @@ export default class SMS {
      * @param {number} cnt - ?
      */
     return axios({
-      method: 'post',
-      url: 'https://smsc.ru/sys/send.php',
+      method: "post",
+      url: "https://smsc.ru/sys/send.php",
       params: {
         login: this.login,
         psw: this.password,
         sender: this.sender,
-        charset: 'utf-8',
+        charset: "utf-8",
         fmt: 3,
-        phones: phones.join(';'),
+        phones: phones.join(";"),
         mes
       }
     });
   }
 
   /**
-   * @description Отправка кода подтверждения 
+   * @description Отправка кода подтверждения
    * @param phone - номер телефона
    */
   code(phone: string) {
@@ -60,7 +60,9 @@ export default class SMS {
      * @param {number} id - id сообщения
      * @param {number} cnt - ?
      */
-    const code = String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)));
+    const code = String(
+      Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1))
+    );
     const message = `Код подтверждения: ${code}`;
 
     const sql = `
@@ -70,13 +72,13 @@ export default class SMS {
     this.db.query(sql, [this.table.codes, phone, code]);
 
     return axios({
-      method: 'post',
-      url: 'https://smsc.ru/sys/send.php',
+      method: "post",
+      url: "https://smsc.ru/sys/send.php",
       params: {
         login: this.login,
         psw: this.password,
         sender: this.sender,
-        charset: 'utf-8',
+        charset: "utf-8",
         fmt: 3,
         phones: phone,
         mes: message
@@ -89,7 +91,7 @@ export default class SMS {
    * @param {string} phone - номер телефона
    * @param {number} id - id отправленного смс
    */
-  status (phone: string, id: number) {
+  status(phone: string, id: number) {
     /**
      * Ответ сервера
      * @param last_date - datetime
@@ -97,12 +99,12 @@ export default class SMS {
      * @param status - id статуса (https://smsc.ru/api/http/status_messages/statuses/#menu)
      */
     return axios({
-      method: 'post',
-      url: 'https://smsc.ru/sys/status.php',
+      method: "post",
+      url: "https://smsc.ru/sys/status.php",
       params: {
         login: this.login,
         psw: this.password,
-        charset: 'utf-8',
+        charset: "utf-8",
         fmt: 3,
         phone,
         id
@@ -119,8 +121,8 @@ export default class SMS {
      * @param balance - баланс
      */
     return axios({
-      method: 'post',
-      url: 'https://smsc.ru/sys/balance.php',
+      method: "post",
+      url: "https://smsc.ru/sys/balance.php",
       params: {
         login: this.login,
         psw: this.password,
@@ -128,5 +130,4 @@ export default class SMS {
       }
     });
   }
-
 }
