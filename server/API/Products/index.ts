@@ -15,7 +15,7 @@ export default class Products extends Main {
   /**
    * @description Получение списка всех актуальных продуктов
    */
-  public async getItems() {
+  public async get() {
     const data: any = await this.Db.query(
       `
       SELECT
@@ -87,5 +87,5 @@ export default class Products extends Main {
 
 export const routeProduct = routeGenerate(
   "/products/get",
-  async () => await new Products().getItems()
+  async () => await new Products().get()
 );
