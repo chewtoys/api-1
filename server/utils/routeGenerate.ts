@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
+import Logger from "../Main/Logger";
 
 /**
  * @description Генерация роута
@@ -58,9 +59,10 @@ const routeGenerate = (
     if (typeof param !== "undefined") {
       if (!emptyObject(query)) {
         reqParams(param, query);
-      }
-      if (!emptyObject(body)) {
+      } else if (!emptyObject(body)) {
         reqParams(param, body);
+      } else {
+        throw new Error(`Не передан(ы) параметр(ы): ${param.join(", ")}`);
       }
     }
   };
@@ -102,13 +104,16 @@ const routeGenerate = (
   };
 
   const postRoute = (req: Request, res: Response) => {
+    const time = Date.now() - reqTime;
     answer.meta = {
-      time: Date.now() - reqTime,
+      time,
       count: answer.data ? answer.data.length : undefined
     };
     if (answer.err) {
+      new Logger().route("ERROR", path, time, answer.err.message);
       res.status(500).json(answer);
     } else {
+      new Logger().route("OK", path, time);
       res.status(200).json(answer);
     }
   };
