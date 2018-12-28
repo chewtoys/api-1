@@ -12,12 +12,12 @@
         "paths": {
             "*": [
                 "node_modules/*",
-                "server/types/*"
+                "types/*"
             ]
         },
-        "typeRoots" : ["server/types"]
+        "typeRoots" : ["types"]
     },
     "include": [
-        "server/**/*"
+        "app/**/*"
     ]
 }
