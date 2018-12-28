@@ -21,7 +21,6 @@ export default class Cron extends Main {
    * @description Пересчет популярности товаров
    */
   public async updateProductsPopularity() {
-    console.log("test");
     const query = `
       UPDATE ?? AS t1
       INNER JOIN (
