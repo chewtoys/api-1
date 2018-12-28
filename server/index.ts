@@ -1,22 +1,13 @@
 require("dotenv").config();
 import express from "express";
-import session from "express-session";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
-import redis from "redis";
-import connectRedis from "connect-redis";
 import Cron from "./Main/Cron";
 import { CronJob } from "cron";
 import router from "./Routes";
-
-const RedisClient = redis.createClient({
-  host: "localhost",
-  port: 6379,
-  password: process.env.REDIS_PASSWORD
-});
-const RedisStore = connectRedis(session);
+import { session } from "./utils";
 
 class Server {
   app: express.Application;
@@ -25,17 +16,7 @@ class Server {
   constructor() {
     this.app = express();
 
-    this.app.use(
-      session({
-        store: new RedisStore({
-          client: RedisClient
-        }),
-        secret: process.env.SESSION_SALT,
-        resave: false,
-        saveUninitialized: false,
-        cookie: { httpOnly: true }
-      })
-    );
+    this.app.use(session);
     // Обеспечит маломальскую защиту, уберет хотябы из header заголовок express
     this.app.use(helmet());
     this.app.use(cookieParser());
@@ -51,8 +32,8 @@ class Server {
   }
 
   private routing() {
-    // Для возможности обращаться с любых доменов
     /**
+     * @description CORS
      * @todo Нужно будет переписать, добавить только наши домены
      */
     this.app.use((req, res, next) => {
@@ -63,6 +44,7 @@ class Server {
       );
       next();
     });
+    // Добавление роутов циклом, последним должен быть 404 всегда
     router.forEach(route => {
       this.app.use(route);
     });
@@ -70,13 +52,10 @@ class Server {
 
   /**
    * @description Запуск приложения
+   * @param {number} port Port
    */
-
-  public start() {
+  public start(port: number) {
     // Запуск cron
-    /**
-     * @todo Надо отдебажить
-     */
     new CronJob(
       "0 0 0 * * *",
       async () => await this.Cron.updateProductsPopularity(),
@@ -85,8 +64,8 @@ class Server {
       "Asia/Irkutsk"
     );
 
-    this.app.listen(9001);
+    this.app.listen(port);
   }
 }
 
-new Server().start();
+new Server().start(9001);
