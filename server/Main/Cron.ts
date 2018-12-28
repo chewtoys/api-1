@@ -13,7 +13,7 @@ export default class Cron extends Main {
 
     this.table = {
       products: "products",
-      orders_data: "orders_data"
+      orders_data: "orders_data",
     };
   }
 

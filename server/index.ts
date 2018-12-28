@@ -38,14 +38,11 @@ class Server {
      */
     this.app.use((req, res, next) => {
       res.header("Access-Control-Allow-Origin", "*");
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-      );
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
     // Добавление роутов циклом, последним должен быть 404 всегда
-    router.forEach(route => {
+    router.forEach((route) => {
       this.app.use(route);
     });
   }
@@ -56,13 +53,7 @@ class Server {
    */
   public start(port: number) {
     // Запуск cron
-    new CronJob(
-      "0 0 0 * * *",
-      async () => await this.Cron.updateProductsPopularity(),
-      null,
-      true,
-      "Asia/Irkutsk"
-    );
+    new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
 
     this.app.listen(port);
   }
