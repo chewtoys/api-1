@@ -1,12 +1,12 @@
-import Main from '../../Main';
-import Functions from '../../Main/Functions';
-import Models from '../../Models';
-import { Request, Response } from 'express';
-import axios from 'axios';
-import moment from 'moment';
-import io from 'socket.io-client';
+import Main from "../../Main";
+import Functions from "../../Main/Functions";
+import Models from "../../Models";
+import { Request, Response } from "express";
+import axios from "axios";
+import moment from "moment";
+import io from "socket.io-client";
 
-export default class Orders extends Main {  
+export default class Orders extends Main {
   functions: Functions;
   response: responseAPI;
   table: tableList;
@@ -19,7 +19,7 @@ export default class Orders extends Main {
   constructor() {
     super();
 
-    this.functions = new Functions;
+    this.functions = new Functions();
     this.delivery_cost = 250;
     this.user = Models.User;
     this.order = Models.Order;
@@ -29,13 +29,13 @@ export default class Orders extends Main {
       result: false
     };
     this.table = {
-      categories: 'categories',
-      users: 'users',
-      orders: 'orders',
-      orders_data: 'orders_data',
-      orders_states: 'orders_states',
-      products: 'products',
-      saved_addresses: 'saved_addresses'
+      categories: "categories",
+      users: "users",
+      orders: "orders",
+      orders_data: "orders_data",
+      orders_states: "orders_states",
+      products: "products",
+      saved_addresses: "saved_addresses"
     };
   }
 
@@ -56,22 +56,22 @@ export default class Orders extends Main {
   public async notifications(req: Request, res: Response) {
     const params = req.body;
     const required = [
-      'TerminalKey',
-      'OrderId',
-      'Success',
-      'Status',
-      'PaymentId',
-      'ErrorCode',
-      'Amount',
-      'CardId',
-      'Pan',
-      'Token',
-      'ExpDate'
+      "TerminalKey",
+      "OrderId",
+      "Success",
+      "Status",
+      "PaymentId",
+      "ErrorCode",
+      "Amount",
+      "CardId",
+      "Pan",
+      "Token",
+      "ExpDate"
     ];
 
     for (let key of required) {
-      if (typeof params[key] === 'undefined') {
-        throw new Error('Переданы не все параметры');
+      if (typeof params[key] === "undefined") {
+        throw new Error("Переданы не все параметры");
       }
     }
 
@@ -100,7 +100,7 @@ export default class Orders extends Main {
     const payment: any = result[0];
     const created: boolean = result[1];
 
-    if (!payment) throw new Error('Неизвестная ошибка');
+    if (!payment) throw new Error("Неизвестная ошибка");
 
     if (!created) {
       payment.update({
@@ -111,17 +111,22 @@ export default class Orders extends Main {
       });
     }
 
-    if (params.Success && params.Status == 'AUTHORIZED') {
+    if (params.Success && params.Status == "AUTHORIZED") {
       // Изменение статуса заказа на "Оплачен"
-      const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
+      const SocketBot: SocketIOClient.Socket = io.connect(
+        process.env.SOCKET_BOT
+      );
 
-      this.setState({
-        idorder: params.OrderId,
-        idstate: 2
-      }, SocketBot);
+      this.setState(
+        {
+          idorder: params.OrderId,
+          idstate: 2
+        },
+        SocketBot
+      );
     }
 
-    return res.status(200).end('OK');
+    res.status(200).end("OK");
   }
 
   /**
@@ -134,58 +139,64 @@ export default class Orders extends Main {
    * @param {string} address - адрес
    * @param {string} entrance - номер подъезда
    * @param {string} apartment - номер квартиры
-   * @param {string} intercom - домофон 
+   * @param {string} intercom - домофон
    * @param {datetime} order_datetime - дата и время, на которое заказана доставка
    * @param {string} comment - комментарий к заказу
    * @param {boolean} [remember] - запомнить адрес
    * @param {string} [address_alias] - название адреса
    * @param {array} items - массив с содержимым заказа
-   * @param {boolean} [debug] - режим отладки
    */
-  public async create(body: any) {
-    // Проверка обязательных параметров
-    const required = [
-      'phone',
-      'email',
-      'name',
-      'lat',
-      'lon',
-      'address',
-      'entrance',
-      'apartment',
-      'intercom',
-      'comment',
-      'order_datetime',
-      'items',
-    ];
-
-    for (let param of required) {
-      if (typeof body[param] === 'undefined') {
-        if (body.debug) this.functions.paramsError();
-        else this.functions.unknownError();
-      }
-    }
-
+  public async create({
+    phone,
+    email,
+    name,
+    lat,
+    lon,
+    address,
+    entrance,
+    apartment,
+    intercom,
+    order_datetime,
+    comment,
+    remember,
+    address_alias,
+    items
+  }: {
+    phone: string;
+    email?: string;
+    name: string;
+    lat: number;
+    lon: number;
+    address: string;
+    entrance: string;
+    apartment: string;
+    order_datetime: string;
+    intercom?: string;
+    comment?: string;
+    remember?: boolean;
+    address_alias?: string;
+    items: any[];
+  }) {
     // Валидация данных
     const phone_reg = /^[0-9]{11}$/;
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
     // const name_reg = /^[a-zа-яё]{2,32}$/i;
 
-    if (!phone_reg.test(body.phone)) throw new Error('Некорректный номер телефона');
-    if (!email_reg.test(body.email)) throw new Error('Некорректный email');
-    if (!body.name.length) throw new Error('Некорректное имя');
-    if (!body.address.length) throw new Error('Укажите адрес');
-    if (!body.entrance.length) throw new Error('Укажите номер подъезда');
-    if (!body.items.length) throw new Error('Заказ пуст');
+    if (!phone_reg.test(phone)) throw new Error("Некорректный номер телефона");
+    if (!email_reg.test(email)) throw new Error("Некорректный email");
+    if (!name.length) throw new Error("Некорректное имя");
+    if (!address.length) throw new Error("Укажите адрес");
+    if (!entrance.length) throw new Error("Укажите номер подъезда");
+    if (!items.length) throw new Error("Заказ пуст");
 
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
     const data = await this.user.findOrCreate({
       where: {
-        phone: body.phone
+        phone: phone
       },
       defaults: {
-        email: body.email,
-        name: body.name,
+        email: email,
+        name: name,
         phone_confirmed: 1,
         email_confirmed: 0
       }
@@ -198,15 +209,15 @@ export default class Orders extends Main {
       if (!created) {
         // Пользователь с таким номером уже есть. Обновляем email и имя.
         user.update({
-          email: body.email,
-          name: body.name
+          email: email,
+          name: name
         });
       }
     } else {
       this.functions.unknownError();
     }
 
-    if (body.remember) {
+    if (remember) {
       // Сохранение адреса
       const sql = `
         INSERT INTO ?? (iduser, lat, lon, address, entrance, apartment, intercom, aliase)
@@ -217,13 +228,13 @@ export default class Orders extends Main {
       const params = [
         this.table.saved_addresses,
         user.iduser,
-        body.lat,
-        body.lon,
-        body.address,
-        body.entrance,
-        body.apartment,
-        body.intercom,
-        body.address_aliase
+        lat,
+        lon,
+        address,
+        entrance,
+        apartment,
+        intercom,
+        address_alias
       ];
       await this.Db.query(sql, params);
     }
@@ -232,30 +243,32 @@ export default class Orders extends Main {
     const order = await this.order.create({
       idclient: user.iduser,
       idstate: 1,
-      lat: body.lat,
-      lon: body.lon,
-      address: body.address,
-      entrance: body.entrance,
-      apartment: body.apartment,
-      intercom: body.intercom,
-      comment: body.comment,
-      order_datetime: body.order_datetime
+      lat: lat,
+      lon: lon,
+      address: address,
+      entrance: entrance,
+      apartment: apartment,
+      intercom: intercom,
+      comment: comment,
+      order_datetime: order_datetime
     });
 
     // Сохранение содержимого заказа
-    const items = body.items.map((item: any) => {
+    items = items.map((item: any) => {
       return `('${order.idorder}', '${item.id}', '${item.count}')`;
     });
 
-    await this.Db.query(`
+    await this.Db.query(
+      `
       INSERT INTO ?? (idorder, idproduct, count)
-      VALUES ${items.join(', ')}
-    `, [this.table.orders_data]);
-
+      VALUES ${items.join(", ")}
+    `,
+      [this.table.orders_data]
+    );
 
     // Подсчет стоимости заказа
     let total = 0;
-    const items_id = body.items.map((item: any) => {
+    const items_id = items.map((item: any) => {
       return item.id;
     });
     const products = await this.product.findAll({
@@ -264,7 +277,7 @@ export default class Orders extends Main {
       }
     });
 
-    for (let item of body.items) {
+    for (let item of items) {
       const product = products.filter((subitem: any) => {
         return subitem.idproduct === item.id;
       });
@@ -284,33 +297,36 @@ export default class Orders extends Main {
         Frame: true,
         Language: "ru",
         DATA: {
-          Email: body.email,
-          Phone: body.phone,
-          Name: body.name,
+          Email: email,
+          Phone: phone,
+          Name: name,
           connection_type: "Widget2.0"
         },
         Receipt: {
           Taxation: "usn_income_outcome",
-          Phone: body.phone,
+          Phone: phone,
           Items: products
             .map((product: any) => {
-              const item = body.items.filter((subitem: any) => {
-                return subitem.id === product.idproduct; 
+              const item = items.filter((subitem: any) => {
+                return subitem.id === product.idproduct;
               })[0];
               return {
                 Name: product.title,
                 Price: product.price * 100,
                 Quantity: item.count,
                 Amount: product.price * item.count * 100,
-                Tax: 'none'
+                Tax: "none"
+              };
+            })
+            .concat([
+              {
+                Name: "Доставка",
+                Price: this.delivery_cost * 100,
+                Quantity: 1,
+                Amount: this.delivery_cost * 100,
+                Tax: "none"
               }
-            }).concat([{
-              Name: 'Доставка',
-              Price: this.delivery_cost * 100,
-              Quantity: 1,
-              Amount: this.delivery_cost * 100,
-              Tax: 'none'
-            }])
+            ])
         }
       }
     });
@@ -335,23 +351,29 @@ export default class Orders extends Main {
       if (query.debug) this.functions.paramsError();
       else this.functions.unknownError();
     } else if (isNaN(query.idorder) || isNaN(query.idstate)) {
-      if (query.debug) throw new Error('Параметры idorder and idstate должны быть числовыми');
+      if (query.debug)
+        throw new Error("Параметры idorder and idstate должны быть числовыми");
       else this.functions.unknownError();
     }
 
     const idorder: number = parseInt(query.idorder);
     const idstate: number = parseInt(query.idstate);
 
-    const result = (await this.order.update({ idstate }, {
-      where: { idorder }
-    }))[0];
+    const result = (await this.order.update(
+      { idstate },
+      {
+        where: { idorder }
+      }
+    ))[0];
 
-    if (!result) throw new Error('Заказ не найден');
+    if (!result) throw new Error("Заказ не найден");
 
-    SocketBot.emit('set_order_state', (await this.get({idorder: query.idorder})).data[0]);
+    SocketBot.emit(
+      "set_order_state",
+      (await this.get({ idorder: query.idorder })).data[0]
+    );
 
     return this.response;
-
   }
 
   /**
@@ -365,15 +387,16 @@ export default class Orders extends Main {
    */
   public async get(query: any) {
     // По умолчанию возвращает все заказы на сегодня
-    if (!query.date_start && !query.idorder) query.date_start = moment().format('YYYY-MM-DD');
-    if (!query.date_end) query.date_end = moment().format('YYYY-MM-DD');
+    if (!query.date_start && !query.idorder)
+      query.date_start = moment().format("YYYY-MM-DD");
+    if (!query.date_end) query.date_end = moment().format("YYYY-MM-DD");
 
     let params: any[] = [
-      this.table.orders, 
-      this.table.users, 
-      this.table.orders_data, 
-      this.table.products, 
-      this.table.categories, 
+      this.table.orders,
+      this.table.users,
+      this.table.orders_data,
+      this.table.products,
+      this.table.categories,
       this.table.orders_states
     ];
 
@@ -403,7 +426,9 @@ export default class Orders extends Main {
       params.push(query.idcourier);
     }
 
-    const where_clause: any = (restrictions.length) ? restrictions.join(' AND ') : 1;
+    const where_clause: any = restrictions.length
+      ? restrictions.join(" AND ")
+      : 1;
 
     const sql: string = `
       SELECT
@@ -464,7 +489,7 @@ export default class Orders extends Main {
               product: item.product_title,
               big_img: item.product_big_img,
               price: item.product_price
-            }
+            };
           })
         });
       }
@@ -474,4 +499,19 @@ export default class Orders extends Main {
     this.response.data = modifdata;
     return this.response;
   }
-};
+}
+
+// [
+//   "phone",
+//   "email",
+//   "name",
+//   "lat",
+//   "lon",
+//   "address",
+//   "entrance",
+//   "apartment",
+//   "intercom",
+//   "comment",
+//   "order_datetime",
+//   "items"
+// ]

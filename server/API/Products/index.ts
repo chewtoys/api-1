@@ -1,5 +1,5 @@
 import Main from "../../Main";
-import { routeGenerate } from "../../utils";
+import { route } from "../../utils";
 
 export default class Products extends Main {
   table: tableList;
@@ -85,7 +85,7 @@ export default class Products extends Main {
   }
 }
 
-export const routeProduct = routeGenerate(
+export const productsRoute = route(
   "/products/get",
   async () => await new Products().get()
 );

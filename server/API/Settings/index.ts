@@ -3,25 +3,18 @@
  * @author Nikita Bersenev
  */
 
-import Main from '../../Main';
-import Functions from '../../Main/Functions';
+import Main from "../../Main";
+import { route } from "../../utils";
 
 export default class Settings extends Main {
-  functions: Functions;
-  response: responseAPI;
   table: tableList;
 
   constructor() {
     super();
-    this.functions = new Functions;
-
-    this.response = {
-      result: false 
-    };
     this.table = {
-      settings: "settings"
+      settings: "settings",
     };
-  };
+  }
 
   /**
    * @description Получение настроек проекта
@@ -29,13 +22,8 @@ export default class Settings extends Main {
    * @param {string} [name] - название параметра
    * @param {boolean} [debug] - режим отладки
    */
-  public async get(query: any) {
-    // Проверка обязательных параметров
-    if (!query.idproject) {
-      if (query.debug) this.functions.paramsError();
-      else this.functions.unknownError();
-    }  
-
+  public async get({ idproject, name }: { idproject?: string; name?: string }) {
+    console.log(idproject);
     let sql: string = `
       SELECT
         idsetting,
@@ -48,15 +36,15 @@ export default class Settings extends Main {
     `;
     let params = [this.table.settings];
 
-    if (query.name) {
+    if (name) {
       sql += ` AND name = ?`;
-      params.push(query.name);
+      params.push(name);
     }
 
     const data: any = await this.Db.query(sql, params);
 
-    this.response.result = true;
-    this.response.data = data;
-    return this.response;
+    return data;
   }
-};
+}
+
+export const settingsRoute = route("/settings/get", async (e) => new Settings().get(e), ["idproject"]);

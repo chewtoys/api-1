@@ -13,7 +13,7 @@ export default class Cron extends Main {
 
     this.table = {
       products: "products",
-      orders_data: "orders_data"
+      orders_data: "orders_data",
     };
   }
 
@@ -21,6 +21,7 @@ export default class Cron extends Main {
    * @description Пересчет популярности товаров
    */
   public async updateProductsPopularity() {
+    console.log("test");
     const query = `
       UPDATE ?? AS t1
       INNER JOIN (

@@ -1,3 +1,4 @@
-import routeGenerate from "./routeGenerate";
+import route from "./routeGenerate";
+import session from "./sessionGenerate";
 
-export { routeGenerate };
+export { route, session };
