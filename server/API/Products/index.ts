@@ -1,26 +1,23 @@
-import Main from '../../Main';
+import Main from "../../Main";
+import { routeGenerate } from "../../utils";
 
 export default class Products extends Main {
-  response: responseAPI;
   table: tableList;
-  [propName: string]: any;
 
   constructor() {
     super();
-    this.response = {
-      result: false
-    };
     this.table = {
       categories: "categories",
       products: "products"
-    }
-  };
+    };
+  }
 
   /**
    * @description Получение списка всех актуальных продуктов
    */
-  public async getItems() {
-    const data: any = await this.Db.query(`
+  public async get() {
+    const data: any = await this.Db.query(
+      `
       SELECT
         t1.idcategory AS idcategory,
         t1.name AS category_name,
@@ -43,7 +40,9 @@ export default class Products extends Main {
       FROM ?? AS t1
       INNER JOIN ?? AS t2 ON t1.idcategory = t2.idcategory
       WHERE actual = 1
-    `, [this.table.categories, this.table.products]);
+    `,
+      [this.table.categories, this.table.products]
+    );
 
     let idcategories: number[] = [];
     let modifdata: any[] = [];
@@ -53,7 +52,7 @@ export default class Products extends Main {
         idcategories.push(item.idcategory);
         let categoryItems = data.filter((subitem: any) => {
           return subitem.idcategory === item.idcategory;
-        }); 
+        });
 
         modifdata.push({
           id: item.idcategory,
@@ -76,15 +75,17 @@ export default class Products extends Main {
               starch: item.product_starch,
               mass: item.product_mass,
               price: item.product_price
-            }
+            };
           })
         });
       }
     });
 
-    this.response.data = modifdata;
-    this.response.result = true;
+    return modifdata;
+  }
+}
 
-    return this.response;
-  };
-};
+export const routeProduct = routeGenerate(
+  "/products/get",
+  async () => await new Products().get()
+);

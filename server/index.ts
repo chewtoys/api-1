@@ -1,72 +1,73 @@
-require('dotenv').config()
+require("dotenv").config();
 import express from "express";
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import passport from 'passport';
-import redis from 'redis';
-import connectRedis from 'connect-redis';
-import Cron from './Main/Cron';
-import cron from 'cron';
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import passport from "passport";
+import helmet from "helmet";
+import { CronJob } from "cron";
+import Cron from "./Main/Cron";
+import session from './utils/session';
 import router from "./Routes";
 
-const RedisClient = redis.createClient({
-  host: 'localhost',
-  port: 6379,
-  password: process.env.REDIS_PASSWORD
-});
-const RedisStore = connectRedis(session);
-
 class Server {
-    app: express.Application;
-    Cron: Cron;
+  app: express.Application;
+  Cron: Cron;
 
-    constructor() {
-        this.app = express();
-        this.app.use(express.static('static/desktop/'));
-        this.app.use(express.static('upload/'));
+  constructor() {
+    this.app = express();
 
-        this.app.use(session({
-          store: new RedisStore({
-            client: RedisClient
-          }),
-          secret: process.env.SESSION_SALT,
-          resave: false,
-          saveUninitialized: false
-        }));
-        this.app.use(cookieParser());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(bodyParser.json());
+    // Обеспечит маломальскую защиту, уберет хотябы из header заголовок express
+    this.app.use(helmet());
+    this.app.use(cookieParser());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(bodyParser.json());
 
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
+    this.app.use(session);
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
 
-        this.Cron = new Cron();
+    this.Cron = new Cron();
 
-        this.routing();
-    };
+    this.routing();
+  }
 
-    private routing() {
-        this.app.use((req, res, next) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-        });
-        this.app.use(router);
-    };
-
+  private routing() {
+    // Для возможности обращаться с любых доменов
     /**
-     * @description Start Server
+     * @todo Нужно будет переписать, добавить только наши домены
      */
-    
-    public start() {
-        new cron.CronJob('0 0 0 * * *', () => {
-          this.Cron.updateProductsPopularity();
-        }, null, true, 'Asia/Irkutsk');
+    this.app.use((req, res, next) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+      );
+      next();
+    });
+    router.forEach(route => {
+      this.app.use(route);
+    });
+  }
 
-        this.app.listen(9001);
-        // console.log('env = ', process.env)
-    };
-};
+  /**
+   * @description Запуск приложения
+   */
+
+  public start() {
+    // Запуск cron
+    /**
+     * @todo Надо отдебажить
+     */
+    new CronJob(
+      "0 0 0 * * *",
+      async () => await this.Cron.updateProductsPopularity(),
+      null,
+      true,
+      "Asia/Irkutsk"
+    );
+
+    this.app.listen(9001);
+  }
+}
 
 new Server().start();

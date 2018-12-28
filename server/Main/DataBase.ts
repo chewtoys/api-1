@@ -2,35 +2,73 @@
  * Класс для работы с БД
  * @author Nikita Bersenev
  */
-import mysql, { Pool } from "mysql";
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    dateStrings: true
-});
+import mysql from "mysql2";
+import { Client } from "ssh2";
+import fs from "fs";
+import path from "path";
+
+let connection: mysql.Connection;
+
+const query = (sql: string, params?: string[]) =>
+  new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV === "development") {
+      const ssh = new Client();
+
+      ssh
+        .on("ready", () => {
+          // console.log("Client :: ready");
+          ssh.forwardOut(
+            "localhost",
+            3007,
+            "localhost",
+            3306,
+            (err, stream) => {
+              if (err) reject(err);
+              const option = {
+                host: process.env.MYSQL_HOST,
+                user: process.env.MYSQL_USER,
+                password: process.env.MYSQL_PASSWORD,
+                database: process.env.MYSQL_DATABASE,
+                stream: stream
+              };
+              connection = mysql.createConnection(option);
+
+              connection.query(
+                sql,
+                params,
+                (err: mysql.QueryError, res: any) => {
+                  if (err) reject(err);
+                  resolve(res);
+                }
+              );
+            }
+          );
+        })
+        .connect({
+          host: "laapl.ru",
+          port: 22,
+          username: "laapl",
+          privateKey: fs.readFileSync(path.resolve(process.cwd(), "key/id_rsa"))
+        });
+    } else {
+      const option = {
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE
+      };
+      connection = mysql.createConnection(option);
+
+      connection.query(sql, params, (err: mysql.QueryError, res: any) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    }
+  });
 
 export default class DB {
-    pool: Pool;
-
-    constructor() {
-        if (!process.env.MYSQL_USER) throw `You need to add to .env file: MYSQL_USER=''`;
-        if (!process.env.MYSQL_PASSWORD) throw `You need to add to .env file: MYSQL_PASSWORD=''`;
-        this.pool = pool;
-    };
-
-    query(sql: string, params?: string[]) {
-        return new Promise((resolve, reject) => {
-            this.pool.getConnection((err, connection) => {
-                if (err) return reject(err);
-                connection.query(sql, params, (err: mysql.MysqlError, res: any) => {
-                    connection.release();
-                    if (err) return reject(err);
-                    return resolve(res);
-                });
-            });
-        });
-    };    
-};
+  constructor() {
+    console.log("db");
+  }
+  query = async (sql: string, params?: string[]) => await query(sql, params);
+}
