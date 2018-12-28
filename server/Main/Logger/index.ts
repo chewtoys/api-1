@@ -6,7 +6,7 @@ import { createLogger, format, transports, addColors } from "winston";
 const { combine, timestamp, printf } = format;
 
 // Стандартный вывод для всех уровней логов
-const myFormat = printf(info => {
+const myFormat = printf((info) => {
   return `${info.timestamp} [${info.label}]: ${info.message}`;
 });
 
@@ -19,7 +19,7 @@ const myCustomLevels = {
     info: 2,
     verbose: 3,
     debug: 4,
-    silly: 5
+    silly: 5,
   },
   colors: {
     error: "red",
@@ -27,15 +27,15 @@ const myCustomLevels = {
     info: "bold blue whiteBG",
     verbose: "green",
     debug: "green",
-    silly: "green"
-  }
+    silly: "green",
+  },
 };
 
 // Инициализация логгера за пределами класса
 const logger = createLogger({
   format: combine(format.colorize(), timestamp(), myFormat),
   levels: myCustomLevels.levels,
-  transports: [new transports.Console()]
+  transports: [new transports.Console()],
 });
 
 addColors(myCustomLevels.colors);
@@ -49,7 +49,7 @@ class Logger {
     logger.log({
       label: "info",
       message: `${msg}`,
-      level: "info"
+      level: "info",
     });
   /**
    * @description Лог для вывода ошибок
@@ -59,7 +59,7 @@ class Logger {
     logger.log({
       label: "error",
       message: `${msg}`,
-      level: "error"
+      level: "error",
     });
   /**
    * @description Лог для роутинга
@@ -72,7 +72,7 @@ class Logger {
     logger.log({
       label: "route",
       message: `[${path}] ${msg} - ${time} ms ${err ? " - " + err : ""}`,
-      level: "info"
+      level: "info",
     });
 }
 

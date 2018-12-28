@@ -5,19 +5,19 @@ import connectRedis from "connect-redis";
 const RedisClient = redis.createClient({
   host: "localhost",
   port: 6379,
-  password: process.env.REDIS_PASSWORD
+  password: process.env.REDIS_PASSWORD,
 });
 
 const RedisStore = connectRedis(Session);
 
 const session = Session({
   store: new RedisStore({
-    client: RedisClient
+    client: RedisClient,
   }),
   secret: process.env.SESSION_SALT,
   resave: false,
   saveUninitialized: false,
-  cookie: { httpOnly: true }
-})
+  cookie: { httpOnly: true },
+});
 
-export default session
+export default session;
