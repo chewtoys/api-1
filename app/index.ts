@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
-import Cron from "./Main/Cron";
+import Cron from "./Cron";
 import { CronJob } from "cron";
 import router from "./Routes";
 import { session } from "./utils";

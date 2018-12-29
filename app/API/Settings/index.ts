@@ -7,8 +7,6 @@ import Main from "../../Main";
 import { route } from "../../utils";
 
 export default class Settings extends Main {
-  table: tableList;
-
   constructor() {
     super();
     this.table = {

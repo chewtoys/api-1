@@ -1,10 +1,10 @@
 /**
- * Базовый класс для работы с аутентификацией 
+ * Базовый класс для работы с аутентификацией
  * @author Nikita Bersenev
  */
 
-import Models from '../Models';
-import passport from 'passport';
+import Models from "../Models";
+import passport from "passport";
 
 export default class Passport {
   passport: passport.PassportStatic;
@@ -17,7 +17,7 @@ export default class Passport {
     this.passport.serializeUser((user: any, done: any) => {
       done(null, user.iduser);
     });
-    
+
     this.passport.deserializeUser((id: number, done: any) => {
       this.user.findById(id).then((user: any) => {
         if (user) {
@@ -28,6 +28,4 @@ export default class Passport {
       });
     });
   }
-
-
 }

@@ -3,21 +3,18 @@
  * @author Nikita Bersenev
  */
 
-import Main from '../../Main';
-import VK from './VK';
-import OK from './OK';
+import Main from "../../Main";
+import VK from "./VK";
+import OK from "./OK";
 
 export default class OAuth extends Main {
   VK: VK;
-  OK:  OK;
-  [propName: string]: any;
+  OK: OK;
 
   constructor() {
     super();
 
-    this.VK = new VK;
-    this.OK = new OK;
-
+    this.VK = new VK();
+    this.OK = new OK();
   }
-
 }

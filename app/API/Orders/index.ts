@@ -1,5 +1,4 @@
 import Main from "../../Main";
-import Functions from "../../Main/Functions";
 import Models from "../../Models";
 import { Request, Response } from "express";
 import axios from "axios";
@@ -7,9 +6,6 @@ import moment from "moment";
 import io from "socket.io-client";
 
 export default class Orders extends Main {
-  functions: Functions;
-  response: responseAPI;
-  table: tableList;
   delivery_cost: number;
   user: any;
   order: any;
@@ -19,15 +15,11 @@ export default class Orders extends Main {
   constructor() {
     super();
 
-    this.functions = new Functions();
     this.delivery_cost = 250;
     this.user = Models.User;
     this.order = Models.Order;
     this.product = Models.Product;
     this.payment = Models.Payment;
-    this.response = {
-      result: false
-    };
     this.table = {
       categories: "categories",
       users: "users",
@@ -35,7 +27,7 @@ export default class Orders extends Main {
       orders_data: "orders_data",
       orders_states: "orders_states",
       products: "products",
-      saved_addresses: "saved_addresses"
+      saved_addresses: "saved_addresses",
     };
   }
 
@@ -55,19 +47,7 @@ export default class Orders extends Main {
    */
   public async notifications(req: Request, res: Response) {
     const params = req.body;
-    const required = [
-      "TerminalKey",
-      "OrderId",
-      "Success",
-      "Status",
-      "PaymentId",
-      "ErrorCode",
-      "Amount",
-      "CardId",
-      "Pan",
-      "Token",
-      "ExpDate"
-    ];
+    const required = ["TerminalKey", "OrderId", "Success", "Status", "PaymentId", "ErrorCode", "Amount", "CardId", "Pan", "Token", "ExpDate"];
 
     for (let key of required) {
       if (typeof params[key] === "undefined") {
@@ -82,7 +62,7 @@ export default class Orders extends Main {
     const result = await this.payment.findOrCreate({
       where: {
         id_payment: params.PaymentId,
-        terminal_key: params.TerminalKey
+        terminal_key: params.TerminalKey,
       },
       defaults: {
         id_order: params.OrderId,
@@ -93,8 +73,8 @@ export default class Orders extends Main {
         card_id: params.CardId,
         pan: params.Pan,
         token: params.Token,
-        exp_date: params.ExpDate
-      }
+        exp_date: params.ExpDate,
+      },
     });
 
     const payment: any = result[0];
@@ -107,20 +87,18 @@ export default class Orders extends Main {
         success: params.Success,
         status: params.Status,
         error_code: params.ErrorCode,
-        token: params.Token
+        token: params.Token,
       });
     }
 
     if (params.Success && params.Status == "AUTHORIZED") {
       // Изменение статуса заказа на "Оплачен"
-      const SocketBot: SocketIOClient.Socket = io.connect(
-        process.env.SOCKET_BOT
-      );
+      const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
 
       this.setState(
         {
           idorder: params.OrderId,
-          idstate: 2
+          idstate: 2,
         },
         SocketBot
       );
@@ -160,7 +138,7 @@ export default class Orders extends Main {
     comment,
     remember,
     address_alias,
-    items
+    items,
   }: {
     phone: string;
     email?: string;
@@ -192,14 +170,14 @@ export default class Orders extends Main {
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
     const data = await this.user.findOrCreate({
       where: {
-        phone: phone
+        phone: phone,
       },
       defaults: {
         email: email,
         name: name,
         phone_confirmed: 1,
-        email_confirmed: 0
-      }
+        email_confirmed: 0,
+      },
     });
 
     const user = data[0];
@@ -210,11 +188,11 @@ export default class Orders extends Main {
         // Пользователь с таким номером уже есть. Обновляем email и имя.
         user.update({
           email: email,
-          name: name
+          name: name,
         });
       }
     } else {
-      this.functions.unknownError();
+      // this.functions.unknownError();
     }
 
     if (remember) {
@@ -225,17 +203,7 @@ export default class Orders extends Main {
         ON DUPLICATE KEY UPDATE
           aliase = VALUES(aliase)
       `;
-      const params = [
-        this.table.saved_addresses,
-        user.iduser,
-        lat,
-        lon,
-        address,
-        entrance,
-        apartment,
-        intercom,
-        address_alias
-      ];
+      const params = [this.table.saved_addresses, user.iduser, lat, lon, address, entrance, apartment, intercom, address_alias];
       await this.Db.query(sql, params);
     }
 
@@ -250,7 +218,7 @@ export default class Orders extends Main {
       apartment: apartment,
       intercom: intercom,
       comment: comment,
-      order_datetime: order_datetime
+      order_datetime: order_datetime,
     });
 
     // Сохранение содержимого заказа
@@ -273,8 +241,8 @@ export default class Orders extends Main {
     });
     const products = await this.product.findAll({
       where: {
-        idproduct: items_id
-      }
+        idproduct: items_id,
+      },
     });
 
     for (let item of items) {
@@ -300,7 +268,7 @@ export default class Orders extends Main {
           Email: email,
           Phone: phone,
           Name: name,
-          connection_type: "Widget2.0"
+          connection_type: "Widget2.0",
         },
         Receipt: {
           Taxation: "usn_income_outcome",
@@ -315,7 +283,7 @@ export default class Orders extends Main {
                 Price: product.price * 100,
                 Quantity: item.count,
                 Amount: product.price * item.count * 100,
-                Tax: "none"
+                Tax: "none",
               };
             })
             .concat([
@@ -324,19 +292,17 @@ export default class Orders extends Main {
                 Price: this.delivery_cost * 100,
                 Quantity: 1,
                 Amount: this.delivery_cost * 100,
-                Tax: "none"
-              }
-            ])
-        }
-      }
+                Tax: "none",
+              },
+            ]),
+        },
+      },
     });
 
-    this.response.result = true;
-    this.response.data = {
+    return {
       url: res.data.PaymentURL,
-      delivery_cost: this.delivery_cost
+      delivery_cost: this.delivery_cost,
     };
-    return this.response;
   }
 
   /**
@@ -348,12 +314,11 @@ export default class Orders extends Main {
   public async setState(query: any, SocketBot: SocketIOClient.Socket) {
     // Проверка обязательных параметров
     if (!query.idorder || !query.idstate) {
-      if (query.debug) this.functions.paramsError();
-      else this.functions.unknownError();
+      // if (query.debug) this.functions.paramsError();
+      // else this.functions.unknownError();
     } else if (isNaN(query.idorder) || isNaN(query.idstate)) {
-      if (query.debug)
-        throw new Error("Параметры idorder and idstate должны быть числовыми");
-      else this.functions.unknownError();
+      if (query.debug) throw new Error("Параметры idorder and idstate должны быть числовыми");
+      // else this.functions.unknownError();
     }
 
     const idorder: number = parseInt(query.idorder);
@@ -362,18 +327,15 @@ export default class Orders extends Main {
     const result = (await this.order.update(
       { idstate },
       {
-        where: { idorder }
+        where: { idorder },
       }
     ))[0];
 
     if (!result) throw new Error("Заказ не найден");
 
-    SocketBot.emit(
-      "set_order_state",
-      (await this.get({ idorder: query.idorder })).data[0]
-    );
+    SocketBot.emit("set_order_state", (await this.get({ idorder: query.idorder })).data[0]);
 
-    return this.response;
+    return;
   }
 
   /**
@@ -387,8 +349,7 @@ export default class Orders extends Main {
    */
   public async get(query: any) {
     // По умолчанию возвращает все заказы на сегодня
-    if (!query.date_start && !query.idorder)
-      query.date_start = moment().format("YYYY-MM-DD");
+    if (!query.date_start && !query.idorder) query.date_start = moment().format("YYYY-MM-DD");
     if (!query.date_end) query.date_end = moment().format("YYYY-MM-DD");
 
     let params: any[] = [
@@ -397,7 +358,7 @@ export default class Orders extends Main {
       this.table.orders_data,
       this.table.products,
       this.table.categories,
-      this.table.orders_states
+      this.table.orders_states,
     ];
 
     let restrictions: string[] = [];
@@ -426,9 +387,7 @@ export default class Orders extends Main {
       params.push(query.idcourier);
     }
 
-    const where_clause: any = restrictions.length
-      ? restrictions.join(" AND ")
-      : 1;
+    const where_clause: any = restrictions.length ? restrictions.join(" AND ") : 1;
 
     const sql: string = `
       SELECT
@@ -488,16 +447,16 @@ export default class Orders extends Main {
               idproduct: item.idproduct,
               product: item.product_title,
               big_img: item.product_big_img,
-              price: item.product_price
+              price: item.product_price,
             };
-          })
+          }),
         });
       }
     });
 
-    this.response.result = true;
-    this.response.data = modifdata;
-    return this.response;
+    return {
+      data: modifdata,
+    };
   }
 }
 

@@ -2,13 +2,11 @@ import Main from "../../Main";
 import { route } from "../../utils";
 
 export default class Products extends Main {
-  table: tableList;
-
   constructor() {
     super();
     this.table = {
       categories: "categories",
-      products: "products"
+      products: "products",
     };
   }
 
@@ -74,9 +72,9 @@ export default class Products extends Main {
               protein: item.product_protein,
               starch: item.product_starch,
               mass: item.product_mass,
-              price: item.product_price
+              price: item.product_price,
             };
-          })
+          }),
         });
       }
     });
@@ -85,7 +83,4 @@ export default class Products extends Main {
   }
 }
 
-export const productsRoute = route(
-  "/products/get",
-  async () => await new Products().get()
-);
+export const productsRoute = route("/products/get", async () => await new Products().get());

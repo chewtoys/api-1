@@ -3,7 +3,7 @@
  * @author Nikita Bersenev
  */
 
-import Main from "./";
+import Main from "../Main";
 
 export default class Cron extends Main {
   table: tableList;

@@ -4,7 +4,7 @@
  */
 
 import axios from "axios";
-import Db from "./DataBase";
+import Db from "../Main/Db";
 
 export default class SMS {
   login: string;
@@ -19,7 +19,7 @@ export default class SMS {
     this.password = process.env.SMS_PASSWORD;
     this.sender = "LAAPL";
     this.table = {
-      codes: "verification_codes"
+      codes: "verification_codes",
     };
     this.db = new Db();
   }
@@ -45,8 +45,8 @@ export default class SMS {
         charset: "utf-8",
         fmt: 3,
         phones: phones.join(";"),
-        mes
-      }
+        mes,
+      },
     });
   }
 
@@ -60,9 +60,7 @@ export default class SMS {
      * @param {number} id - id сообщения
      * @param {number} cnt - ?
      */
-    const code = String(
-      Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1))
-    );
+    const code = String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)));
     const message = `Код подтверждения: ${code}`;
 
     const sql = `
@@ -81,8 +79,8 @@ export default class SMS {
         charset: "utf-8",
         fmt: 3,
         phones: phone,
-        mes: message
-      }
+        mes: message,
+      },
     });
   }
 
@@ -107,8 +105,8 @@ export default class SMS {
         charset: "utf-8",
         fmt: 3,
         phone,
-        id
-      }
+        id,
+      },
     });
   }
 
@@ -126,8 +124,8 @@ export default class SMS {
       params: {
         login: this.login,
         psw: this.password,
-        fmt: 3
-      }
+        fmt: 3,
+      },
     });
   }
 }

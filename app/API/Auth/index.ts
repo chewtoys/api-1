@@ -4,29 +4,23 @@
  */
 
 import Main from "../../Main";
-import Functions from "../../Main/Functions";
-import SMS from "../../Main/SMS";
+import SMS from "../../SMS";
 import Models from "../../Models";
 import { Request, Response } from "express";
 
 export default class Auth extends Main {
-  functions: Functions;
-  response: responseAPI;
   sms: SMS;
-  table: tableList;
   user: any;
 
   constructor() {
     super();
 
-    this.functions = new Functions();
     this.sms = new SMS();
 
     this.table = {
-      codes: "verification_codes"
+      codes: "verification_codes",
     };
 
-    this.response = { result: false };
     this.user = Models.User;
   }
 
@@ -37,8 +31,7 @@ export default class Auth extends Main {
     req.logout();
     res.clearCookie("connect.sid");
 
-    this.response.result = true;
-    return res.json(this.response);
+    return res.json();
   }
 
   /**
@@ -49,14 +42,13 @@ export default class Auth extends Main {
   public async get_code(query: any) {
     // Проверка обязательных параметров
     if (!query.phone) {
-      if (query.debug) this.functions.paramsError();
-      else this.functions.unknownError();
+      // if (query.debug) this.functions.paramsError();
+      // else this.functions.unknownError();
     }
 
     this.sms.code(query.phone);
 
-    this.response.result = true;
-    return this.response;
+    return true;
   }
 
   /**
@@ -68,8 +60,8 @@ export default class Auth extends Main {
   public async check_code(query: any) {
     // Проверка обязательных параметров
     if (!query.phone || !query.code) {
-      if (query.debug) this.functions.paramsError();
-      else this.functions.unknownError();
+      // if (query.debug) this.functions.paramsError();
+      // else this.functions.unknownError();
     }
 
     // Проверка кода
@@ -82,11 +74,7 @@ export default class Auth extends Main {
       ORDER BY datetime DESC
       LIMIT 1
     `;
-    const data: any = await this.Db.query(sql, [
-      this.table.codes,
-      query.phone,
-      query.code
-    ]);
+    const data: any = await this.Db.query(sql, [this.table.codes, query.phone, query.code]);
 
     if (!data.length) throw new Error("Неверный код");
 
@@ -103,8 +91,7 @@ export default class Auth extends Main {
     `;
     this.Db.query(update_sql, [this.table.codes, query.phone, query.code]);
 
-    this.response.result = true;
-    return this.response;
+    return true;
   }
 
   // /**
