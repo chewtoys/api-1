@@ -85,7 +85,7 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]>, p
     } catch (err) {
       answer.err = {
         message: err.message,
-        stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+        stack: process.env.NODE_ENV === "development" ? err.stack.split("\n    ") : undefined,
       };
       next();
     }

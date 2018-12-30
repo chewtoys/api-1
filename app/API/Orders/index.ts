@@ -159,7 +159,6 @@ export default class Orders extends Main {
     const phone_reg = /^[0-9]{11}$/;
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
     // const name_reg = /^[a-zа-яё]{2,32}$/i;
-
     if (!phone_reg.test(phone)) throw new Error("Некорректный номер телефона");
     if (!email_reg.test(email)) throw new Error("Некорректный email");
     if (!name.length) throw new Error("Некорректное имя");
@@ -168,7 +167,7 @@ export default class Orders extends Main {
     if (!items.length) throw new Error("Заказ пуст");
 
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
-    const data = await Models.Order.findOrCreate({
+    const data = await Models.User.findOrCreate({
       where: {
         phone: phone,
       },
@@ -186,7 +185,7 @@ export default class Orders extends Main {
     if (user) {
       if (!created) {
         // Пользователь с таким номером уже есть. Обновляем email и имя.
-        Models.Order.update({
+        user.update({
           email: email,
           name: name,
         });
@@ -222,14 +221,14 @@ export default class Orders extends Main {
     });
 
     // Сохранение содержимого заказа
-    items = items.map((item: any) => {
+    const itemsInsert = items.map((item: any) => {
       return `('${order.idorder}', '${item.id}', '${item.count}')`;
     });
 
     await this.Db.query(
       `
       INSERT INTO ?? (idorder, idproduct, count)
-      VALUES ${items.join(", ")}
+      VALUES ${itemsInsert.join(", ")}
     `,
       [this.table.orders_data]
     );
@@ -239,7 +238,7 @@ export default class Orders extends Main {
     const items_id = items.map((item: any) => {
       return item.id;
     });
-    const products = await this.product.findAll({
+    const products = await Models.Product.findAll({
       where: {
         idproduct: items_id,
       },
@@ -354,14 +353,7 @@ export default class Orders extends Main {
     if (!query.date_start && !query.idorder) query.date_start = moment().format("YYYY-MM-DD");
     if (!query.date_end) query.date_end = moment().format("YYYY-MM-DD");
 
-    let params: any[] = [
-      this.table.orders,
-      this.table.users,
-      this.table.orders_data,
-      this.table.products,
-      this.table.categories,
-      this.table.orders_states,
-    ];
+    let params: any[] = [this.table.orders, this.table.users, this.table.orders_data, this.table.products, this.table.categories, this.table.orders_states];
 
     let restrictions: string[] = [];
 
