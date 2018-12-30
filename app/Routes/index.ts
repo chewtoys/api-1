@@ -4,7 +4,10 @@
  */
 
 import notFoundRoute from "./NotFound";
-import { productsRoute } from "../API/Products";
-import { settingsRoute } from "../API/Settings";
+import { productsRoute } from "../API/Products/routes";
+import { settingsRoute } from "../API/Settings/routes";
+import { ordersRoute } from "../API/Orders/routes";
 
-export default [productsRoute, settingsRoute, notFoundRoute];
+export const notFound = notFoundRoute;
+
+export default [productsRoute, settingsRoute, ordersRoute];

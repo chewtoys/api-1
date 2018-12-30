@@ -4,7 +4,6 @@
  */
 
 import Main from "../../Main";
-import { route } from "../../utils";
 
 export default class Settings extends Main {
   constructor() {
@@ -18,10 +17,8 @@ export default class Settings extends Main {
    * @description Получение настроек проекта
    * @param {number} idproject - id проекта
    * @param {string} [name] - название параметра
-   * @param {boolean} [debug] - режим отладки
    */
   public async get({ idproject, name }: { idproject?: string; name?: string }) {
-    console.log(idproject);
     let sql: string = `
       SELECT
         idsetting,
@@ -44,5 +41,3 @@ export default class Settings extends Main {
     return data;
   }
 }
-
-export const settingsRoute = route("/settings/get", async (e) => new Settings().get(e), ["idproject"]);

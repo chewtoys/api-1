@@ -9,13 +9,10 @@ import Models from "../../Models";
 import { Request, Response } from "express";
 
 export default class Auth extends Main {
-  sms: SMS;
   user: any;
 
   constructor() {
     super();
-
-    this.sms = new SMS();
 
     this.table = {
       codes: "verification_codes",
@@ -37,18 +34,9 @@ export default class Auth extends Main {
   /**
    * @description Получение кода подтверждения
    * @param {string} phone - номер телефона
-   * @param {boolean} [debug] - режим отладки
    */
   public async get_code(query: any) {
-    // Проверка обязательных параметров
-    if (!query.phone) {
-      // if (query.debug) this.functions.paramsError();
-      // else this.functions.unknownError();
-    }
-
-    this.sms.code(query.phone);
-
-    return true;
+    new SMS().code(query.phone);
   }
 
   /**
@@ -135,7 +123,7 @@ export default class Auth extends Main {
   //   if (!created) throw new Error('Номер телефона уже зарегистрирован');
 
   //   // Отправка кода подтверждения
-  //   this.sms.code(query.phone);
+  //   new SMS().code(query.phone);
 
   //   this.response.result = true;
 

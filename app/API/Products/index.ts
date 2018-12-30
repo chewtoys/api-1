@@ -1,5 +1,4 @@
 import Main from "../../Main";
-import { route } from "../../utils";
 
 export default class Products extends Main {
   constructor() {
@@ -82,5 +81,3 @@ export default class Products extends Main {
     return modifdata;
   }
 }
-
-export const productsRoute = route("/products/get", async () => await new Products().get());

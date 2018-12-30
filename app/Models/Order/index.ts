@@ -1,81 +1,81 @@
 export default (sequelize: any, Sequelize: any) => {
+  // console.log(Sequelize);
 
-  const Order = sequelize.define('order', {
+  const Order = sequelize.define("order", {
     idorder: {
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     idclient: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     idcourier: {
       type: Sequelize.INTEGER,
       allowNull: true,
-      notEmpty: true
+      notEmpty: true,
     },
     idstate: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     lat: {
       type: Sequelize.DECIMAL,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     lon: {
       type: Sequelize.DECIMAL,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     address: {
       type: Sequelize.STRING,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     entrance: {
       type: Sequelize.STRING,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     apartment: {
       type: Sequelize.STRING,
       allowNull: true,
-      notEmpty: false
+      notEmpty: false,
     },
     intercom: {
       type: Sequelize.STRING,
       allowNull: true,
-      notEmpty: false
+      notEmpty: false,
     },
     paid: {
       type: Sequelize.BOOLEAN,
       defaultValue: 0,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     comment: {
       type: Sequelize.STRING,
       allowNull: true,
-      notEmpty: false
+      notEmpty: false,
     },
     order_datetime: {
       type: Sequelize.DATE,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
     },
     finish_datetime: {
       type: Sequelize.DATE,
       allowNull: true,
-      notEmpty: true
-    }
+      notEmpty: true,
+    },
   });
 
   return Order;
-
-}
+};

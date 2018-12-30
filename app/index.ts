@@ -6,7 +6,7 @@ import passport from "passport";
 import helmet from "helmet";
 import Cron from "./Cron";
 import { CronJob } from "cron";
-import router from "./Routes";
+import router, { notFound } from "./Routes";
 import { session } from "./utils";
 
 class Server {
@@ -45,6 +45,7 @@ class Server {
     router.forEach((route) => {
       this.app.use(route);
     });
+    this.app.use(notFound);
   }
 
   /**

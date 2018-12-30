@@ -134,11 +134,11 @@ export default class Orders extends Main {
     entrance,
     apartment,
     intercom,
+    items,
     order_datetime,
     comment,
     remember,
     address_alias,
-    items,
   }: {
     phone: string;
     email?: string;
@@ -148,12 +148,12 @@ export default class Orders extends Main {
     address: string;
     entrance: string;
     apartment: string;
+    items: any[];
     order_datetime: string;
     intercom?: string;
     comment?: string;
     remember?: boolean;
     address_alias?: string;
-    items: any[];
   }) {
     // Валидация данных
     const phone_reg = /^[0-9]{11}$/;
@@ -168,7 +168,7 @@ export default class Orders extends Main {
     if (!items.length) throw new Error("Заказ пуст");
 
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
-    const data = await this.user.findOrCreate({
+    const data = await Models.Order.findOrCreate({
       where: {
         phone: phone,
       },
@@ -186,7 +186,7 @@ export default class Orders extends Main {
     if (user) {
       if (!created) {
         // Пользователь с таким номером уже есть. Обновляем email и имя.
-        user.update({
+        Models.Order.update({
           email: email,
           name: name,
         });
@@ -299,10 +299,12 @@ export default class Orders extends Main {
       },
     });
 
-    return {
-      url: res.data.PaymentURL,
-      delivery_cost: this.delivery_cost,
-    };
+    return [
+      {
+        url: res.data.PaymentURL,
+        delivery_cost: this.delivery_cost,
+      },
+    ];
   }
 
   /**
@@ -459,18 +461,3 @@ export default class Orders extends Main {
     };
   }
 }
-
-// [
-//   "phone",
-//   "email",
-//   "name",
-//   "lat",
-//   "lon",
-//   "address",
-//   "entrance",
-//   "apartment",
-//   "intercom",
-//   "comment",
-//   "order_datetime",
-//   "items"
-// ]
