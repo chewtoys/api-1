@@ -1,4 +1,4 @@
-import Session from "express-session";
+import session from "express-session";
 import redis from "redis";
 import connectRedis from "connect-redis";
 
@@ -8,9 +8,9 @@ const RedisClient = redis.createClient({
   password: process.env.REDIS_PASSWORD,
 });
 
-const RedisStore = connectRedis(Session);
+const RedisStore = connectRedis(session);
 
-const session = Session({
+export default session({
   store: new RedisStore({
     client: RedisClient,
   }),
@@ -19,5 +19,3 @@ const session = Session({
   saveUninitialized: false,
   cookie: { httpOnly: true },
 });
-
-export default session;
