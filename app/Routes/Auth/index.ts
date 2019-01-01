@@ -2,40 +2,31 @@ import { Router, Request, Response, NextFunction } from "express";
 import API from "../../API";
 
 export default (router: Router) => {
-  router.post(
-    "/auth/get_code",
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        return res.json(await new API().Auth.get_code(req.query));
-      } catch (e) {
-        return res.json({
-          result: false,
-          error_text: e.message
-        });
-      }
+  router.post("/auth/get_code", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // return res.json(await new API().Auth.get_code(req.query));
+    } catch (e) {
+      return res.json({
+        result: false,
+        error_text: e.message,
+      });
     }
-  );
+  });
 
-  router.post(
-    "/auth/check_code",
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        return res.json(await new API().Auth.check_code(req.query));
-      } catch (e) {
-        return res.json({
-          result: false,
-          error_text: e.message
-        });
-      }
+  router.post("/auth/check_code", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      return res.json(await new API().Auth.check_code(req.query));
+    } catch (e) {
+      return res.json({
+        result: false,
+        error_text: e.message,
+      });
     }
-  );
+  });
 
-  router.post(
-    "/auth/logout",
-    (req: Request, res: Response, next: NextFunction) => {
-      new API().Auth.logout(req, res);
-    }
-  );
+  router.post("/auth/logout", (req: Request, res: Response, next: NextFunction) => {
+    new API().Auth.logout(req, res);
+  });
 };
 
 // // Локальная авторизация

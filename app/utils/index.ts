@@ -1,4 +1,5 @@
 import route from "./routeGenerate";
+import routeExport from "./routeExport";
 import session from "./sessionGenerate";
 
-export { route, session };
+export { route, routeExport, session };

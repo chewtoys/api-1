@@ -7,7 +7,7 @@ import Logger from "../Main/Logger";
  * @param {() => Promise<any[]>} fn Функция которая выполняет основную задачу роута. Всегда асинхроная, если синхроная, то нужно обернуть ее в Promise
  * @param {string[]} [param] Массив обязательных параметров необходимых для работы fn
  */
-const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]>, param?: string[]) => {
+const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | any, param?: string[]) => {
   const router = Router();
   let answer: answerJSON;
   let reqTime: number;

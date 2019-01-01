@@ -33,10 +33,10 @@ export default class Auth extends Main {
 
   /**
    * @description Получение кода подтверждения
-   * @param {string} phone - номер телефона
+   * @param {string} phone - Номер телефона
    */
-  public async get_code(query: any) {
-    new SMS().code(query.phone);
+  public getСode({ phone }: { phone: string }) {
+    new SMS().code(phone);
   }
 
   /**
