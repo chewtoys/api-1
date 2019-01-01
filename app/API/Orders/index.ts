@@ -1,8 +1,8 @@
 import Main from "../../Main";
 import Models from "../../Models";
-import { Request, Response } from "express";
 import axios from "axios";
 import moment from "moment";
+import crypto from "crypto";
 import io from "socket.io-client";
 
 export default class Orders extends Main {
@@ -40,40 +40,88 @@ export default class Orders extends Main {
    * @param {number} PaymentId - идентификатор платежа
    * @param {string} ErrorCode - код ошибки, если произошла ошибка
    * @param {number} Amount - сумма транзакции в копейках
+   * @param {number} [RebillId] - ID рекуррентного платежа
    * @param {number} CardId - идентификатор привязанной карты
    * @param {string} Pan - маскированный номер карты
+   * @param {string} [DATA] - дополнительные параметры платежа
    * @param {string} Token - подпись запроса
    * @param {string} ExpDate - срок действия карты
    */
-  public async notifications(req: Request, res: Response) {
-    const params = req.body;
-    const required = ["TerminalKey", "OrderId", "Success", "Status", "PaymentId", "ErrorCode", "Amount", "CardId", "Pan", "Token", "ExpDate"];
+  public async notifications({
+    TerminalKey,
+    OrderId,
+    Success,
+    Status,
+    PaymentId,
+    ErrorCode,
+    Amount,
+    RebillId,
+    CardId,
+    Pan,
+    DATA,
+    Token,
+    ExpDate
+  }: {
+    TerminalKey: string,
+    OrderId: string,
+    Success: boolean,
+    Status: string,
+    PaymentId: number,
+    ErrorCode: string,
+    Amount: number,
+    RebillId?: number,
+    CardId: number,
+    Pan: string,
+    DATA?: string,
+    Token: string,
+    ExpDate: string
+  }) {
+    // Проверка токена
+    let data: any = {
+      "TerminalKey": TerminalKey,
+      "OrderId": OrderId,
+      "Success": Success,
+      "Status": Status,
+      "PaymentId": PaymentId,
+      "ErrorCode": ErrorCode,
+      "Amount": Amount,
+      "CardId": CardId,
+      "Pan": Pan,
+      "ExpDate": ExpDate
+    };
 
-    for (let key of required) {
-      if (typeof params[key] === "undefined") {
-        throw new Error("Переданы не все параметры");
-      }
+    if (typeof RebillId !== 'undefined') data["RebillId"] = RebillId;
+    if (typeof DATA !== 'undefined') data["DATA"] = DATA;
+
+    const keys = Object.keys(data).sort();
+    let generated_token: string = '';
+    
+    for (let key of keys) {
+      generated_token += data[key];
     }
 
-    /**
-     * здесь будет проверка токена
-     */
+    generated_token = crypto.createHash("sha256").update(generated_token).digest("hex");
 
+    if (Token !== generated_token) {
+      throw new Error("Неверный токен");
+    }
+
+    // Создание/обновления платежа в базе данных
     const result = await this.payment.findOrCreate({
       where: {
-        id_payment: params.PaymentId,
-        terminal_key: params.TerminalKey,
+        id_payment: PaymentId,
+        terminal_key: TerminalKey,
       },
       defaults: {
-        id_order: params.OrderId,
-        success: params.Success,
-        status: params.Status,
-        error_code: params.ErrorCode,
-        amount: params.Amount / 100,
-        card_id: params.CardId,
-        pan: params.Pan,
-        token: params.Token,
-        exp_date: params.ExpDate,
+        id_order: OrderId,
+        success: Success,
+        status: Status,
+        error_code: ErrorCode,
+        amount: Amount / 100,
+        card_id: CardId,
+        pan: Pan,
+        token: Token,
+        exp_date: ExpDate,
       },
     });
 
@@ -84,27 +132,27 @@ export default class Orders extends Main {
 
     if (!created) {
       payment.update({
-        success: params.Success,
-        status: params.Status,
-        error_code: params.ErrorCode,
-        token: params.Token,
+        success: Success,
+        status: Status,
+        error_code: ErrorCode,
+        token: Token,
       });
     }
 
-    if (params.Success && params.Status == "AUTHORIZED") {
+    if (Success && Status == "AUTHORIZED") {
       // Изменение статуса заказа на "Оплачен"
-      const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
+      // const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
 
-      this.setState(
-        {
-          idorder: params.OrderId,
-          idstate: 2,
-        },
-        SocketBot
-      );
+      // this.setState(
+      //   {
+      //     idorder: OrderId,
+      //     idstate: 2,
+      //   },
+      //   SocketBot
+      // );
     }
 
-    res.status(200).end("OK");
+    return 'OK';
   }
 
   /**
