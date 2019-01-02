@@ -87,7 +87,8 @@ export default class Orders extends Main {
       "Amount": Amount,
       "CardId": CardId,
       "Pan": Pan,
-      "ExpDate": ExpDate
+      "ExpDate": ExpDate,
+      "Password": process.env.TERMINAL_PASSWORD
     };
 
     if (typeof RebillId !== 'undefined') data["RebillId"] = RebillId;
