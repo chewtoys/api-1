@@ -3,7 +3,7 @@
  * @author Nikita Bersenev
  */
 
-import Models from "../Models";
+import Sequelize from "../Models";
 import passport from "passport";
 
 export default class Passport {
@@ -12,7 +12,7 @@ export default class Passport {
 
   constructor() {
     this.passport = passport;
-    this.user = Models.User;
+    this.user = Sequelize.models.user;
 
     this.passport.serializeUser((user: any, done: any) => {
       done(null, user.iduser);
