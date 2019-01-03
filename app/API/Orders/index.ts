@@ -92,8 +92,8 @@ export default class Orders extends Main {
       "ExpDate": ExpDate
     };
 
-    if (typeof RebillId !== 'undefined') data["RebillId"] = RebillId;
-    if (typeof DATA !== 'undefined') data["DATA"] = DATA;
+    if (RebillId !== undefined) data["RebillId"] = RebillId;
+    if (DATA !== undefined) data["DATA"] = DATA;
 
     const project = await this.project.findOne({
       where: {
@@ -104,10 +104,10 @@ export default class Orders extends Main {
       }
     });
 
-    if (TerminalKey.indexOf('DEMO') !== -1) {
-      data["Password"] = project.demopassword;
-    } else {
+    if (project.production) {
       data["Password"] = project.password;
+    } else {
+      data["Password"] = project.demopassword;
     }
 
     const keys = Object.keys(data).sort();
@@ -190,6 +190,7 @@ export default class Orders extends Main {
    * @param {array} items - массив с содержимым заказа
    */
   public async create({
+    idproject,
     phone,
     email,
     name,
@@ -205,6 +206,7 @@ export default class Orders extends Main {
     remember,
     address_alias,
   }: {
+    idproject: string,
     phone: string;
     email?: string;
     name: string;
@@ -247,16 +249,12 @@ export default class Orders extends Main {
     const user = data[0];
     const created = data[1];
 
-    if (user) {
-      if (!created) {
-        // Пользователь с таким номером уже есть. Обновляем email и имя.
-        user.update({
-          email: email,
-          name: name,
-        });
-      }
-    } else {
-      // this.functions.unknownError();
+    if (!created) {
+      // Пользователь с таким номером уже есть. Обновляем email и имя.
+      user.update({
+        email: email,
+        name: name,
+      });
     }
 
     if (remember) {
@@ -316,13 +314,19 @@ export default class Orders extends Main {
       total += product[0].price * item.count;
     }
 
+    const project = await this.project.findOne({
+      where: { idproject }
+    });
+
+    if (project === null) throw new Error(`Не найден idproject (${idproject})`);
+
     // Получение ссылки для оплаты
     const res = await axios({
       method: "POST",
       url: "https://securepay.tinkoff.ru/v2/Init",
       headers: { "Content-Type": "application/json" },
       data: {
-        TerminalKey: process.env.TERMINAL_KEY,
+        TerminalKey: (project.production) ? project.key : project.demokey,
         Amount: (total + this.delivery_cost) * 100,
         OrderId: order.idorder,
         Description: "",
