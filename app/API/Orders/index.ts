@@ -11,6 +11,7 @@ export default class Orders extends Main {
   order: any;
   product: any;
   payment: any;
+  project: any;
 
   constructor() {
     super();
@@ -20,6 +21,7 @@ export default class Orders extends Main {
     this.order = Sequelize.models.order;
     this.product = Sequelize.models.product;
     this.payment = Sequelize.models.payment;
+    this.project = Sequelize.models.project;
     this.table = {
       categories: "categories",
       users: "users",
@@ -87,12 +89,26 @@ export default class Orders extends Main {
       "Amount": Amount,
       "CardId": CardId,
       "Pan": Pan,
-      "ExpDate": ExpDate,
-      "Password": process.env.TERMINAL_PASSWORD
+      "ExpDate": ExpDate
     };
 
     if (typeof RebillId !== 'undefined') data["RebillId"] = RebillId;
     if (typeof DATA !== 'undefined') data["DATA"] = DATA;
+
+    const project = await this.project.findOne({
+      where: {
+        [Sequelize.Op.or]: [
+          { key: TerminalKey },
+          { demokey: TerminalKey }
+        ]
+      }
+    });
+
+    if (TerminalKey.indexOf('DEMO') !== -1) {
+      data["Password"] = project.demopassword;
+    } else {
+      data["Password"] = project.password;
+    }
 
     const keys = Object.keys(data).sort();
     let generated_token: string = '';

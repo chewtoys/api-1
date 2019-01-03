@@ -22,4 +22,6 @@ fs.readdirSync(__dirname)
     Sequelize.import(path.join(__dirname, folder, "index.js"));
   });
 
+Sequelize.sync();
+
 export default Sequelize;
