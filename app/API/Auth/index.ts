@@ -5,7 +5,7 @@
 
 import Main from "../../Main";
 import SMS from "../../SMS";
-import Models from "../../Models";
+import Sequelize from "../../Models";
 import { Request, Response } from "express";
 
 export default class Auth extends Main {
@@ -18,7 +18,7 @@ export default class Auth extends Main {
       codes: "verification_codes",
     };
 
-    this.user = Models.User;
+    this.user = Sequelize.models.user;
   }
 
   /**

@@ -1,5 +1,5 @@
 import Main from "../../Main";
-import Models from "../../Models";
+import Sequelize from "../../Models";
 import axios from "axios";
 import moment from "moment";
 import crypto from "crypto";
@@ -16,10 +16,10 @@ export default class Orders extends Main {
     super();
 
     this.delivery_cost = 250;
-    this.user = Models.User;
-    this.order = Models.Order;
-    this.product = Models.Product;
-    this.payment = Models.Payment;
+    this.user = Sequelize.models.user;
+    this.order = Sequelize.models.order;
+    this.product = Sequelize.models.product;
+    this.payment = Sequelize.models.payment;
     this.table = {
       categories: "categories",
       users: "users",
@@ -216,7 +216,7 @@ export default class Orders extends Main {
     if (!items.length) throw new Error("Заказ пуст");
 
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
-    const data = await Models.User.findOrCreate({
+    const data = await this.user.findOrCreate({
       where: {
         phone: phone,
       },
@@ -287,7 +287,7 @@ export default class Orders extends Main {
     const items_id = items.map((item: any) => {
       return item.id;
     });
-    const products = await Models.Product.findAll({
+    const products = await this.product.findAll({
       where: {
         idproduct: items_id,
       },
