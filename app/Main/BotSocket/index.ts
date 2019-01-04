@@ -7,7 +7,11 @@ export default class BotSocket {
     this.connection = io.connect(process.env.BOT_SOCKET);
   }
 
-  start() {
+  public emit(event: string, data: any) {
+    this.connection.emit(event, data);
+  }
+
+  public start() {
     // тут будут обработчики событий
   }
 }
