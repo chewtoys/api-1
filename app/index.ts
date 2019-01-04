@@ -8,6 +8,7 @@ import Cron from "./Cron";
 import { CronJob } from "cron";
 import router, { notFound } from "./Routes";
 import { session } from "./utils";
+import BotSocket from "./BotSocket";
 
 class Server {
   app: express.Application;
@@ -53,11 +54,11 @@ class Server {
    * @param {number} port Port
    */
   public start(port: number) {
-    // Запуск cron
-    new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
-
     this.app.listen(port);
+
+    new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
+    new BotSocket().start();
   }
 }
 
-new Server().start(9001);
+new Server().start(Number(process.env.PORT));
