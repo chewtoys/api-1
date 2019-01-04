@@ -1,7 +1,6 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
 import axios from "axios";
-import moment from "moment";
 import crypto from "crypto";
 
 export default class Orders extends Main {
@@ -167,6 +166,8 @@ export default class Orders extends Main {
         order.update({
           idstate: 2
         });
+
+        this.BotSocket.connection.emit("new_order", order);
       }
     }
 
