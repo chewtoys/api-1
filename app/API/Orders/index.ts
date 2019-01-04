@@ -387,117 +387,117 @@ export default class Orders extends Main {
     ];
   }
 
-  /**
-   * @description Получение информации о заказе/заказах
-   * @param {string} [date_start=moment()] - start date
-   * @param {string} [date_end=moment()] - end date
-   * @param {number} [idorder] - order id
-   * @param {number} [idclient] - client id
-   * @param {number} [idcourier] - courier id
-   * @param {boolean} [debug=false] - debug mode
-   */
-  public async get(query: any) {
-    // По умолчанию возвращает все заказы на сегодня
-    if (!query.date_start && !query.idorder) query.date_start = moment().format("YYYY-MM-DD");
-    if (!query.date_end) query.date_end = moment().format("YYYY-MM-DD");
+  // /**
+  //  * @description Получение информации о заказе/заказах
+  //  * @param {string} [date_start=moment()] - start date
+  //  * @param {string} [date_end=moment()] - end date
+  //  * @param {number} [idorder] - order id
+  //  * @param {number} [idclient] - client id
+  //  * @param {number} [idcourier] - courier id
+  //  * @param {boolean} [debug=false] - debug mode
+  //  */
+  // public async get(query: any) {
+  //   // По умолчанию возвращает все заказы на сегодня
+  //   if (!query.date_start && !query.idorder) query.date_start = moment().format("YYYY-MM-DD");
+  //   if (!query.date_end) query.date_end = moment().format("YYYY-MM-DD");
 
-    let params: any[] = [this.table.orders, this.table.users, this.table.orders_data, this.table.products, this.table.categories, this.table.orders_states];
+  //   let params: any[] = [this.table.orders, this.table.users, this.table.orders_data, this.table.products, this.table.categories, this.table.orders_states];
 
-    let restrictions: string[] = [];
+  //   let restrictions: string[] = [];
 
-    if (query.date_start) {
-      restrictions.push(`DATE(t1.order_datetime) BETWEEN ? AND ?`);
-      params.push(query.date_start);
-      params.push(query.date_end);
-    } else {
-      restrictions.push(`DATE(t1.order_datetime) <= ?`);
-      params.push(query.date_end);
-    }
+  //   if (query.date_start) {
+  //     restrictions.push(`DATE(t1.order_datetime) BETWEEN ? AND ?`);
+  //     params.push(query.date_start);
+  //     params.push(query.date_end);
+  //   } else {
+  //     restrictions.push(`DATE(t1.order_datetime) <= ?`);
+  //     params.push(query.date_end);
+  //   }
 
-    if (query.idorder) {
-      restrictions.push(`t1.idorder = ?`);
-      params.push(query.idorder);
-    }
+  //   if (query.idorder) {
+  //     restrictions.push(`t1.idorder = ?`);
+  //     params.push(query.idorder);
+  //   }
 
-    if (query.idclient) {
-      restrictions.push(`t1.idclient = ?`);
-      params.push(query.idclient);
-    }
+  //   if (query.idclient) {
+  //     restrictions.push(`t1.idclient = ?`);
+  //     params.push(query.idclient);
+  //   }
 
-    if (query.idcourier) {
-      restrictions.push(`t1.idcourier = ?`);
-      params.push(query.idcourier);
-    }
+  //   if (query.idcourier) {
+  //     restrictions.push(`t1.idcourier = ?`);
+  //     params.push(query.idcourier);
+  //   }
 
-    const where_clause: any = restrictions.length ? restrictions.join(" AND ") : 1;
+  //   const where_clause: any = restrictions.length ? restrictions.join(" AND ") : 1;
 
-    const sql: string = `
-      SELECT
-        t1.*,
-        t2.name AS client_name,
-        t2.email AS client_email,
-        t2.phone AS client_phone,
-        t4.idproduct AS idproduct,
-        t4.title AS product_title,
-        t4.big_img AS product_big_img,
-        t4.price AS product_price,
-        t5.idcategory AS idcategory,
-        t5.name AS categoy_name,
-        t5.icon AS category_icon,
-        t6.name AS state
-      FROM ?? AS t1
-      INNER JOIN ?? AS t2 ON t1.idclient = t2.iduser
-      INNER JOIN ?? AS t3 ON t1.idorder = t3.idorder
-      INNER JOIN ?? AS t4 ON t3.idproduct = t4.idproduct
-      INNER JOIN ?? AS t5 ON t4.idcategory = t5.idcategory
-      INNER JOIN ?? AS t6 ON t1.idstate = t6.idstate
-      WHERE ${where_clause}
-      ORDER BY t1.order_datetime
-    `;
+  //   const sql: string = `
+  //     SELECT
+  //       t1.*,
+  //       t2.name AS client_name,
+  //       t2.email AS client_email,
+  //       t2.phone AS client_phone,
+  //       t4.idproduct AS idproduct,
+  //       t4.title AS product_title,
+  //       t4.big_img AS product_big_img,
+  //       t4.price AS product_price,
+  //       t5.idcategory AS idcategory,
+  //       t5.name AS categoy_name,
+  //       t5.icon AS category_icon,
+  //       t6.name AS state
+  //     FROM ?? AS t1
+  //     INNER JOIN ?? AS t2 ON t1.idclient = t2.iduser
+  //     INNER JOIN ?? AS t3 ON t1.idorder = t3.idorder
+  //     INNER JOIN ?? AS t4 ON t3.idproduct = t4.idproduct
+  //     INNER JOIN ?? AS t5 ON t4.idcategory = t5.idcategory
+  //     INNER JOIN ?? AS t6 ON t1.idstate = t6.idstate
+  //     WHERE ${where_clause}
+  //     ORDER BY t1.order_datetime
+  //   `;
 
-    const data: any = await this.Db.query(sql, params);
+  //   const data: any = await this.Db.query(sql, params);
 
-    let idorders: number[] = [];
-    let modifdata: any[] = [];
+  //   let idorders: number[] = [];
+  //   let modifdata: any[] = [];
 
-    data.forEach((item: any) => {
-      if (idorders.indexOf(item.idorder) === -1) {
-        idorders.push(item.idorder);
-        let orderItems: any[] = data.filter((subitem: any) => {
-          return subitem.idorder === item.idorder;
-        });
+  //   data.forEach((item: any) => {
+  //     if (idorders.indexOf(item.idorder) === -1) {
+  //       idorders.push(item.idorder);
+  //       let orderItems: any[] = data.filter((subitem: any) => {
+  //         return subitem.idorder === item.idorder;
+  //       });
 
-        modifdata.push({
-          idorder: item.idorder,
-          idclient: item.idclient,
-          client_name: item.client_name,
-          client_email: item.client_email,
-          client_phone: item.client_phone,
-          idstate: item.idstate,
-          state: item.state,
-          address: item.address,
-          comment: item.comment,
-          paid: item.paid,
-          created_datetime: item.createdAt,
-          order_datetime: item.order_datetime,
-          lead_datetime: item.lead_datetime,
-          items: orderItems.map((item: any) => {
-            return {
-              idcategory: item.idcategory,
-              category: item.category_name,
-              category_icon: item.category_icon,
-              idproduct: item.idproduct,
-              product: item.product_title,
-              big_img: item.product_big_img,
-              price: item.product_price,
-            };
-          }),
-        });
-      }
-    });
+  //       modifdata.push({
+  //         idorder: item.idorder,
+  //         idclient: item.idclient,
+  //         client_name: item.client_name,
+  //         client_email: item.client_email,
+  //         client_phone: item.client_phone,
+  //         idstate: item.idstate,
+  //         state: item.state,
+  //         address: item.address,
+  //         comment: item.comment,
+  //         paid: item.paid,
+  //         created_datetime: item.createdAt,
+  //         order_datetime: item.order_datetime,
+  //         lead_datetime: item.lead_datetime,
+  //         items: orderItems.map((item: any) => {
+  //           return {
+  //             idcategory: item.idcategory,
+  //             category: item.category_name,
+  //             category_icon: item.category_icon,
+  //             idproduct: item.idproduct,
+  //             product: item.product_title,
+  //             big_img: item.product_big_img,
+  //             price: item.product_price,
+  //           };
+  //         }),
+  //       });
+  //     }
+  //   });
 
-    return {
-      data: modifdata,
-    };
-  }
+  //   return {
+  //     data: modifdata,
+  //   };
+  // }
 }
