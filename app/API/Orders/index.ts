@@ -3,7 +3,6 @@ import Sequelize from "../../Models";
 import axios from "axios";
 import moment from "moment";
 import crypto from "crypto";
-import io from "socket.io-client";
 
 export default class Orders extends Main {
   delivery_cost: number;
@@ -111,7 +110,7 @@ export default class Orders extends Main {
     }
 
     const keys = Object.keys(data).sort();
-    let generated_token: string = '';
+    let generated_token: string = "";
     
     for (let key of keys) {
       generated_token += data[key];
@@ -156,20 +155,22 @@ export default class Orders extends Main {
       });
     }
 
-    if (Success && Status == "AUTHORIZED") {
+    if (Success && (Status == "AUTHORIZED" || Status == "CONFIRMED")) {
       // Изменение статуса заказа на "Оплачен"
-      // const SocketBot: SocketIOClient.Socket = io.connect(process.env.SOCKET_BOT);
+      const order = await this.order.findOne({
+        where: {
+          idorder: OrderId
+        }
+      });
 
-      // this.setState(
-      //   {
-      //     idorder: OrderId,
-      //     idstate: 2,
-      //   },
-      //   SocketBot
-      // );
+      if (order.idstate == 1) {
+        order.update({
+          idstate: 2
+        });
+      }
     }
 
-    return 'OK';
+    return "OK";
   }
 
   /**
@@ -209,7 +210,7 @@ export default class Orders extends Main {
     idproject: string,
     phone: string;
     email?: string;
-    name: string;
+    name?: string;
     lat: number;
     lon: number;
     address: string;
@@ -225,10 +226,9 @@ export default class Orders extends Main {
     // Валидация данных
     const phone_reg = /^[0-9]{11}$/;
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
-    // const name_reg = /^[a-zа-яё]{2,32}$/i;
+  
     if (!phone_reg.test(phone)) throw new Error("Некорректный номер телефона");
-    if (!email_reg.test(email)) throw new Error("Некорректный email");
-    if (!name.length) throw new Error("Некорректное имя");
+    if (email !== undefined && !email_reg.test(email)) throw new Error("Некорректный email");
     if (!address.length) throw new Error("Укажите адрес");
     if (!entrance.length) throw new Error("Укажите номер подъезда");
     if (!items.length) throw new Error("Заказ пуст");
@@ -249,24 +249,39 @@ export default class Orders extends Main {
     const user = data[0];
     const created = data[1];
 
-    if (!created) {
-      // Пользователь с таким номером уже есть. Обновляем email и имя.
-      user.update({
-        email: email,
-        name: name,
-      });
+    if (!created && (email !== undefined || name !== undefined)) {
+      // Пользователь с таким номером уже есть. Обновляем email и имя, если были указаны.
+      let updates: any = {};
+      if (email !== undefined) updates.email = email;
+      if (name !== undefined) updates.name = name;
+      user.update(updates);
     }
 
     if (remember) {
       // Сохранение адреса
-      const sql = `
-        INSERT INTO ?? (iduser, lat, lon, address, entrance, apartment, intercom, aliase)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-          aliase = VALUES(aliase)
-      `;
-      const params = [this.table.saved_addresses, user.iduser, lat, lon, address, entrance, apartment, intercom, address_alias];
-      await this.Db.query(sql, params);
+      if (!address_alias) throw new Error("Не указано название сохраняемого адреса");
+
+      let columns = ["iduser", "lat", "lon", "address", "entrance", "apartment", "alias"];
+      let replacements = [user.iduser, lat, lon, address, entrance, apartment, address_alias];
+
+      if (intercom) {
+        columns.push("intercom");
+        replacements.push(intercom);
+      }
+
+      Sequelize.query(
+        `
+          INSERT INTO ${this.table.saved_addresses} (${columns.join(', ')})
+          VALUES (?, ?, ?, ?, ?, ?, ? ${(intercom) ? ", ?" : ""})
+          ON DUPLICATE KEY UPDATE
+            address = VALUES(address),
+            entrance = VALUES(entrance),
+            apartment = VALUES(apartment),
+            alias = VALUES(alias)
+            ${(intercom) ? ", intercom = VALUES(intercom)": ""}
+        `,
+        { replacements }
+      );
     }
 
     // Создание заказа
@@ -285,16 +300,13 @@ export default class Orders extends Main {
 
     // Сохранение содержимого заказа
     const itemsInsert = items.map((item: any) => {
-      return `('${order.idorder}', '${item.id}', '${item.count}')`;
+      return `("${order.idorder}", "${item.id}", "${item.count}")`;
     });
 
-    await this.Db.query(
-      `
-      INSERT INTO ?? (idorder, idproduct, count)
+    Sequelize.query(`
+      INSERT INTO ${this.table.orders_data} (idorder, idproduct, count)
       VALUES ${itemsInsert.join(", ")}
-    `,
-      [this.table.orders_data]
-    );
+    `);
 
     // Подсчет стоимости заказа
     let total = 0;
@@ -373,39 +385,6 @@ export default class Orders extends Main {
         delivery_cost: this.delivery_cost,
       },
     ];
-  }
-
-  /**
-   * @description Изменение состояния заказа
-   * @param {number} idstate - id состояния
-   * @param {number} idorder - id заказа
-   * @param {boolean} [debug] - режим отладки
-   */
-  public async setState(query: any, SocketBot: SocketIOClient.Socket) {
-    // Проверка обязательных параметров
-    if (!query.idorder || !query.idstate) {
-      // if (query.debug) this.functions.paramsError();
-      // else this.functions.unknownError();
-    } else if (isNaN(query.idorder) || isNaN(query.idstate)) {
-      if (query.debug) throw new Error("Параметры idorder and idstate должны быть числовыми");
-      // else this.functions.unknownError();
-    }
-
-    const idorder: number = parseInt(query.idorder);
-    const idstate: number = parseInt(query.idstate);
-
-    const result = (await this.order.update(
-      { idstate },
-      {
-        where: { idorder },
-      }
-    ))[0];
-
-    if (!result) throw new Error("Заказ не найден");
-
-    SocketBot.emit("set_order_state", (await this.get({ idorder: query.idorder })).data[0]);
-
-    return;
   }
 
   /**
