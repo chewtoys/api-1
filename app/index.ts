@@ -8,7 +8,7 @@ import Cron from "./Cron";
 import { CronJob } from "cron";
 import router, { notFound } from "./Routes";
 import { session } from "./utils";
-import BotSocket from "./BotSocket";
+import BotSocket from "./Main/BotSocket";
 
 class Server {
   app: express.Application;
