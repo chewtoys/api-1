@@ -167,7 +167,7 @@ export default class Orders extends Main {
           idstate: 2
         });
 
-        this.BotSocket.connection.emit("new_order", order);
+        this.BotSocket.emit("new_order", order);
       }
     }
 
