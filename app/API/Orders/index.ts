@@ -10,16 +10,17 @@ export default class Orders extends Main {
   product: any;
   payment: any;
   project: any;
+  setting: any;
 
   constructor() {
     super();
 
-    this.delivery_cost = 250;
     this.user = Sequelize.models.user;
     this.order = Sequelize.models.order;
     this.product = Sequelize.models.product;
     this.payment = Sequelize.models.payment;
     this.project = Sequelize.models.project;
+    this.setting = Sequelize.models.setting;
     this.table = {
       categories: "categories",
       users: "users",
@@ -167,7 +168,17 @@ export default class Orders extends Main {
           idstate: 2
         });
 
-        this.BotSocket.emit("new_order", { idorder: order.idorder });
+        const delivery_cost = Number((await this.setting.findOne({
+          where: {
+            idproject: project.idproject,
+            name: "delivery_cost"
+          }
+        })).value);
+
+        this.BotSocket.emit("new_order", { 
+          idorder: order.idorder,
+          delivery_cost 
+        });
       }
     }
 
@@ -333,6 +344,13 @@ export default class Orders extends Main {
 
     if (project === null) throw new Error(`Не найден idproject (${idproject})`);
 
+    const delivery_cost = Number((await this.setting.findOne({
+      where: {
+        idproject,
+        name: "delivery_cost"
+      }
+    })).value);
+
     // Получение ссылки для оплаты
     const res = await axios({
       method: "POST",
@@ -340,7 +358,7 @@ export default class Orders extends Main {
       headers: { "Content-Type": "application/json" },
       data: {
         TerminalKey: (project.production) ? project.key : project.demokey,
-        Amount: (total + this.delivery_cost) * 100,
+        Amount: (total + delivery_cost) * 100,
         OrderId: order.idorder,
         Description: "",
         Frame: true,
@@ -370,9 +388,9 @@ export default class Orders extends Main {
             .concat([
               {
                 Name: "Доставка",
-                Price: this.delivery_cost * 100,
+                Price: delivery_cost * 100,
                 Quantity: 1,
-                Amount: this.delivery_cost * 100,
+                Amount: delivery_cost * 100,
                 Tax: "none",
               },
             ]),
@@ -383,7 +401,7 @@ export default class Orders extends Main {
     return [
       {
         url: res.data.PaymentURL,
-        delivery_cost: this.delivery_cost,
+        delivery_cost,
       },
     ];
   }
