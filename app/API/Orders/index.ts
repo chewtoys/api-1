@@ -177,6 +177,7 @@ export default class Orders extends Main {
 
         this.BotSocket.emit("new_order", { 
           idorder: order.idorder,
+          idproject: project.idproject,
           delivery_cost 
         });
       }
