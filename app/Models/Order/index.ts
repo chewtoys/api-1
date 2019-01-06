@@ -59,12 +59,6 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: true,
       notEmpty: false,
     },
-    paid: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: 0,
-      allowNull: false,
-      notEmpty: true,
-    },
     comment: {
       type: Sequelize.STRING,
       allowNull: true,
