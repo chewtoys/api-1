@@ -177,7 +177,6 @@ export default class Orders extends Main {
 
         this.BotSocket.emit("new_order", { 
           idorder: order.idorder,
-          idproject: project.idproject,
           delivery_cost 
         });
       }
@@ -188,6 +187,7 @@ export default class Orders extends Main {
 
   /**
    * @description Создание нового заказа
+   * @param {string} idproject - ID проекта
    * @param {string} phone - номер телефона
    * @param {string} email - email
    * @param {string} name - имя
@@ -299,16 +299,17 @@ export default class Orders extends Main {
 
     // Создание заказа
     const order = await this.order.create({
+      idproject,
       idclient: user.iduser,
       idstate: 1,
-      lat: lat,
-      lon: lon,
-      address: address,
-      entrance: entrance,
-      apartment: apartment,
-      intercom: intercom,
-      comment: comment,
-      order_datetime: order_datetime,
+      lat,
+      lon,
+      address,
+      entrance,
+      apartment,
+      intercom,
+      comment,
+      order_datetime,
     });
 
     // Сохранение содержимого заказа
