@@ -9,6 +9,11 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true,
     },
+    idproject: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      notEmpty: true
+    },
     idclient: {
       type: Sequelize.INTEGER,
       allowNull: false,

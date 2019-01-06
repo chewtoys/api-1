@@ -4,8 +4,7 @@ import connectRedis from "connect-redis";
 
 const RedisClient = redis.createClient({
   host: "localhost",
-  port: 6379,
-  password: process.env.REDIS_PASSWORD,
+  port: 6379
 });
 
 const RedisStore = connectRedis(session);
