@@ -297,6 +297,13 @@ export default class Orders extends Main {
       );
     }
 
+    const delivery_cost = Number((await this.setting.findOne({
+      where: {
+        idproject,
+        name: "delivery_cost"
+      }
+    })).value);
+
     // Создание заказа
     const order = await this.order.create({
       idproject,
@@ -309,6 +316,7 @@ export default class Orders extends Main {
       apartment,
       intercom,
       comment,
+      delivery_cost,
       order_datetime,
     });
 
@@ -345,13 +353,6 @@ export default class Orders extends Main {
     });
 
     if (project === null) throw new Error(`Не найден idproject (${idproject})`);
-
-    const delivery_cost = Number((await this.setting.findOne({
-      where: {
-        idproject,
-        name: "delivery_cost"
-      }
-    })).value);
 
     // Получение ссылки для оплаты
     const res = await axios({
