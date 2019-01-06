@@ -70,6 +70,11 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: true,
       notEmpty: false,
     },
+    delivery_cost: {
+      type: Sequelize.FLOAT,
+      allowNull: false,
+      notEmpty: true
+    },
     order_datetime: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -80,6 +85,15 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: true,
       notEmpty: true,
     },
+  }, {
+    indexes: [
+      {
+        fields: ['idproject']
+      },
+      {
+        fields: ['idclient']
+      }
+    ]
   });
 
   return Order;
