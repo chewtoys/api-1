@@ -57,7 +57,7 @@ export default class Products extends Main {
           icon: item.category_icon,
           items: categoryItems.map((item: any) => {
             return {
-              id: item.idproduct,
+              id: item.product_id,
               name: item.product_name,
               title: item.product_title,
               description: item.product_description,
