@@ -8,8 +8,9 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\build\\index.js",
+            "program": "${workspaceFolder}\\app\\index.ts",
             "preLaunchTask": "ts:w",
+            "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/build/**/*.js"
             ]

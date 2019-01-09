@@ -16,11 +16,10 @@ export default class Products extends Main {
     const data: any = await this.Db.query(
       `
       SELECT
-        t1.idcategory AS idcategory,
+        t1.category_id AS category_id,
         t1.name AS category_name,
-        t1.aliase AS category_aliase,
-        t1.icon AS category_icon,
-        t2.idproduct AS idproduct,
+        t1.alias AS category_aliase,
+        t2.product_id AS product_id,
         t2.name AS product_name,
         t2.title AS product_title,
         t2.specification AS product_specification,
@@ -35,8 +34,8 @@ export default class Products extends Main {
         t2.bad_img AS product_bad_img,
         t2.price AS product_price
       FROM ?? AS t1
-      INNER JOIN ?? AS t2 ON t1.idcategory = t2.idcategory
-      WHERE actual = 1
+      INNER JOIN ?? AS t2 ON t2.fk_category_id = t1.category_id
+      WHERE t2.actual = 1
     `,
       [this.table.categories, this.table.products]
     );
@@ -45,14 +44,14 @@ export default class Products extends Main {
     let modifdata: any[] = [];
 
     data.forEach((item: any) => {
-      if (idcategories.indexOf(item.idcategory) === -1) {
-        idcategories.push(item.idcategory);
+      if (idcategories.indexOf(item.category_id) === -1) {
+        idcategories.push(item.category_id);
         let categoryItems = data.filter((subitem: any) => {
-          return subitem.idcategory === item.idcategory;
+          return subitem.category_id === item.category_id;
         });
 
         modifdata.push({
-          id: item.idcategory,
+          id: item.category_id,
           name: item.category_name,
           aliase: item.category_aliase,
           icon: item.category_icon,
