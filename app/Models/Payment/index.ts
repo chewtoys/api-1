@@ -1,19 +1,27 @@
-export default (sequelize: any, Sequelize: any) => {
+/**
+ * @description Платеж
+ */
 
-  const Payment = sequelize.define('payment', {
-    id_payment: {
+export default (sequelize: any, Sequelize: any) => {
+  const Payment = sequelize.define("payment", {
+    payment_id: {
+      type: Sequelize.INTEGER,
       primaryKey: true,
+      allowNull: false,
+      notEmpty: true
+    },
+    fk_order_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      notEmpty: true
+    },  
+    rebill_id: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
       notEmpty: true
     },
     terminal_key: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      notEmpty: true
-    },
-    id_order: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(100),
       allowNull: false,
       notEmpty: true
     },
@@ -23,12 +31,12 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true
     },
     status: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
     error_code: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(100),
       allowNull: false,
       notEmpty: true
     },
@@ -43,7 +51,7 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true
     },
     pan: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
@@ -51,14 +59,12 @@ export default (sequelize: any, Sequelize: any) => {
       type: Sequelize.STRING,
       allowNull: false,
       notEmpty: true
-    },
-    exp_date: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      notEmpty: true
     }
+  }, {
+    freezeTableName: true,
+    tableName: "payments",
+    underscored: true
   });
 
   return Payment;
-
-}
+} 
