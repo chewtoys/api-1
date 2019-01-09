@@ -1,35 +1,38 @@
-export default (sequelize: any, Sequelize: any) => {
+/**
+ * @description Товар
+ */
 
-  const Product = sequelize.define('product', {
-    idproduct: {
+export default (sequelize: any, Sequelize: any) => {
+  const Product = sequelize.define("product", {
+    product_id: {
+      type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER,
       allowNull: false,
       notEmpty: true
     },
-    idcategory: {
+    fk_category_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
       notEmpty: true
     },
     name: {
-      type: Sequelize.STRING,
-      allowNull: true,
+      type: Sequelize.STRING(50),
+      allowNull: false,
       notEmpty: true
     },
     specification: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(50),
       allowNull: true,
       notEmpty: true
     },
     title: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
     description: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(1000),
       allowNull: false,
       notEmpty: true
     },
@@ -40,17 +43,17 @@ export default (sequelize: any, Sequelize: any) => {
     },
     small_img: {
       type: Sequelize.STRING,
-      allowNull: true,
+      allowNull: false,
       notEmpty: true
     },
     bad_img: {
       type: Sequelize.STRING,
-      allowNull: true,
+      allowNull: false,
       notEmpty: true
     },
     price: {
       type: Sequelize.FLOAT,
-      allowNull: true,
+      allowNull: false,
       notEmpty: true
     },
     energy_value: {
@@ -79,12 +82,27 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true
     },
     mass_unit: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(10),
       allowNull: true,
       notEmpty: true
+    },
+    actual: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      notEmpty: true,
+      defaultValue: true
+    },
+    popularity: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      notEmpty: true,
+      defaultValue: 0
     }
+  }, {
+    freezeTableName: true,
+    tableName: "products",
+    underscored: true
   });
 
   return Product;
-
 }

@@ -1,14 +1,17 @@
-export default (sequelize: any, Sequelize: any) => {
+/**
+ * @description Проект
+ */
 
-  const Project = sequelize.define('project', {
-    idproject: {
-      primaryKey: true,
+export default (sequelize: any, Sequelize: any) => {
+  const Project = sequelize.define("project", {
+    project_id: {
       type: Sequelize.STRING,
+      primaryKey: true,
       allowNull: false,
       notEmpty: true
     },
-    title: {
-      type: Sequelize.STRING,
+    name: {
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
@@ -17,38 +20,47 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
-    key: {
-      type: Sequelize.STRING,
+    terminal_key: {
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
-    demokey: {
-      type: Sequelize.STRING,
+    terminal_demokey: {
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
-    password: {
-      type: Sequelize.STRING,
+    terminal_password: {
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
-    demopassword: {
-      type: Sequelize.STRING,
+    terminal_demopassword: {
+      type: Sequelize.STRING(50),
       allowNull: false,
       notEmpty: true
     },
-    start_date: {
-      type: Sequelize.DATE,
+    production: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-      notEmpty: true
+      notEmpty: true,
+      defaultValue: false
     },
-    end_date: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      notEmpty: true
-    },
+  }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ["terminal_key"]
+      },
+      {
+        unique: true,
+        fields: ["terminal_demokey"]
+      }
+    ],
+    freezeTableName: true,
+    tableName: "projects",
+    underscored: true
   });
 
   return Project;
-
 }
