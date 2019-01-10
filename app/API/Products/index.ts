@@ -4,11 +4,13 @@ import Sequelize from "../../Models";
 export default class Products extends Main {
   category: any;
   product: any;
+  image: any;
 
   constructor() {
     super();
     this.category = Sequelize.models.category;
     this.product = Sequelize.models.product;
+    this.image = Sequelize.models.image;
   }
 
   /**
@@ -20,7 +22,17 @@ export default class Products extends Main {
         actual: true,
         fk_project_id: project_id 
       },
-      include: [this.product]
+      include: [
+        {
+          model: this.product,
+          required: true,
+          include: [{
+            model: this.image,
+            required: true,
+            where: { unit_name: "product" }
+          }]
+        }
+      ]
     });
 
     return data;

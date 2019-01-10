@@ -25,6 +25,7 @@ fs
 
 // Связи таблиц
 const Category = Sequelize.models.category;
+const Image = Sequelize.models.image;
 const Message = Sequelize.models.message;
 const MessageType = Sequelize.models.message_type;
 const Order = Sequelize.models.order;
@@ -63,6 +64,7 @@ Order.hasOne(Payment, { foreignKey: "fk_order_id" });
 
 Product.belongsTo(Category, { foreignKey: "fk_category_id", targetKey: "category_id" });
 Category.hasMany(Product, { foreignKey: "fk_category_id", sourceKey: "category_id" });
+Product.hasMany(Image, { foreignKey: "unit_id", sourceKey: "product_id" });
 
 /**
  * Синхронизация таблиц
@@ -76,6 +78,7 @@ Category.hasMany(Product, { foreignKey: "fk_category_id", sourceKey: "category_i
   await Order.sync();
   await Category.sync();
   await Product.sync();
+  await Image.sync();
   await OrderData.sync();
   await MessageType.sync();
   await Message.sync();
