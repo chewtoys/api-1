@@ -36,21 +36,6 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
-    big_img: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      notEmpty: true
-    },
-    small_img: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      notEmpty: true
-    },
-    bad_img: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      notEmpty: true
-    },
     price: {
       type: Sequelize.FLOAT,
       allowNull: false,
