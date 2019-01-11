@@ -24,6 +24,7 @@ fs
   });
 
 // Связи таблиц
+const Address = Sequelize.models.address;
 const Category = Sequelize.models.category;
 const Image = Sequelize.models.image;
 const Message = Sequelize.models.message;
@@ -66,6 +67,9 @@ Product.belongsTo(Category, { foreignKey: "fk_category_id", targetKey: "category
 Category.hasMany(Product, { foreignKey: "fk_category_id", sourceKey: "category_id" });
 Product.hasMany(Image, { foreignKey: "unit_id", sourceKey: "product_id" });
 
+Address.belongsTo(User, { foreignKey: "fk_user_id", targetKey: "user_id" });
+User.hasMany(Address, { foreignKey: "fk_user_id", sourceKey: "user_id" });
+
 /**
  * Синхронизация таблиц
  * Не использовать Sequelize.sync(), так как важен порядок!
@@ -73,6 +77,7 @@ Product.hasMany(Image, { foreignKey: "unit_id", sourceKey: "product_id" });
 (async() => {
   await Project.sync();
   await User.sync();
+  await Address.sync();
   await Worker.sync();
   await OrderStatus.sync();
   await Order.sync();
