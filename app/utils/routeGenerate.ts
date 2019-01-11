@@ -1,10 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Logger from "../Main/Logger";
 
-const router = Router();
-let answer: answerJSON;
-let reqTime: number;
-
 /**
  * @description Проверка объекта на пустоту
  * @param obj Проверяемый
@@ -62,6 +58,9 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
   } else {
     param.push("project_id");
   }
+  const router = Router();
+  let answer: answerJSON;
+  let reqTime: number;
 
   const preRoute = (req: Request, res: Response, next: NextFunction) => {
     answer = {
