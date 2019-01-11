@@ -1,6 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Logger from "../Main/Logger";
 
+const router = Router();
+let answer: answerJSON;
+let reqTime: number;
+
 /**
  * @description Проверка объекта на пустоту
  * @param obj Проверяемый
@@ -53,9 +57,11 @@ const reqParams = (param: string[], query: { [key: string]: any }, body: { [key:
  * @param {string[]} [param] Массив обязательных параметров необходимых для работы fn
  */
 const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | any, param?: string[]) => {
-  const router = Router();
-  let answer: answerJSON;
-  let reqTime: number;
+  if (typeof param === "undefined") {
+    param = ["project_id"];
+  } else {
+    param.push("project_id");
+  }
 
   const preRoute = (req: Request, res: Response, next: NextFunction) => {
     answer = {
@@ -64,7 +70,6 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
       meta: undefined,
     };
     reqTime = Date.now();
-    console.log(req.subdomains);
     next();
   };
 
