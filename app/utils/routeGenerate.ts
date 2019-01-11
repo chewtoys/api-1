@@ -57,6 +57,12 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
   let answer: answerJSON;
   let reqTime: number;
 
+  if (typeof param === "undefined") {
+    param = ["project_id"];
+  } else {
+    param.push("project_id");
+  }
+
   const preRoute = (req: Request, res: Response, next: NextFunction) => {
     answer = {
       data: undefined,
