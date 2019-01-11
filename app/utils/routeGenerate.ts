@@ -7,7 +7,11 @@ import Logger from "../Main/Logger";
  * @param {() => Promise<any[]>} fn Функция которая выполняет основную задачу роута. Всегда асинхроная, если синхроная, то нужно обернуть ее в Promise
  * @param {string[]} [param] Массив обязательных параметров необходимых для работы fn
  */
-const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | any, param?: string[]) => {
+const routeGenerate = (
+  path: string,
+  fn: (queryOrBody: any) => Promise<any[]> | any,
+  param?: string[]
+) => {
   const router = Router();
   let answer: answerJSON;
   let reqTime: number;
@@ -18,13 +22,16 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
    */
   const reqParams = (param: string[], queryOrBody: { [key: string]: any }) => {
     const notTransmitted: string[] = [];
-    param.forEach((item) => {
+    param.concat("idproject");
+    param.forEach(item => {
       if (typeof queryOrBody[item] === "undefined") {
         notTransmitted.push(item);
       }
     });
     if (notTransmitted.length) {
-      throw new Error(`Не передан(ы) параметр(ы): ${notTransmitted.join(", ")}`);
+      throw new Error(
+        `Не передан(ы) параметр(ы): ${notTransmitted.join(", ")}`
+      );
     }
   };
   /**
@@ -45,7 +52,9 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
    */
   const checkForAvailability = (query: object, body: object) => {
     if (!emptyObject(query) && !emptyObject(body)) {
-      throw new Error("Параметры могут приходить в query или body, но не там и там одновременно");
+      throw new Error(
+        "Параметры могут приходить в query или body, но не там и там одновременно"
+      );
     }
     // Если нет обязательных параметров, то ничего не делаем
     if (typeof param !== "undefined") {
@@ -63,13 +72,17 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
     answer = {
       data: undefined,
       err: undefined,
-      meta: undefined,
+      meta: undefined
     };
     reqTime = Date.now();
     next();
   };
 
-  const middleRoute = async (req: Request, res: Response, next: NextFunction) => {
+  const middleRoute = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       checkForAvailability(req.query, req.body);
       let queryOrBody: object;
@@ -85,7 +98,10 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
     } catch (err) {
       answer.err = {
         message: err.message,
-        stack: process.env.NODE_ENV === "development" ? err.stack.split("\n    ") : undefined,
+        stack:
+          process.env.NODE_ENV === "development"
+            ? err.stack.split("\n    ")
+            : undefined
       };
       next();
     }
@@ -95,7 +111,7 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
     const time = Date.now() - reqTime;
     answer.meta = {
       time,
-      count: answer.data ? answer.data.length : undefined,
+      count: answer.data ? answer.data.length : undefined
     };
     if (answer.err) {
       new Logger().route("ERROR", path, time, answer.err.message);
