@@ -18,21 +18,24 @@ export default class Products extends Main {
    */
   public async get({ project_id }: { project_id: string }) {
     const data: any = await this.category.findAll({
-      where: { 
+      where: {
         actual: true,
-        fk_project_id: project_id 
+        fk_project_id: project_id,
       },
       include: [
         {
           model: this.product,
           required: true,
-          include: [{
-            model: this.image,
-            required: true,
-            where: { unit_name: "product" }
-          }]
-        }
-      ]
+          where: { actual: true },
+          include: [
+            {
+              model: this.image,
+              required: true,
+              where: { unit_name: "product" },
+            },
+          ],
+        },
+      ],
     });
 
     return data;
