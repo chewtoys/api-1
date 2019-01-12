@@ -12,7 +12,7 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true
     },
     fk_project_id: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(20),
       allowNull: false,
       notEmpty: true
     },

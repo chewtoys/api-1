@@ -28,13 +28,13 @@ const reqParams = (param: string[], query: { [key: string]: any }, body: { [key:
 
   if (!emptyObject(query)) {
     param.forEach((item) => {
-      if (typeof query[item] === "undefined") {
+      if (typeof query[item] === "undefined" || !String(query[item]).length) {
         notTransmitted.push(item);
       }
     });
   } else if (!emptyObject(body)) {
     param.forEach((item) => {
-      if (typeof body[item] === "undefined") {
+      if (typeof body[item] === "undefined" || !String(body[item]).length) {
         notTransmitted.push(item);
       }
     });

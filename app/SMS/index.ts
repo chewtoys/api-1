@@ -4,24 +4,15 @@
  */
 
 import axios from "axios";
-import Db from "../Main/Db";
-
-export default class SMS {
+class SMS {
   login: string;
   password: string;
   sender: string;
-  table: tableList;
-  db: Db;
-  // [propName: string]: any;
 
   constructor() {
     this.login = process.env.SMS_USER;
     this.password = process.env.SMS_PASSWORD;
-    this.sender = "LAAPL";
-    this.table = {
-      codes: "verification_codes",
-    };
-    this.db = new Db();
+    this.sender = "LAAPL.RU";
   }
 
   /**
@@ -46,40 +37,6 @@ export default class SMS {
         fmt: 3,
         phones: phones.join(";"),
         mes,
-      },
-    });
-  }
-
-  /**
-   * @description Отправка кода подтверждения
-   * @param phone - номер телефона
-   */
-  code(phone: string) {
-    /**
-     * Ответ сервера
-     * @param {number} id - id сообщения
-     * @param {number} cnt - ?
-     */
-    const code = String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)));
-    const message = `Код подтверждения: ${code}`;
-
-    const sql = `
-      INSERT INTO ?? (id_verification_type, value, code)
-      VALUES ('1', ?, ?)
-    `;
-    this.db.query(sql, [this.table.codes, phone, code]);
-
-    return axios({
-      method: "post",
-      url: "https://smsc.ru/sys/send.php",
-      params: {
-        login: this.login,
-        psw: this.password,
-        sender: this.sender,
-        charset: "utf-8",
-        fmt: 3,
-        phones: phone,
-        mes: message,
       },
     });
   }
@@ -129,3 +86,5 @@ export default class SMS {
     });
   }
 }
+
+export default new SMS();

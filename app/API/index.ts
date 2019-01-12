@@ -1,31 +1,15 @@
 /**
- * Класс для работы с API
- * @author Nikita Bersenev
- * @body For our API we should follow [JSON:API](https://jsonapi.org/) standard. More info at https://jsonapi.org/
+ * @description Экспорт классов API
  */
 
-import Auth from "./Auth";
-import OAuth from "./OAuth";
-import Settings from "./Settings";
-import Products from "./Products";
-import Orders from "./Orders";
+import _Auth from "./Auth";
+import _OAuth from "./OAuth";
+import _Orders from "./Orders";
+import _Products from "./Products";
+import _Settings from "./Settings";
 
-export default class API {
-  Auth: Auth;
-  OAuth: OAuth;
-  Settings: Settings;
-  //   Products: Products;
-  //   Orders: Orders;
-  //   [propName: string]: any;
-
-  constructor() {
-    this.Auth = new Auth();
-    this.OAuth = new OAuth();
-    this.Settings = new Settings();
-    // this.Products = new Products();
-    // this.Orders = new Orders();
-  }
-
-  Products = new Products();
-  Orders = new Orders();
-}
+export const Auth = new _Auth();
+export const OAuth = new _OAuth();
+export const Orders = new _Orders();
+export const Products = new _Products();
+export const Settings = new _Settings();

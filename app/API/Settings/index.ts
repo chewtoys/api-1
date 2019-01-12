@@ -4,40 +4,31 @@
  */
 
 import Main from "../../Main";
+import Sequelize from "../../Models";
 
 export default class Settings extends Main {
+  setting: any;
+
   constructor() {
     super();
-    this.table = {
-      settings: "settings",
-    };
+    
+    this.setting = Sequelize.models.setting;
   }
 
   /**
    * @description Получение настроек проекта
-   * @param {number} idproject - id проекта
-   * @param {string} [name] - название параметра
+   * @param {string} project_id - ID проекта
+   * @param {string} [setting_id] - ID параметра
    */
-  public async get({ idproject, name }: { idproject?: string; name?: string }) {
-    let sql: string = `
-      SELECT
-        idsetting,
-        name,
-        value,
-        start_date,
-        end_date
-      FROM ??
-      WHERE CURDATE() BETWEEN start_date AND end_date
-    `;
-    let params = [this.table.settings];
+  public async get({ project_id, setting_id }: { project_id: string; setting_id?: string }) {
+    let where_clause: any = { fk_project_id: project_id };
 
-    if (name) {
-      sql += ` AND name = ?`;
-      params.push(name);
+    if (setting_id) {
+      where_clause.setting_id = setting_id;
     }
 
-    const data: any = await this.Db.query(sql, params);
-
-    return data;
+    return await this.setting.findAll({
+      where: where_clause
+    });
   }
 }

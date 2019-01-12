@@ -12,7 +12,7 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true,
     },
     fk_project_id: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(20),
       allowNull: false,
       notEmpty: true
     },
@@ -31,15 +31,10 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true,
     },
-    lat: {
-      type: Sequelize.DECIMAL,
+    point: {
+      type: Sequelize.GEOMETRY("POINT"),
       allowNull: false,
-      notEmpty: true,
-    },
-    lon: {
-      type: Sequelize.DECIMAL,
-      allowNull: false,
-      notEmpty: true,
+      notEmpty: true
     },
     address: {
       type: Sequelize.STRING,
@@ -73,7 +68,7 @@ export default (sequelize: any, Sequelize: any) => {
     },
     order_datetime: {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
       notEmpty: true,
     },
     finish_datetime: {
