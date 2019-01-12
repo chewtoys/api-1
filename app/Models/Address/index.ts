@@ -4,19 +4,15 @@
 
 export default (sequelize: any, Sequelize: any) => {
   const Address = sequelize.define("address", {
-    address_id: {
+    fk_user_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       allowNull: false,
       notEmpty: true
     },
-    fk_user_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      notEmpty: true
-    },
     point: {
       type: Sequelize.GEOMETRY("POINT"),
+      primaryKey: true,
       allowNull: false,
       notEmpty: true
     },

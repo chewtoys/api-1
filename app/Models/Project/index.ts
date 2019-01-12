@@ -46,6 +46,12 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true,
       defaultValue: false
     },
+    actual: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      notEmpty: true,
+      defaultValue: true
+    }
   }, {
     indexes: [
       {

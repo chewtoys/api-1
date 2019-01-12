@@ -6,60 +6,90 @@
 import Main from "../../Main";
 import SMS from "../../SMS";
 import Sequelize from "../../Models";
-import { Request, Response } from "express";
+import moment from "moment";
 
 export default class Auth extends Main {
-  user: any;
+  code: any;
 
   constructor() {
     super();
 
-    this.table = {
-      codes: "verification_codes",
-    };
-
-    this.user = Sequelize.models.user;
+    this.code = Sequelize.models.code;
   }
 
   /**
    * @description Получение кода подтверждения
-   * @param {string} phone - Номер телефона
+   * @param {number} type_id - Тип подтверждения
+   * @param {number} operation_id - Подтверждаемая операция
+   * @param {string} recipient - Получатель
    */
-  public getСode({ phone }: { phone: string }) {
-    new SMS().code(phone);
+  public getСode({
+    type_id,
+    operation_id,
+    recipient
+  }: {
+    type_id: number,
+    operation_id: number,
+    recipient: string
+  }) {
+    const code = String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)));
+    const msg = `Код подтверждения: ${code}`;
+
+    switch (type_id) {
+      case 1:
+        // Через телефон
+        const phone_reg = /^[0-9]{11}$/;
+        if (!phone_reg.test(recipient)) throw new Error("Некорректный номер телефона");
+
+        SMS.send([recipient], msg);
+        break;
+      case 2:
+        // Через Email
+        // Написать, когда станет актуальным
+        break;
+      default: throw new Error("Неизвестный тип подтверждения");
+    }
+
+    this.code.create({
+      fk_type_id: type_id,
+      fk_operation_id: operation_id,
+      recipient,
+      code
+    });
+
+    return [code];
   }
 
   /**
    * @description Проверка кода подтверждения
-   * @param {string} phone - Номер телефона
+   * @param {string} recipient - Получатель
+   * @param {number} operation_id - Подтверждаемая операция
    * @param {number} code - Код подтверждения
    */
-  public async checkCode({ phone, code }: { phone: string; code: number }) {
-    // Проверка кода
-    const sql = `
-      SELECT * FROM ??
-      WHERE id_verification_type = 1
-        AND value = ?
-        AND code = ?
-        AND confirmed = 0
-      ORDER BY datetime DESC
-      LIMIT 1
-    `;
-    const data: any = await this.Db.query(sql, [this.table.codes, phone, code]);
+  public async checkCode({
+    operation_id,
+    recipient,
+    code
+  }: {
+    operation_id: number,
+    recipient: string,
+    code: number
+  }) {
+    const data = await this.code.findOne({
+      where: {
+        fk_operation_id: operation_id,
+        recipient,
+        code,
+        valid_until: {
+          [Sequelize.Op.gte]: moment().format("YYYY-MM-DD HH:mm:ss")
+        }
+      }
+    });
 
-    if (!data.length) throw new Error("Неверный код");
-
-    // Меняем статус кода на "подтвержденный"
-    const update_sql = `
-      UPDATE ??
-      SET confirmed = 1
-      WHERE id_verification_type = 1
-        AND value = ?
-        AND code = ?
-        AND confirmed = 0
-      ORDER BY datetime DESC
-      LIMIT 1
-    `;
-    this.Db.query(update_sql, [this.table.codes, phone, code]);
+    if (data) {
+      return [true];
+    } else {
+      return [false];
+    }
   }
 }

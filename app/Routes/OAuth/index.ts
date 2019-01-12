@@ -1,26 +1,26 @@
 import { Router, Request, Response, NextFunction } from "express";
-import API from "../../API";
+import { OAuth } from "../../API";
 
 export default (router: Router) => {
   router.get("/oauth/vk", (req: Request, res: Response, next: NextFunction) => {
-    new API().OAuth.VK.login(req, res, next);
+    OAuth.VK.login(req, res, next);
   });
 
   router.get(
     "/oauth/vk/callback",
     (req: Request, res: Response, next: NextFunction) => {
-      new API().OAuth.VK.callback(req, res, next);
+      OAuth.VK.callback(req, res, next);
     }
   );
 
   router.get("/oauth/ok", (req: Request, res: Response, next: NextFunction) => {
-    new API().OAuth.OK.login(req, res, next);
+    OAuth.OK.login(req, res, next);
   });
 
   router.get(
     "/oauth/ok/callback",
     (req: Request, res: Response, next: NextFunction) => {
-      new API().OAuth.OK.callback(req, res, next);
+      OAuth.OK.callback(req, res, next);
     }
   );
 };

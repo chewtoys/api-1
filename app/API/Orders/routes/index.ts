@@ -1,20 +1,20 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
 import { route, routeExport } from "../../../utils";
-import Logger from '../../../Main/Logger';
-import Orders from "../";
+import Logger from "../../../Main/Logger";
+import { Orders } from "../../";
 
 const router = Router();
 
-const createRoute = route("/orders/create", (e) => new Orders().create(e), [
-  "idproject",
+const createRoute = route("/orders/create", (e) => Orders.create(e), [
+  "project_id",
   "phone",
+  "code",
   "lat",
   "lon",
   "address",
   "entrance",
   "apartment",
-  "order_datetime",
-  "items",
+  "items"
 ]);
 
 const notificationsRoute = router.post("/orders/notifications", async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ const notificationsRoute = router.post("/orders/notifications", async (req: Requ
       }
     }
 
-    const response = await new Orders().notifications(params);
+    const response = await Orders.notifications(params);
     new Logger().route("OK", path, Date.now() - reqTime);
     res.status(200).end(response);
   } catch (err) {

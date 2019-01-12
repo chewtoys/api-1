@@ -1,5 +1,5 @@
 import { route } from "../../../utils";
 
-import Settings from "../";
+import { Settings } from "../../";
 
-export const settingsRoute = route("/settings/get", async (e) => new Settings().get(e));
+export const settingsRoute = route("/settings/get", async (e) => Settings.get(e));

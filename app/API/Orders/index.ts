@@ -1,5 +1,6 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
+import { Auth } from "../";
 import axios from "axios";
 import crypto from "crypto";
 
@@ -7,29 +8,24 @@ export default class Orders extends Main {
   delivery_cost: number;
   user: any;
   order: any;
+  order_data: any;
   product: any;
   payment: any;
   project: any;
   setting: any;
+  address: any;
 
   constructor() {
     super();
 
     this.user = Sequelize.models.user;
     this.order = Sequelize.models.order;
+    this.order_data = Sequelize.models.order_data;
     this.product = Sequelize.models.product;
     this.payment = Sequelize.models.payment;
     this.project = Sequelize.models.project;
     this.setting = Sequelize.models.setting;
-    this.table = {
-      categories: "categories",
-      users: "users",
-      orders: "orders",
-      orders_data: "orders_data",
-      orders_states: "orders_states",
-      products: "products",
-      saved_addresses: "saved_addresses",
-    };
+    this.address = Sequelize.models.address;
   }
 
   /**
@@ -187,130 +183,144 @@ export default class Orders extends Main {
 
   /**
    * @description Создание нового заказа
-   * @param {string} idproject - ID проекта
+   * @param {string} project_id - ID проекта
    * @param {string} phone - номер телефона
-   * @param {string} email - email
-   * @param {string} name - имя
-   * @param {string} lat - latitude
-   * @param {string} lon - longitude
+   * @param {number} lat - latitude
+   * @param {number} lon - longitude
    * @param {string} address - адрес
-   * @param {string} entrance - номер подъезда
-   * @param {string} apartment - номер квартиры
-   * @param {string} intercom - домофон
-   * @param {datetime} order_datetime - дата и время, на которое заказана доставка
-   * @param {string} comment - комментарий к заказу
-   * @param {boolean} [remember] - запомнить адрес
-   * @param {string} [address_alias] - название адреса
-   * @param {array} items - массив с содержимым заказа
+   * @param {string} entrance - информация о подъезде
+   * @param {string} apartment - информация о квартире
+   * @param {any} items - массив с содержимым заказа
+   * @param {string} [name] - имя клиента
+   * @param {string} [email] - email клиента
+   * @param {string} [intercom] - информация о домофоне
+   * @param {string} [order_datetime] - дата и время, на которое заказана доставка
+   * @param {string} [comment] - комментарий к заказу
+   * @param {boolean} [remember] - сохранить адрес
+   * @param {string} [alias] - название адреса для сохранения
    */
   public async create({
-    idproject,
+    project_id,
     phone,
-    email,
-    name,
+    code,
     lat,
     lon,
     address,
     entrance,
     apartment,
-    intercom,
     items,
+    name,
+    email,
+    intercom,
     order_datetime,
     comment,
     remember,
-    address_alias,
+    alias
   }: {
-    idproject: string,
-    phone: string;
-    email?: string;
-    name?: string;
-    lat: number;
-    lon: number;
-    address: string;
-    entrance: string;
-    apartment: string;
-    items: any[];
-    order_datetime: string;
-    intercom?: string;
-    comment?: string;
-    remember?: boolean;
-    address_alias?: string;
+    project_id: string,
+    phone: string,
+    code: number,
+    lat: number,
+    lon: number,
+    address: string,
+    entrance: string,
+    apartment: string,
+    items: any,
+    name?: string,
+    email?: string,
+    intercom?: string,
+    order_datetime?: string,
+    comment?: string,
+    remember?: boolean,
+    alias?: string
   }) {
     // Валидация данных
     const phone_reg = /^[0-9]{11}$/;
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
   
     if (!phone_reg.test(phone)) throw new Error("Некорректный номер телефона");
-    if (email !== undefined && !email_reg.test(email)) throw new Error("Некорректный email");
-    if (!address.length) throw new Error("Укажите адрес");
-    if (!entrance.length) throw new Error("Укажите номер подъезда");
+    if (typeof email !== "undefined" && !email_reg.test(email)) throw new Error("Некорректный email");
     if (!items.length) throw new Error("Заказ пуст");
 
-    // Поиск пользователя с таким номером. Если такого нет, создаем нового.
-    const data = await this.user.findOrCreate({
+    const project = await this.project.findOne({
       where: {
-        phone: phone,
-      },
-      defaults: {
-        email: email,
-        name: name,
-        phone_confirmed: 1,
-        email_confirmed: 0,
-      },
+        actual: true,
+        project_id
+      }
     });
 
-    const user = data[0];
-    const created = data[1];
+    if (!project) throw new Error("Несуществующий project_id");
 
-    if (!created && (email !== undefined || name !== undefined)) {
-      // Пользователь с таким номером уже есть. Обновляем email и имя, если были указаны.
-      let updates: any = {};
-      if (email !== undefined) updates.email = email;
-      if (name !== undefined) updates.name = name;
-      user.update(updates);
+    // Проверка кода подтверждения
+    const code_status = (await Auth.checkCode({
+      operation_id: 1,
+      recipient: phone,
+      code
+    }))[0];
+    if (!code_status) throw new Error("Неверный код");
+
+    // Поиск пользователя с таким номером. Если такого нет, создаем нового.
+    const user_data = await this.user.findOrCreate({
+      where: { phone },
+      defaults: { email, name }
+    });
+
+    const user = user_data[0];
+    const created_user = user_data[1];
+
+    if (!created_user) {
+      // Если пользователь уже есть, обновляем email и имя
+      user.update({ email, name });
     }
 
     if (remember) {
       // Сохранение адреса
-      if (!address_alias) throw new Error("Не указано название сохраняемого адреса");
+      if (!alias) throw new Error("Не указано название сохраняемого адреса");
 
-      let columns = ["iduser", "lat", "lon", "address", "entrance", "apartment", "alias"];
-      let replacements = [user.iduser, lat, lon, address, entrance, apartment, address_alias];
+      const created_address = (await this.address.findOrCreate({
+        where: {
+          fk_user_id: user.user_id,
+          point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`)
+        },
+        defaults: {
+          address,
+          entrance,
+          apartment,
+          intercom,
+          alias
+        }
+      }))[1];
 
-      if (intercom) {
-        columns.push("intercom");
-        replacements.push(intercom);
+      if (!created_address) {
+        // Эти координаты уже сохранены у этого пользователя. Обновляем информацию о них.
+        this.address.update({
+          address,
+          entrance,
+          apartment,
+          intercom,
+          alias
+        }, {
+          where: {
+            fk_user_id: user.user_id,
+            point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`)
+          }
+        });
       }
-
-      Sequelize.query(
-        `
-          INSERT INTO ${this.table.saved_addresses} (${columns.join(', ')})
-          VALUES (?, ?, ?, ?, ?, ?, ? ${(intercom) ? ", ?" : ""})
-          ON DUPLICATE KEY UPDATE
-            address = VALUES(address),
-            entrance = VALUES(entrance),
-            apartment = VALUES(apartment),
-            alias = VALUES(alias)
-            ${(intercom) ? ", intercom = VALUES(intercom)": ""}
-        `,
-        { replacements }
-      );
     }
 
     const delivery_cost = Number((await this.setting.findOne({
       where: {
-        idproject,
-        name: "delivery_cost"
+        setting_id: "delivery_cost",
+        fk_project_id: project_id,
       }
     })).value);
 
     // Создание заказа
     const order = await this.order.create({
-      idproject,
-      idclient: user.iduser,
-      idstate: 1,
-      lat,
-      lon,
+      fk_project_id: project_id,
+      fk_user_id: user.user_id,
+      fk_status_id: 1,
+      point: { type: "Point", coordinates: [lat, lon] },
       address,
       entrance,
       apartment,
@@ -321,38 +331,31 @@ export default class Orders extends Main {
     });
 
     // Сохранение содержимого заказа
-    const itemsInsert = items.map((item: any) => {
-      return `("${order.idorder}", "${item.id}", "${item.count}")`;
-    });
-
-    Sequelize.query(`
-      INSERT INTO ${this.table.orders_data} (idorder, idproduct, count)
-      VALUES ${itemsInsert.join(", ")}
-    `);
+    for (let item of items) {
+      this.order_data.create({
+        fk_order_id: order.order_id,
+        fk_product_id: item.product_id,
+        amount: item.amount
+      });
+    }
 
     // Подсчет стоимости заказа
     let total = 0;
     const items_id = items.map((item: any) => {
-      return item.id;
+      return item.product_id;
     });
     const products = await this.product.findAll({
       where: {
-        idproduct: items_id,
-      },
+        product_id: items_id,
+      }
     });
 
     for (let item of items) {
       const product = products.filter((subitem: any) => {
-        return subitem.idproduct === item.id;
+        return subitem.product_id === item.product_id;
       });
-      total += product[0].price * item.count;
+      total += product[0].price * item.amount;
     }
-
-    const project = await this.project.findOne({
-      where: { idproject }
-    });
-
-    if (project === null) throw new Error(`Не найден idproject (${idproject})`);
 
     // Получение ссылки для оплаты
     const res = await axios({
@@ -360,9 +363,9 @@ export default class Orders extends Main {
       url: "https://securepay.tinkoff.ru/v2/Init",
       headers: { "Content-Type": "application/json" },
       data: {
-        TerminalKey: (project.production) ? project.key : project.demokey,
+        TerminalKey: (project.production) ? project.terminal_key : project.terminal_demokey,
         Amount: (total + delivery_cost) * 100,
-        OrderId: order.idorder,
+        OrderId: order.order_id,
         Description: "",
         Frame: true,
         Language: "ru",
@@ -374,17 +377,19 @@ export default class Orders extends Main {
         },
         Receipt: {
           Taxation: "usn_income_outcome",
+          Email: email,
+          EmailCompany: "info@laapl.ru",
           Phone: phone,
           Items: products
             .map((product: any) => {
               const item = items.filter((subitem: any) => {
-                return subitem.id === product.idproduct;
+                return subitem.product_id === product.product_id;
               })[0];
               return {
                 Name: product.title,
                 Price: product.price * 100,
-                Quantity: item.count,
-                Amount: product.price * item.count * 100,
+                Quantity: item.amount,
+                Amount: product.price * item.amount * 100,
                 Tax: "none",
               };
             })

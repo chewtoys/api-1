@@ -26,6 +26,9 @@ fs
 // Связи таблиц
 const Address = Sequelize.models.address;
 const Category = Sequelize.models.category;
+const Code = Sequelize.models.code;
+const CodeOperation = Sequelize.models.code_operation;
+const CodeType = Sequelize.models.code_type;
 const Image = Sequelize.models.image;
 const Message = Sequelize.models.message;
 const MessageType = Sequelize.models.message_type;
@@ -35,30 +38,26 @@ const OrderStatus = Sequelize.models.order_status;
 const Payment = Sequelize.models.payment;
 const Product = Sequelize.models.product;
 const Project = Sequelize.models.project;
+const Setting = Sequelize.models.setting;
 const User = Sequelize.models.user;
 const Worker = Sequelize.models.worker;
 
 Category.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
-Project.hasMany(Category, { foreignKey: "fk_project_id", sourceKey: "project_id" });
 
 Message.belongsTo(MessageType, { foreignKey: "fk_type_id", targetKey: "type_id" });
-MessageType.hasMany(Message, { foreignKey: "fk_type_id", sourceKey: "type_id" });
 Message.belongsTo(Worker, { foreignKey: "fk_telegram_id", targetKey: "telegram_id" });
 Worker.hasMany(Message, { foreignKey: "fk_telegram_id", sourceKey: "telegram_id" });
 
 Order.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
-Project.hasMany(Order, { foreignKey: "fk_project_id", sourceKey: "project_id" });
 Order.belongsTo(User, { foreignKey: "fk_user_id", targetKey: "user_id" });
 User.hasMany(Order, { foreignKey: "fk_user_id", sourceKey: "user_id" });
 Order.belongsTo(Worker, { foreignKey: "fk_worker_id", targetKey: "worker_id" });
 Worker.hasMany(Order, { foreignKey: "fk_worker_id", sourceKey: "worker_id" });
 Order.belongsTo(OrderStatus, { foreignKey: "fk_status_id", targetKey: "status_id" });
-OrderStatus.hasMany(Order, { foreignKey: "fk_status_id", sourceKey: "status_id" });
 
 OrderData.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasMany(OrderData, { foreignKey: "fk_order_id", sourceKey: "order_id" });
 OrderData.belongsTo(Product, { foreignKey: "fk_product_id", targetKey: "product_id" });
-Product.hasMany(OrderData, { foreignKey: "fk_product_id", sourceKey: "product_id" });
 
 Payment.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasOne(Payment, { foreignKey: "fk_order_id" });
@@ -70,12 +69,18 @@ Product.hasMany(Image, { foreignKey: "unit_id", sourceKey: "product_id" });
 Address.belongsTo(User, { foreignKey: "fk_user_id", targetKey: "user_id" });
 User.hasMany(Address, { foreignKey: "fk_user_id", sourceKey: "user_id" });
 
+Code.belongsTo(CodeType, { foreignKey: "fk_type_id", targetKey: "type_id" });
+Code.belongsTo(CodeOperation, { foreignKey: "fk_operation_id", targetKey: "operation_id" });
+
+Setting.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
+
 /**
  * Синхронизация таблиц
  * Не использовать Sequelize.sync(), так как важен порядок!
  */
 (async() => {
   await Project.sync();
+  await Setting.sync();
   await User.sync();
   await Address.sync();
   await Worker.sync();
@@ -88,6 +93,9 @@ User.hasMany(Address, { foreignKey: "fk_user_id", sourceKey: "user_id" });
   await MessageType.sync();
   await Message.sync();
   await Payment.sync();
+  await CodeOperation.sync();
+  await CodeType.sync();
+  await Code.sync();
 })();
 
 export default Sequelize;

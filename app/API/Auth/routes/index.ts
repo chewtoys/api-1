@@ -1,12 +1,17 @@
 import { route, routeExport } from "../../../utils";
-import Auth from "../";
+import { Auth } from "../../";
 
-const getCode = route("/auth/code/get", (e) => new Auth().getСode(e), ["phone"]);
-const checkCode = route("/auth/code/check", (e) => new Auth().checkCode(e), ["phone", "code"]);
+const getCode = route("/auth/code/get", (e) => Auth.getСode(e), [
+  "type_id",
+  "operation_id",
+  "recipient"
+]);
 
-// Потом для разлогина
-// req.logout();
-// res.clearCookie("connect.sid")
+const checkCode = route("/auth/code/check", (e) => Auth.checkCode(e), [
+  "recipient",
+  "operation_id",
+  "code"
+]);
 
 export default routeExport({
   getCode,
