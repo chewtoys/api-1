@@ -93,8 +93,8 @@ export default class Orders extends Main {
     const project = await this.project.findOne({
       where: {
         [Sequelize.Op.or]: [
-          { key: TerminalKey },
-          { demokey: TerminalKey }
+          { terminal_key: TerminalKey },
+          { terminal_demokey: TerminalKey }
         ]
       }
     });
@@ -121,11 +121,11 @@ export default class Orders extends Main {
     // Создание/обновления платежа в базе данных
     const result = await this.payment.findOrCreate({
       where: {
-        id_payment: PaymentId,
+        payment_id: PaymentId,
         terminal_key: TerminalKey,
       },
       defaults: {
-        id_order: OrderId,
+        fk_order_id: OrderId,
         success: Success,
         status: Status,
         error_code: ErrorCode,
@@ -155,26 +155,26 @@ export default class Orders extends Main {
       // Изменение статуса заказа на "Оплачен"
       const order = await this.order.findOne({
         where: {
-          idorder: OrderId
+          order_id: OrderId
         }
       });
 
-      if (order.idstate == 1) {
+      if (order.fk_status_id == 1) {
         order.update({
-          idstate: 2
+          fk_status_id: 2
         });
 
-        const delivery_cost = Number((await this.setting.findOne({
-          where: {
-            idproject: project.idproject,
-            name: "delivery_cost"
-          }
-        })).value);
+        // const delivery_cost = Number((await this.setting.findOne({
+        //   where: {
+        //     fk_project_id: project.idproject,
+        //     setting_id: "delivery_cost"
+        //   }
+        // })).value);
 
-        this.BotSocket.emit("new_order", { 
-          idorder: order.idorder,
-          delivery_cost 
-        });
+        // this.BotSocket.emit("new_order", { 
+        //   idorder: order.idorder,
+        //   delivery_cost 
+        // });
       }
     }
 
