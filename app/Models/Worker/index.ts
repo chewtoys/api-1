@@ -1,3 +1,5 @@
+import { notDeepEqual } from "assert";
+
 /**
  * @description Работник
  */
@@ -23,11 +25,13 @@ export default (sequelize: any, Sequelize: any) => {
     },
     telegram_last_name: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: true,
+      notEmpty: true
     },
     telegram_username: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: true,
+      notEmpty: true
     },
     ready: {
       type: Sequelize.BOOLEAN,
