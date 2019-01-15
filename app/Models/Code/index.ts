@@ -33,12 +33,18 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
-    valid_until: {
+    lifetime: {
       type: Sequelize.DATE,
       allowNull: false,
       notEmpty: true,
       defaultValue: moment().add(5, "minutes").format("YYYY-MM-DD HH:mm:ss")
-    }   
+    },
+    confirmed: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      notEmpty: true,
+      defaultValue: false
+    }
   }, {
     freezeTableName: true,
     tableName: "codes",

@@ -8,7 +8,6 @@ const router = Router();
 const createRoute = route("/orders/create", (e) => Orders.create(e), [
   "project_id",
   "phone",
-  "code",
   "lat",
   "lon",
   "address",
