@@ -349,7 +349,7 @@ export default class Orders extends Main {
     for (let item of items) {
       this.order_data.create({
         fk_order_id: order.order_id,
-        fk_product_id: item.id,
+        fk_product_id: item.product_id,
         amount: item.amount,
       });
     }
@@ -357,7 +357,7 @@ export default class Orders extends Main {
     // Подсчет стоимости заказа
     let total = 0;
     const items_id = items.map((item: any) => {
-      return item.id;
+      return item.product_id;
     });
     const products = await this.product.findAll({
       where: {
@@ -367,7 +367,7 @@ export default class Orders extends Main {
 
     for (let item of items) {
       const product = products.filter((subitem: any) => {
-        return subitem.product_id === item.id;
+        return subitem.product_id === item.product_id;
       });
       total += product[0].price * item.amount;
     }
@@ -398,7 +398,7 @@ export default class Orders extends Main {
           Items: products
             .map((product: any) => {
               const item = items.filter((subitem: any) => {
-                return subitem.id === product.product_id;
+                return subitem.product_id === product.product_id;
               })[0];
               return {
                 Name: product.title,
