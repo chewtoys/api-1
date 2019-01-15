@@ -4,12 +4,16 @@
  */
 
 import axios from "axios";
+import Logger from "../Main/Logger";
+
 class SMS {
   login: string;
   password: string;
   sender: string;
 
   constructor() {
+    new Logger().info("SMS Class init");
+
     this.login = process.env.SMS_USER;
     this.password = process.env.SMS_PASSWORD;
     this.sender = "LAAPL.RU";
@@ -87,4 +91,4 @@ class SMS {
   }
 }
 
-export default new SMS();
+export default SMS;
