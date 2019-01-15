@@ -1,11 +1,10 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
-import { Auth } from "../";
 import axios from "axios";
 import crypto from "crypto";
+import moment from "moment";
 
 export default class Orders extends Main {
-  delivery_cost: number;
   user: any;
   order: any;
   order_data: any;
@@ -14,6 +13,7 @@ export default class Orders extends Main {
   project: any;
   setting: any;
   address: any;
+  code: any;
 
   constructor() {
     super();
@@ -27,6 +27,7 @@ export default class Orders extends Main {
     this.project = Sequelize.models.project;
     this.setting = Sequelize.models.setting;
     this.address = Sequelize.models.address;
+    this.code = Sequelize.models.code;
   }
 
   /**
@@ -203,7 +204,6 @@ export default class Orders extends Main {
   public async create({
     project_id,
     phone,
-    code,
     lat,
     lon,
     address,
@@ -220,7 +220,6 @@ export default class Orders extends Main {
   }: {
     project_id: string;
     phone: string;
-    code: number;
     lat: number;
     lon: number;
     address: string;
@@ -252,13 +251,23 @@ export default class Orders extends Main {
 
     if (!project) throw new Error("Несуществующий project_id");
 
-    // Проверка кода подтверждения
-    const code_status = (await Auth.checkCode({
-      operation_id: 1,
-      recipient: phone,
-      code,
-    }))[0];
-    if (!code_status) throw new Error("Неверный код");
+    // Проверка подтверждения номера
+    const code = await this.code.findOne({
+      where: {
+        fk_operation_id: 1,
+        recipient: phone,
+        lifetime: {
+          [Sequelize.Op.gte]: moment().format("YYYY-MM-DD HH:mm:ss"),
+        },
+        confirmed: true
+      },
+      limit: 1,
+      order: [
+        ["code_id", "DESC"]
+      ]
+    });
+
+    if (!code) throw new Error("Не подтвержден номер, либо истекло время сессии");
 
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
     const user_data = await this.user.findOrCreate({

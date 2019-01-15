@@ -23,34 +23,48 @@ export default class Auth extends Main {
    * @param {number} operation_id - Подтверждаемая операция
    * @param {string} recipient - Получатель
    */
-  public getСode({ type_id, operation_id, recipient }: { type_id: number; operation_id: number; recipient: string }) {
-    const code = String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)));
-    const msg = `Код подтверждения: ${code}`;
-
+  public async getСode({ type_id, operation_id, recipient }: { type_id: number; operation_id: number; recipient: string }) {
     switch (type_id) {
       case 1:
         // Через телефон
         const phone_reg = /^[0-9]{11}$/;
         if (!phone_reg.test(recipient)) throw new Error("Некорректный номер телефона");
-
-        new SMS().send([recipient], msg);
-        break;
-      case 2:
-        // Через Email
-        // Написать, когда станет актуальным
         break;
       default:
         throw new Error("Неизвестный тип подтверждения");
     }
 
-    this.code.create({
-      fk_type_id: type_id,
-      fk_operation_id: operation_id,
-      recipient,
-      code,
+    const data = await this.code.findOrCreate({
+      where: {
+        fk_type_id: type_id,
+        fk_operation_id: operation_id,
+        recipient,
+        lifetime: {
+          [Sequelize.Op.gte]: moment().format("YYYY-MM-DD HH:mm:ss"),
+        },
+        confirmed: false
+      },
+      limit: 1,
+      order: [
+        ["code_id", "DESC"]
+      ],
+      defaults: {
+        code: String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1))),
+        lifetime: moment().add(5, "minutes").format("YYYY-MM-DD HH:mm:ss")
+      }
     });
 
-    return [code];
+    const msg = `Код подтверждения: ${data[0].code}`;
+
+    switch (type_id) {
+      case 1:
+        new SMS().send([recipient], msg);
+        break;
+      default:
+        break;
+    }
+
+    return [{ code: data[0].code }];
   }
 
   /**
@@ -65,13 +79,19 @@ export default class Auth extends Main {
         fk_operation_id: operation_id,
         recipient,
         code,
-        valid_until: {
+        lifetime: {
           [Sequelize.Op.gte]: moment().format("YYYY-MM-DD HH:mm:ss"),
         },
+        confirmed: false
       },
+      limit: 1,
+      order: [
+        ["code_id", "DESC"]
+      ]
     });
 
     if (data) {
+      data.update({ confirmed: true });
       return [true];
     } else {
       return [false];
