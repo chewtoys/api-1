@@ -8,6 +8,7 @@ export default class Products extends Main {
 
   constructor() {
     super();
+    this.Logger.info("Products Class init");
     this.category = Sequelize.models.category;
     this.product = Sequelize.models.product;
     this.image = Sequelize.models.image;
@@ -39,5 +40,25 @@ export default class Products extends Main {
     });
 
     return data;
+  }
+
+  /**
+   * @description Пересчет популярности товаров
+   */
+  public async updateProductsPopularity() {
+    // console.log("test");
+    // const query = `
+    //   UPDATE ?? AS t1
+    //   INNER JOIN (
+    //     SELECT
+    //       idproduct,
+    //       SUM(count) AS count
+    //     FROM ??
+    //     GROUP BY idproduct
+    //   ) AS t2 ON t1.idproduct = t2.idproduct
+    //   SET t1.popularity = t2.count
+    // `;
+    // const params = [this.table.products, this.table.orders_data];
+    // await this.Db.query(query, params);
   }
 }

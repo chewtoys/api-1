@@ -18,6 +18,7 @@ export default class Orders extends Main {
   constructor() {
     super();
 
+    this.Logger.info("Orders Class init");
     this.user = Sequelize.models.user;
     this.order = Sequelize.models.order;
     this.order_data = Sequelize.models.order_data;
@@ -57,34 +58,34 @@ export default class Orders extends Main {
     Pan,
     DATA,
     Token,
-    ExpDate
+    ExpDate,
   }: {
-    TerminalKey: string,
-    OrderId: string,
-    Success: boolean,
-    Status: string,
-    PaymentId: number,
-    ErrorCode: string,
-    Amount: number,
-    RebillId?: number,
-    CardId: number,
-    Pan: string,
-    DATA?: string,
-    Token: string,
-    ExpDate: string
+    TerminalKey: string;
+    OrderId: string;
+    Success: boolean;
+    Status: string;
+    PaymentId: number;
+    ErrorCode: string;
+    Amount: number;
+    RebillId?: number;
+    CardId: number;
+    Pan: string;
+    DATA?: string;
+    Token: string;
+    ExpDate: string;
   }) {
     // Проверка токена
     let data: any = {
-      "TerminalKey": TerminalKey,
-      "OrderId": OrderId,
-      "Success": Success,
-      "Status": Status,
-      "PaymentId": PaymentId,
-      "ErrorCode": ErrorCode,
-      "Amount": Amount,
-      "CardId": CardId,
-      "Pan": Pan,
-      "ExpDate": ExpDate
+      TerminalKey: TerminalKey,
+      OrderId: OrderId,
+      Success: Success,
+      Status: Status,
+      PaymentId: PaymentId,
+      ErrorCode: ErrorCode,
+      Amount: Amount,
+      CardId: CardId,
+      Pan: Pan,
+      ExpDate: ExpDate,
     };
 
     if (RebillId !== undefined) data["RebillId"] = RebillId;
@@ -92,11 +93,8 @@ export default class Orders extends Main {
 
     const project = await this.project.findOne({
       where: {
-        [Sequelize.Op.or]: [
-          { terminal_key: TerminalKey },
-          { terminal_demokey: TerminalKey }
-        ]
-      }
+        [Sequelize.Op.or]: [{ terminal_key: TerminalKey }, { terminal_demokey: TerminalKey }],
+      },
     });
 
     if (project.production) {
@@ -107,12 +105,15 @@ export default class Orders extends Main {
 
     const keys = Object.keys(data).sort();
     let generated_token: string = "";
-    
+
     for (let key of keys) {
       generated_token += data[key];
     }
 
-    generated_token = crypto.createHash("sha256").update(generated_token).digest("hex");
+    generated_token = crypto
+      .createHash("sha256")
+      .update(generated_token)
+      .digest("hex");
 
     if (Token !== generated_token) {
       throw new Error("Неверный токен");
@@ -155,13 +156,13 @@ export default class Orders extends Main {
       // Изменение статуса заказа на "Оплачен"
       const order = await this.order.findOne({
         where: {
-          order_id: OrderId
-        }
+          order_id: OrderId,
+        },
       });
 
       if (order.fk_status_id == 1) {
         order.update({
-          fk_status_id: 2
+          fk_status_id: 2,
         });
 
         // const delivery_cost = Number((await this.setting.findOne({
@@ -171,9 +172,9 @@ export default class Orders extends Main {
         //   }
         // })).value);
 
-        // this.BotSocket.emit("new_order", { 
+        // this.BotSocket.emit("new_order", {
         //   idorder: order.idorder,
-        //   delivery_cost 
+        //   delivery_cost
         // });
       }
     }
@@ -215,29 +216,29 @@ export default class Orders extends Main {
     order_datetime,
     comment,
     remember,
-    alias
+    alias,
   }: {
-    project_id: string,
-    phone: string,
-    code: number,
-    lat: number,
-    lon: number,
-    address: string,
-    entrance: string,
-    apartment: string,
-    items: any,
-    name?: string,
-    email?: string,
-    intercom?: string,
-    order_datetime?: string,
-    comment?: string,
-    remember?: boolean,
-    alias?: string
+    project_id: string;
+    phone: string;
+    code: number;
+    lat: number;
+    lon: number;
+    address: string;
+    entrance: string;
+    apartment: string;
+    items: any;
+    name?: string;
+    email?: string;
+    intercom?: string;
+    order_datetime?: string;
+    comment?: string;
+    remember?: boolean;
+    alias?: string;
   }) {
     // Валидация данных
     const phone_reg = /^[0-9]{11}$/;
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
-  
+
     if (!phone_reg.test(phone)) throw new Error("Некорректный номер телефона");
     if (typeof email !== "undefined" && !email_reg.test(email)) throw new Error("Некорректный email");
     if (!items.length) throw new Error("Заказ пуст");
@@ -245,8 +246,8 @@ export default class Orders extends Main {
     const project = await this.project.findOne({
       where: {
         actual: true,
-        project_id
-      }
+        project_id,
+      },
     });
 
     if (!project) throw new Error("Несуществующий project_id");
@@ -255,14 +256,14 @@ export default class Orders extends Main {
     const code_status = (await Auth.checkCode({
       operation_id: 1,
       recipient: phone,
-      code
+      code,
     }))[0];
     if (!code_status) throw new Error("Неверный код");
 
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
     const user_data = await this.user.findOrCreate({
       where: { phone },
-      defaults: { email, name }
+      defaults: { email, name },
     });
 
     const user = user_data[0];
@@ -280,40 +281,45 @@ export default class Orders extends Main {
       const created_address = (await this.address.findOrCreate({
         where: {
           fk_user_id: user.user_id,
-          point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`)
+          point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`),
         },
         defaults: {
           address,
           entrance,
           apartment,
           intercom,
-          alias
-        }
+          alias,
+        },
       }))[1];
 
       if (!created_address) {
         // Эти координаты уже сохранены у этого пользователя. Обновляем информацию о них.
-        this.address.update({
-          address,
-          entrance,
-          apartment,
-          intercom,
-          alias
-        }, {
-          where: {
-            fk_user_id: user.user_id,
-            point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`)
+        this.address.update(
+          {
+            address,
+            entrance,
+            apartment,
+            intercom,
+            alias,
+          },
+          {
+            where: {
+              fk_user_id: user.user_id,
+              point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`),
+            },
           }
-        });
+        );
       }
     }
 
-    const delivery_cost = Number((await this.setting.findOne({
-      where: {
-        setting_id: "delivery_cost",
-        fk_project_id: project_id,
-      }
-    })).value);
+    const delivery_cost = Number(
+      (await this.setting.findOne({
+        where: {
+          setting_id: "delivery_cost",
+          fk_project_id: project_id,
+        },
+      })).value
+    );
 
     // Создание заказа
     const order = await this.order.create({
@@ -335,7 +341,7 @@ export default class Orders extends Main {
       this.order_data.create({
         fk_order_id: order.order_id,
         fk_product_id: item.product_id,
-        amount: item.amount
+        amount: item.amount,
       });
     }
 
@@ -347,7 +353,7 @@ export default class Orders extends Main {
     const products = await this.product.findAll({
       where: {
         product_id: items_id,
-      }
+      },
     });
 
     for (let item of items) {
@@ -363,7 +369,7 @@ export default class Orders extends Main {
       url: "https://securepay.tinkoff.ru/v2/Init",
       headers: { "Content-Type": "application/json" },
       data: {
-        TerminalKey: (project.production) ? project.terminal_key : project.terminal_demokey,
+        TerminalKey: project.production ? project.terminal_key : project.terminal_demokey,
         Amount: (total + delivery_cost) * 100,
         OrderId: order.order_id,
         Description: "",

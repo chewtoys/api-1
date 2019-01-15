@@ -5,16 +5,19 @@ import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
 import Cron from "./Cron";
-import { CronJob } from "cron";
+import Logger from "./Main/Logger";
+// import { CronJob } from "cron";
 import router, { notFound } from "./Routes";
 import { session } from "./utils";
 import BotSocket from "./Main/BotSocket";
 
 class Server {
   app: express.Application;
-  Cron: Cron;
+  // Cron: Cron;
 
   constructor() {
+    new Logger().info("Server Class init");
+
     this.app = express();
 
     this.app.use(session);
@@ -27,12 +30,13 @@ class Server {
     this.app.use(passport.initialize());
     this.app.use(passport.session());
 
-    this.Cron = new Cron();
+    // this.Cron = new Cron();
 
     this.routing();
   }
 
   private routing() {
+    new Logger().info("routing in Server Class init");
     /**
      * @description CORS
      * @todo Нужно будет переписать, добавить только наши домены
@@ -56,7 +60,8 @@ class Server {
   public start(port: number) {
     this.app.listen(port);
 
-    new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
+    new Logger().info("start in Server Class init");
+    // new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
     new BotSocket().start();
   }
 }

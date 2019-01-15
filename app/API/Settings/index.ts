@@ -11,7 +11,9 @@ export default class Settings extends Main {
 
   constructor() {
     super();
-    
+
+    this.Logger.info("Settings Class init");
+
     this.setting = Sequelize.models.setting;
   }
 
@@ -28,7 +30,7 @@ export default class Settings extends Main {
     }
 
     return await this.setting.findAll({
-      where: where_clause
+      where: where_clause,
     });
   }
 }
