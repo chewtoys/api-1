@@ -71,6 +71,16 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: true,
       notEmpty: true
     },
+    structure: {
+      type: Sequelize.STRING(1000),
+      allowNull: true,
+      notEmpty: true
+    },
+    full_structure: {
+      type: Sequelize.STRING(10000),
+      allowNull: true,
+      notEmpty: true
+    },
     actual: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
