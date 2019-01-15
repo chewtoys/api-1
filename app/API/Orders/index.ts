@@ -398,7 +398,7 @@ export default class Orders extends Main {
           Items: products
             .map((product: any) => {
               const item = items.filter((subitem: any) => {
-                return subitem.product_id === product.product_id;
+                return subitem.id === product.product_id;
               })[0];
               return {
                 Name: product.title,
