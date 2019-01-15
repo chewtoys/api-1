@@ -385,14 +385,14 @@ export default class Orders extends Main {
         Frame: true,
         Language: "ru",
         DATA: {
-          Email: email,
+          Email: (email.length) ? email : undefined,
           Phone: phone,
           Name: name,
           connection_type: "Widget2.0",
         },
         Receipt: {
           Taxation: "usn_income_outcome",
-          Email: email,
+          Email: (email.length) ? email : undefined,
           EmailCompany: "info@laapl.ru",
           Phone: phone,
           Items: products
