@@ -240,7 +240,7 @@ export default class Orders extends Main {
     const email_reg = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/i;
 
     if (!phone_reg.test(phone)) throw new Error("Некорректный номер телефона");
-    if (typeof email !== "undefined" && !email_reg.test(email)) throw new Error("Некорректный email");
+    if (typeof email !== "undefined" && email !== "" && !email_reg.test(email)) throw new Error("Некорректный email");
     if (!items.length) throw new Error("Заказ пуст");
 
     const project = await this.project.findOne({
