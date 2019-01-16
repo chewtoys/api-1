@@ -58,7 +58,7 @@ Order.belongsTo(OrderStatus, { foreignKey: "fk_status_id", targetKey: "status_id
 OrderData.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasMany(OrderData, { foreignKey: "fk_order_id", sourceKey: "order_id" });
 OrderData.belongsTo(Product, { foreignKey: "fk_product_id", targetKey: "product_id" });
-OrderData.hasOne(Product, { foreignKey: "fk_product_id" });
+OrderData.hasOne(Product, { foreignKey: "product_id" });
 
 Payment.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasOne(Payment, { foreignKey: "fk_order_id" });
