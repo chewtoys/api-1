@@ -9,14 +9,13 @@ import Logger from "./Main/Logger";
 // import { CronJob } from "cron";
 import router, { notFound } from "./Routes";
 import { session } from "./utils";
-import BotSocket from "./Main/BotSocket";
 
 class Server {
   app: express.Application;
   // Cron: Cron;
 
   constructor() {
-    new Logger().info("Server Class init");
+    Logger.info("Server Class init");
 
     this.app = express();
 
@@ -36,7 +35,7 @@ class Server {
   }
 
   private routing() {
-    new Logger().info("routing in Server Class init");
+    Logger.info("routing in Server Class init");
     /**
      * @description CORS
      * @todo Нужно будет переписать, добавить только наши домены
@@ -60,9 +59,9 @@ class Server {
   public start(port: number) {
     this.app.listen(port);
 
-    new Logger().info("start in Server Class init");
+    Logger.info("start in Server Class init");
     // new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
-    new BotSocket().start();
+    // new BotSocket();
   }
 }
 

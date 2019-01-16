@@ -13,7 +13,7 @@ const createRoute = route("/orders/create", (e) => Orders.create(e), [
   "address",
   "entrance",
   "apartment",
-  "items"
+  "items",
 ]);
 
 const notificationsRoute = router.post("/orders/notifications", async (req: Request, res: Response) => {
@@ -22,7 +22,19 @@ const notificationsRoute = router.post("/orders/notifications", async (req: Requ
 
   try {
     const params = req.body;
-    const required = ["TerminalKey", "OrderId", "Success", "Status", "PaymentId", "ErrorCode", "Amount", "CardId", "Pan", "Token", "ExpDate"];
+    const required = [
+      "TerminalKey",
+      "OrderId",
+      "Success",
+      "Status",
+      "PaymentId",
+      "ErrorCode",
+      "Amount",
+      "CardId",
+      "Pan",
+      "Token",
+      "ExpDate",
+    ];
 
     for (let key of required) {
       if (typeof params[key] === "undefined") {
@@ -31,15 +43,15 @@ const notificationsRoute = router.post("/orders/notifications", async (req: Requ
     }
 
     const response = await Orders.notifications(params);
-    new Logger().route("OK", path, Date.now() - reqTime);
+    Logger.route("OK", path, Date.now() - reqTime);
     res.status(200).end(response);
   } catch (err) {
-    new Logger().route("ERROR", path, Date.now() - reqTime, err.message);
+    Logger.route("ERROR", path, Date.now() - reqTime, err.message);
     res.status(500).end("ERROR");
   }
 });
 
 export default routeExport({
   createRoute,
-  notificationsRoute
-}); 
+  notificationsRoute,
+});

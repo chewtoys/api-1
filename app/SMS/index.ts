@@ -12,7 +12,7 @@ class SMS {
   sender: string;
 
   constructor() {
-    new Logger().info("SMS Class init");
+    Logger.info("SMS Class init");
 
     this.login = process.env.SMS_USER;
     this.password = process.env.SMS_PASSWORD;
