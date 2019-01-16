@@ -23,6 +23,30 @@ export default class Mailer {
     this.transporter = transporter;
   }
 
+  /**
+   * @description Отправка заказа
+   */
+  sendOrder(data: any) {
+    const mailOptions = {
+      from: "\"LAAPL DELIVERY\" <noreply@laapl.ru>",
+      to: "bersenoff@bk.ru",
+      subject: "📧 Поступил новый заказ!",
+      text: `
+        Это текст
+      `,
+      html: `
+        <span style="color: red">Это HTML</span>
+      `
+    };
+
+    this.transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+    });
+  }
+
   sendVerificationEmail(options: MOptions) {
     const mailOptions = {
       from: '"LAAPL DELIVERY" <noreply@laapl.ru>',
