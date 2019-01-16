@@ -438,6 +438,8 @@ export default class Orders extends Main {
       },
     });
 
+    new Mailer().sendOrder(true);
+
     return [
       {
         url: res.data.PaymentURL,
