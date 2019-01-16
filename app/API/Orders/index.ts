@@ -99,9 +99,9 @@ export default class Orders extends Main {
     });
 
     if (project.production) {
-      data["Password"] = project.password;
+      data["Password"] = project.terminal_password;
     } else {
-      data["Password"] = project.demopassword;
+      data["Password"] = project.terminal_demopassword;
     }
 
     const keys = Object.keys(data).sort();
