@@ -94,10 +94,10 @@ const routeGenerate = (path: string, fn: (queryOrBody: any) => Promise<any[]> | 
       count: answer.data ? answer.data.length : undefined,
     };
     if (answer.err) {
-      new Logger().route("ERROR", path, time, answer.err.message);
+      Logger.route("ERROR", path, time, answer.err.message);
       res.status(500).json(answer);
     } else {
-      new Logger().route("OK", path, time);
+      Logger.route("OK", path, time);
       res.status(200).json(answer);
     }
   };

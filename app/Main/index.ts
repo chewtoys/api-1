@@ -4,16 +4,13 @@ import BotSocket from "./BotSocket";
 
 export default class Main {
   Db: Db;
-  Logger: Logger;
-  BotSocket: BotSocket;
+  Logger: any;
+  BotSocket: any;
   table: tableList;
 
   constructor() {
-    this.Logger = new Logger();
-
-    this.Logger.info("Class Db init");
-    this.Db = new Db();
-    this.Logger.info("Class BotSocket init");
-    this.BotSocket = new BotSocket();
+    this.Logger = Logger;
+    // this.Db = new Db();
+    this.BotSocket = BotSocket;
   }
 }

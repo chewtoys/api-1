@@ -41,6 +41,9 @@ const logger = createLogger({
 addColors(myCustomLevels.colors);
 
 class Logger {
+  constructor() {
+    this.info("Logger init");
+  }
   /**
    * @description Лог с любой информцией
    * @param {string} msg Сообщение
@@ -76,4 +79,4 @@ class Logger {
     });
 }
 
-export default Logger;
+export default new Logger();
