@@ -167,8 +167,21 @@ export default class Orders extends Main {
           fk_status_id: 2,
         });
 
+        // Получение содержимого заказа
+        const OrderData = await this.order_data.findAll({
+          where: {
+            fk_order_id: order.order_id
+          },
+          include: [
+            {
+              model: this.product,
+              required: true
+            }
+          ]
+        });
+
         // Отправка на Email
-        new Mailer().sendOrder({});
+        // new Mailer().sendOrder({});
 
         // const delivery_cost = Number((await this.setting.findOne({
         //   where: {
