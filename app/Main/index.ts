@@ -9,8 +9,11 @@ export default class Main {
   table: tableList;
 
   constructor() {
-    this.Db = new Db();
     this.Logger = new Logger();
+
+    this.Logger.info("Class Db init");
+    this.Db = new Db();
+    this.Logger.info("Class BotSocket init");
     this.BotSocket = new BotSocket();
   }
 }
