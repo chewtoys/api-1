@@ -1,5 +1,6 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
+import Mailer from "../../Email";
 import axios from "axios";
 import crypto from "crypto";
 import moment from "moment";
@@ -165,6 +166,9 @@ export default class Orders extends Main {
         order.update({
           fk_status_id: 2,
         });
+
+        // Отправка на Email
+        new Mailer().sendOrder({});
 
         // const delivery_cost = Number((await this.setting.findOne({
         //   where: {
