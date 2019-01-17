@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.yandex.ru",
-  port: 25,
+  port: 465,
   secure: true,
   auth: {
     user: process.env.MAIL_USER,
@@ -65,11 +65,13 @@ export default class Mailer {
             `,
     };
 
-    this.transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return console.log(error);
-      }
-      console.log("Message sent: %s", info.messageId);
+    return new Promise((resolve, reject) => {
+      this.transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve("Message sent: %s");
+      });
     });
   }
 }
