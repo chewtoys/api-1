@@ -23,6 +23,8 @@ export default class Workers extends Main {
       where: { telegram_id }
     });
 
+    if (!worker) throw new Error("Курьер не найден");
+
     worker.update({
       ready: (!worker.ready) ? true : false
     });
