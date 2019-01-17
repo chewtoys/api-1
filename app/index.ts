@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
 import Cron from "./Cron";
-import Mailer from "./Email";
 import Logger from "./Main/Logger";
 // import { CronJob } from "cron";
 import router, { notFound } from "./Routes";
@@ -59,14 +58,6 @@ class Server {
    */
   public async start(port: number) {
     this.app.listen(port);
-
-    const email = await new Mailer().sendVerificationEmail({
-      toEmail: "laapl@yandex.ru",
-      toName: "Никита",
-      code: "SNsdnbxjsj227632jdjskje83",
-    });
-
-    console.log(email);
 
     Logger.info("start in Server Class init");
     // new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
