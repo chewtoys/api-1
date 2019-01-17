@@ -11,5 +11,6 @@ const changeStatus = route("/workers/changeStatus", (e) => Workers.changeStatus(
 ]);
 
 export default routeExport({
-  createIfNotExist
+  createIfNotExist,
+  changeStatus
 });
