@@ -6,6 +6,10 @@ const createIfNotExist = route("/workers/createIfNotExist", (e) => Workers.creat
   "id"
 ]);
 
+const changeStatus = route("/workers/changeStatus", (e) => Workers.changeStatus(e), [
+  "telegram_id"
+]);
+
 export default routeExport({
   createIfNotExist
 });

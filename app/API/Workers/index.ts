@@ -16,6 +16,21 @@ export default class Workers extends Main {
   }
 
   /**
+   * @description Изменение статуса
+   */
+  public async changeStatus({ telegram_id }: { telegram_id: number }) {
+    const worker = await this.worker.findOne({
+      where: { telegram_id }
+    });
+
+    worker.update({
+      ready: (!worker.ready) ? true : false
+    });
+
+    return [worker.ready]
+  }
+
+  /**
    * @description Создание учетной записи сотрудника, если ее еще нет
    */
   public async createIfNotExist({
