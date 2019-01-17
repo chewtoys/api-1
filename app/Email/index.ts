@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.yandex.ru",
-  port: 465,
+  port: 25,
   secure: true,
   auth: {
     user: process.env.MAIL_USER,
@@ -28,7 +28,7 @@ export default class Mailer {
    */
   sendOrder(data: any) {
     const mailOptions = {
-      from: "\"LAAPL DELIVERY\" <noreply@laapl.ru>",
+      from: '"LAAPL DELIVERY" <noreply@laapl.ru>',
       to: "bersenoff@bk.ru",
       subject: "📧 Поступил новый заказ!",
       text: `
@@ -36,7 +36,7 @@ export default class Mailer {
       `,
       html: `
         <span style="color: red">Это HTML</span>
-      `
+      `,
     };
 
     this.transporter.sendMail(mailOptions, (error, info) => {
@@ -75,8 +75,8 @@ export default class Mailer {
 }
 
 // Example
-// new Mailer().sendVerificationEmail({
-//     toEmail: "laapl@yandex.ru",
-//     toName: "Никита",
-//     code: "SNsdnbxjsj227632jdjskje83"
-// });
+new Mailer().sendVerificationEmail({
+  toEmail: "laapl@yandex.ru",
+  toName: "Никита",
+  code: "SNsdnbxjsj227632jdjskje83",
+});
