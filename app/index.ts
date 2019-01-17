@@ -30,12 +30,6 @@ class Server {
     this.app.use(passport.initialize());
     this.app.use(passport.session());
 
-    new Mailer().sendVerificationEmail({
-      toEmail: "laapl@yandex.ru",
-      toName: "Никита",
-      code: "SNsdnbxjsj227632jdjskje83",
-    });
-
     // this.Cron = new Cron();
 
     this.routing();
@@ -63,8 +57,16 @@ class Server {
    * @description Запуск приложения
    * @param {number} port Port
    */
-  public start(port: number) {
+  public async start(port: number) {
     this.app.listen(port);
+
+    const email = await new Mailer().sendVerificationEmail({
+      toEmail: "laapl@yandex.ru",
+      toName: "Никита",
+      code: "SNsdnbxjsj227632jdjskje83",
+    });
+
+    console.log(email);
 
     Logger.info("start in Server Class init");
     // new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
