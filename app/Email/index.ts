@@ -75,8 +75,3 @@ export default class Mailer {
 }
 
 // Example
-new Mailer().sendVerificationEmail({
-  toEmail: "laapl@yandex.ru",
-  toName: "Никита",
-  code: "SNsdnbxjsj227632jdjskje83",
-});

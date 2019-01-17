@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
 import Cron from "./Cron";
+import Mailer from "./Email";
 import Logger from "./Main/Logger";
 // import { CronJob } from "cron";
 import router, { notFound } from "./Routes";
@@ -28,6 +29,12 @@ class Server {
 
     this.app.use(passport.initialize());
     this.app.use(passport.session());
+
+    new Mailer().sendVerificationEmail({
+      toEmail: "laapl@yandex.ru",
+      toName: "Никита",
+      code: "SNsdnbxjsj227632jdjskje83",
+    });
 
     // this.Cron = new Cron();
 
