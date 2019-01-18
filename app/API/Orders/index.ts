@@ -1,5 +1,6 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
+import Socket from "../../Socket";
 import axios from "axios";
 import crypto from "crypto";
 import moment from "moment";
@@ -153,44 +154,31 @@ export default class Orders extends Main {
       });
     }
 
-    if (Success && (Status == "AUTHORIZED" || Status == "CONFIRMED")) {
-      // Изменение статуса заказа на "Оплачен"
+    if (Success && (Status == "AUTHORIZED")) {
+      // Заказ был только что оплачен, получаем его содержимое для отправки
       const order = await this.order.findOne({
         where: {
           order_id: OrderId,
         },
+        include: [
+          {
+            model: this.order_data,
+            required: true,
+            include: [
+              {
+                model: this.product,
+                required: true
+              }
+            ]
+          }
+        ]
       });
 
-      if (order.fk_status_id == 1) {
-        order.update({
-          fk_status_id: 2,
-        });
+      // Изменение статуса заказа на "Оплачен"
+      order.update({ fk_status_id: 2 });
 
-        // Получение содержимого заказа
-        const OrderData = await this.order_data.findAll({
-          where: {
-            fk_order_id: order.order_id
-          },
-          include: [
-            {
-              model: this.product,
-              required: true
-            }
-          ]
-        });
-
-        // const delivery_cost = Number((await this.setting.findOne({
-        //   where: {
-        //     fk_project_id: project.idproject,
-        //     setting_id: "delivery_cost"
-        //   }
-        // })).value);
-
-        // this.BotSocket.emit("new_order", {
-        //   idorder: order.idorder,
-        //   delivery_cost
-        // });
-      }
+      // Отправка заказа чере сокет
+      Socket.bot.emit("new_order", order);
     }
 
     return "OK";
