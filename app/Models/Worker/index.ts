@@ -20,7 +20,7 @@ export default (sequelize: any, Sequelize: any) => {
       type: Sequelize.INTEGER,
       allowNull: false,
       notEmpty: true,
-      defaultValue: false
+      defaultValue: 1
     },
     telegram_first_name: {
       type: Sequelize.STRING,
