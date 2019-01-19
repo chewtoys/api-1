@@ -1,7 +1,5 @@
-import { notDeepEqual } from "assert";
-
 /**
- * @description Работник
+ * @description Курьер
  */
 
 export default (sequelize: any, Sequelize: any) => {
@@ -18,6 +16,12 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
+    fk_status_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      notEmpty: true,
+      defaultValue: false
+    },
     telegram_first_name: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -32,12 +36,6 @@ export default (sequelize: any, Sequelize: any) => {
       type: Sequelize.STRING,
       allowNull: true,
       notEmpty: true
-    },
-    ready: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      notEmpty: true,
-      defaultValue: false
     }
   }, {
     indexes: [

@@ -15,6 +15,7 @@ export default class Orders extends Main {
   setting: any;
   address: any;
   code: any;
+  worker: any;
 
   constructor() {
     super();
@@ -29,6 +30,7 @@ export default class Orders extends Main {
     this.setting = Sequelize.models.setting;
     this.address = Sequelize.models.address;
     this.code = Sequelize.models.code;
+    this.worker = Sequelize.models.worker;
   }
 
   /**
@@ -155,30 +157,23 @@ export default class Orders extends Main {
     }
 
     if (Success && (Status == "AUTHORIZED")) {
-      // Заказ был только что оплачен, получаем его содержимое для отправки
+      // Заказ был только что оплачен, получаем информацию о нем
       const order = await this.order.findOne({
         where: {
           order_id: OrderId,
-        },
-        include: [
-          {
-            model: this.order_data,
-            required: true,
-            include: [
-              {
-                model: this.product,
-                required: true
-              }
-            ]
-          }
-        ]
+        }
       });
 
       // Изменение статуса заказа на "Оплачен"
       order.update({ fk_status_id: 2 });
 
-      // Отправка заказа чере сокет
-      Socket.bot.emit("new_order", order);
+      // Получаем список свободных курьеров
+      const worker = await this.worker.findAll({
+        where: { fk_status_id: 2 }
+      });
+
+      // Отправка данных в сокет
+      Socket.bot.emit("new_order", { order, worker });
     }
 
     return "OK";
