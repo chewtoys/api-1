@@ -4,15 +4,13 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
-import Cron from "./Cron";
 import Logger from "./Main/Logger";
-// import { CronJob } from "cron";
+import Socket from "./Socket";
 import router, { notFound } from "./Routes";
 import { session } from "./utils";
 
 class Server {
   app: express.Application;
-  // Cron: Cron;
 
   constructor() {
     Logger.info("Server Class init");
@@ -59,9 +57,9 @@ class Server {
   public async start(port: number) {
     this.app.listen(port);
 
+    Socket.eventHandler();
+
     Logger.info("start in Server Class init");
-    // new CronJob("0 0 0 * * *", async () => await this.Cron.updateProductsPopularity(), null, true, "Asia/Irkutsk");
-    // new BotSocket();
   }
 }
 
