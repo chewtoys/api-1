@@ -17,6 +17,7 @@ class Socket {
         res.data = await Workers.createIfNotExist(data);
         res.success = true;
       } catch (err) {
+        res.telegram_id = data.id;
         res.message = err.message;
       }
 
@@ -31,6 +32,7 @@ class Socket {
         res.data = await Workers.changeStatus(data);
         res.success = true;
       } catch (err) {
+        res.telegram_id = data.telegram_id;
         res.message = err.message;
       }
 
