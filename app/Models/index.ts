@@ -41,6 +41,7 @@ const Project = Sequelize.models.project;
 const Setting = Sequelize.models.setting;
 const User = Sequelize.models.user;
 const Worker = Sequelize.models.worker;
+const WorkerStatus = Sequelize.models.worker_status;
 
 Category.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
 
@@ -58,7 +59,6 @@ Order.belongsTo(OrderStatus, { foreignKey: "fk_status_id", targetKey: "status_id
 OrderData.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasMany(OrderData, { foreignKey: "fk_order_id", sourceKey: "order_id" });
 OrderData.belongsTo(Product, { foreignKey: "fk_product_id", targetKey: "product_id" });
-OrderData.hasOne(Product, { foreignKey: "product_id" });
 
 Payment.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasOne(Payment, { foreignKey: "fk_order_id" });
@@ -75,6 +75,8 @@ Code.belongsTo(CodeOperation, { foreignKey: "fk_operation_id", targetKey: "opera
 
 Setting.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
 
+Worker.belongsTo(WorkerStatus, { foreignKey: "fk_status_id", targetKey: "status_id" });
+
 /**
  * Синхронизация таблиц
  * Не использовать Sequelize.sync(), так как важен порядок!
@@ -84,6 +86,7 @@ Setting.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id
   await Setting.sync();
   await User.sync();
   await Address.sync();
+  await WorkerStatus.sync();
   await Worker.sync();
   await OrderStatus.sync();
   await Order.sync();
