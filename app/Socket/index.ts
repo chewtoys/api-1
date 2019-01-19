@@ -9,9 +9,32 @@ class Socket {
   }
 
   public eventHandler() {
+    // Запуск бота
+    this.bot.on("launch", async (data: any) => {
+      let res: any = { success: false };
+
+      try {
+        res.data = await Workers.createIfNotExist(data);
+        res.success = true;
+      } catch (err) {
+        res.message = err.message;
+      }
+
+      this.bot.emit("launch_res", res);
+    });
+
     // Изменение статуса курьера
     this.bot.on("change_worker_status", async (data: any) => {
-      this.bot.emit("change_worker_status_res", await Workers.changeStatus(data));
+      let res: any = { success: false };
+
+      try {
+        res.data = await Workers.changeStatus(data);
+        res.success = true;
+      } catch (err) {
+        res.message = err.message;
+      }
+
+      this.bot.emit("change_worker_status_res", res);
     });
   }
 }
