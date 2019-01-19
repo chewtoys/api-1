@@ -18,7 +18,7 @@ export default class Workers extends Main {
   /**
    * @description Изменение статуса
    */
-  public async changeStatus({ telegram_id }: { telegram_id: number }) {
+  public async changeStatus({ telegram_id, status_id }: { telegram_id: number; status_id: number }) {
     const worker = await this.worker.findOne({
       where: { telegram_id }
     });
@@ -26,10 +26,10 @@ export default class Workers extends Main {
     if (!worker) throw new Error("Курьер не найден");
 
     worker.update({
-      ready: (!worker.ready) ? true : false
+      fk_status_id: status_id
     });
 
-    return [worker.ready]
+    return [worker];
   }
 
   /**
