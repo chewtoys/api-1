@@ -11,13 +11,15 @@ class Socket {
   public eventHandler() {
     // Запуск бота
     this.bot.on("launch", async (data: any) => {
-      let res: any = { success: false };
+      let res: any = { 
+        success: false,
+        telegram_id: data.id 
+      };
 
       try {
         res.data = await Workers.createIfNotExist(data);
         res.success = true;
       } catch (err) {
-        res.telegram_id = data.id;
         res.message = err.message;
       }
 
@@ -26,13 +28,15 @@ class Socket {
 
     // Изменение статуса курьера
     this.bot.on("change_worker_status", async (data: any) => {
-      let res: any = { success: false };
+      let res: any = { 
+        success: false,
+        telegram_id: data.telegram_id
+      };
 
       try {
         res.data = await Workers.changeStatus(data);
         res.success = true;
       } catch (err) {
-        res.telegram_id = data.telegram_id;
         res.message = err.message;
       }
 
@@ -46,13 +50,15 @@ class Socket {
 
     // Запрос актуальных заказов
     this.bot.on("get_orders", async (data: any) => {
-      let res: any = { success: false };
+      let res: any = { 
+        success: false,
+        telegram_id: data.telegram_id 
+      };
 
-      try{
+      try {
         res.data = await Orders.get(data);
         res.success = true;
       } catch (err) {
-        res.telegram_id = data.telegram_id;
         res.message = err.message;
       }
 
