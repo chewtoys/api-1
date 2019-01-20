@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { Telegram, Workers } from "../API";
+import { Orders, Telegram, Workers } from "../API";
 
 class Socket {
   bot: SocketIOClient.Socket;
@@ -42,6 +42,21 @@ class Socket {
     // Логирование сообщения
     this.bot.on("message", (data: any) => {
       Telegram.saveMessage(data);
+    });
+
+    // Запрос актуальных заказов
+    this.bot.on("get_orders", async (data: any) => {
+      let res: any = { success: false };
+
+      try{
+        res.data = await Orders.get(data);
+        res.success = true;
+      } catch (err) {
+        res.telegram_id = data.telegram_id;
+        res.message = err.message;
+      }
+
+      this.bot.emit("get_orders_res", res);
     });
   }
 }
