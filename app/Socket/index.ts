@@ -26,7 +26,7 @@ class Socket {
       this.bot.emit("launch_res", res);
     });
 
-    // Изменение статуса курьера
+    // Запрос на изменение статуса курьера
     this.bot.on("change_worker_status", async (data: any) => {
       let res: any = { 
         success: false,
@@ -64,6 +64,23 @@ class Socket {
 
       this.bot.emit("get_orders_res", res);
     });
+
+    // Запрос удаления сообщений
+    this.bot.on("delete_messages", async (data: any) => {
+      let res: any = {
+        success: false,
+        telegram_id: data.telegram_id
+      };
+
+      try {
+        res.data = await Telegram.deleteMessages(data);
+        res.success = true;
+      } catch (err) {
+        res.message = err.message;
+      }
+
+      this.bot.emit("delete_messages_res", res);
+    }); 
   }
 }
 
