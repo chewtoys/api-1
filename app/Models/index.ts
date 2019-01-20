@@ -47,7 +47,6 @@ Category.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_i
 
 Message.belongsTo(MessageType, { foreignKey: "fk_type_id", targetKey: "type_id" });
 Message.belongsTo(Worker, { foreignKey: "fk_telegram_id", targetKey: "telegram_id" });
-Worker.hasMany(Message, { foreignKey: "fk_telegram_id", sourceKey: "telegram_id" });
 
 Order.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
 Order.belongsTo(User, { foreignKey: "fk_user_id", targetKey: "user_id" });

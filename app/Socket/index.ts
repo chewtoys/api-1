@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { Workers } from "../API";
+import { Telegram, Workers } from "../API";
 
 class Socket {
   bot: SocketIOClient.Socket;
@@ -37,6 +37,11 @@ class Socket {
       }
 
       this.bot.emit("change_worker_status_res", res);
+    });
+
+    // Логирование сообщения
+    this.bot.on("message", (data: any) => {
+      Telegram.saveMessage(data);
     });
   }
 }

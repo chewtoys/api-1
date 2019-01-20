@@ -20,10 +20,21 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
+    unit_id: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      notEmpty: true
+    },
     text: {
       type: Sequelize.STRING,
       allowNull: false,
       notEmpty: true
+    },
+    deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      notEmpty: true,
+      defaultValue: false
     }
   }, {
     freezeTableName: true,
