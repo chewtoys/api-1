@@ -4,7 +4,6 @@
 
 import Main from "../../Main";
 import Sequelize from "../../Models";
-import { type } from "os";
 
 export default class Telegram extends Main {
   message: any;
