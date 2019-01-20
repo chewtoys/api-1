@@ -1,6 +1,8 @@
 import { route, routeExport } from "../../../utils";
 import { Telegram } from "../../";
 
+const deleteMessages = route("/telegram/deleteMessages", (e) => Telegram.deleteMessages(e));
+
 const saveMessage = route("/telegram/saveMessage", (e) => Telegram.saveMessage(e), [
   "telegram_id",
   "message_id",
@@ -9,5 +11,6 @@ const saveMessage = route("/telegram/saveMessage", (e) => Telegram.saveMessage(e
 ]);
 
 export default routeExport({
+  deleteMessages,
   saveMessage
 });

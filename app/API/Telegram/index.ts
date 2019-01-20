@@ -4,6 +4,7 @@
 
 import Main from "../../Main";
 import Sequelize from "../../Models";
+import { type } from "os";
 
 export default class Telegram extends Main {
   message: any;
@@ -14,6 +15,45 @@ export default class Telegram extends Main {
 
     this.message = Sequelize.models.message;
     this.worker = Sequelize.models.worker;
+  }
+
+  /**
+   * @description Удаление сообщений
+   */
+  public async deleteMessages({
+    type_id,
+    unit_id,
+    telegram_id
+  }: {
+    type_id?: number;
+    unit_id?: number;
+    telegram_id?: number;
+  }) {
+    let conditions: any = {};
+
+    if (typeof type_id !== "undefined") {
+      conditions.fk_type_id = type_id;
+    }
+
+    if (typeof unit_id !== "undefined") {
+      conditions.unit_id = unit_id;
+    }
+
+    if (typeof telegram_id !== "undefined") {
+      conditions.fk_telegram_id = telegram_id;
+    }
+
+    await this.message.update({
+      deleted: true
+    }, {
+      where: conditions
+    });
+
+    const messages = await this.message.findAll({
+      where: conditions
+    });
+
+    return [messages];
   }
 
   /**
