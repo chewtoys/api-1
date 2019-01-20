@@ -5,8 +5,6 @@ import { Orders } from "../../";
 
 const router = Router();
 
-const getRoute = route("/orders/get", (e) => Orders.get(e));
-
 const createRoute = route("/orders/create", (e) => Orders.create(e), [
   "project_id",
   "phone",
@@ -54,7 +52,6 @@ const notificationsRoute = router.post("/orders/notifications", async (req: Requ
 });
 
 export default routeExport({
-  getRoute,
   createRoute,
   notificationsRoute,
 });
