@@ -3,9 +3,11 @@ import { Orders, Telegram, Workers } from "../API";
 
 class Socket {
   bot: SocketIOClient.Socket;
+  client: SocketIOClient.Socket;
 
   constructor() {
     this.bot = io.connect(process.env.BOT_SOCKET);
+    this.client = io.connect(process.env.CLIENT_SOCKET);
   }
 
   public eventHandler() {

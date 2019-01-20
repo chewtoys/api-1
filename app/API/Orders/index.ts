@@ -286,6 +286,11 @@ export default class Orders extends Main {
       });
 
       // Отправка данных в сокет
+      Socket.client.emit("notification", {
+        OrderId,
+        Success,
+        Status
+      });
       Socket.bot.emit("new_order", { order, worker });
     }
 
