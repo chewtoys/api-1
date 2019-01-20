@@ -34,6 +34,27 @@ export default class Orders extends Main {
   }
 
   /**
+   * @description Получение заказов в общем виде
+   */
+  public async get({
+    status_id
+  }: {
+    status_id?: number
+  }) {
+    let conditions: any = {};
+
+    if (typeof status_id !== "undefined") {
+      conditions.fk_status_id = status_id;
+    }
+
+    const order = await this.order.findAll({
+      where: conditions
+    });
+
+    return [order];
+  } 
+
+  /**
    * Обработка нотификаций от банка
    * @param {string} TerminalKey - идентификатор магазина
    * @param {string} OrderId - ID заказа
