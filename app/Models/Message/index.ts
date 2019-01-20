@@ -26,7 +26,7 @@ export default (sequelize: any, Sequelize: any) => {
       notEmpty: true
     },
     text: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(10000),
       allowNull: false,
       notEmpty: true
     },

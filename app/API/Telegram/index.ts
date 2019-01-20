@@ -28,7 +28,9 @@ export default class Telegram extends Main {
     unit_id?: number;
     telegram_id?: number;
   }) {
-    let conditions: any = {};
+    let conditions: any = {
+      deleted: false
+    };
 
     if (typeof type_id !== "undefined") {
       conditions.fk_type_id = type_id;
@@ -42,13 +44,13 @@ export default class Telegram extends Main {
       conditions.fk_telegram_id = telegram_id;
     }
 
-    await this.message.update({
-      deleted: true
-    }, {
+    const messages = await this.message.findAll({
       where: conditions
     });
 
-    const messages = await this.message.findAll({
+    await this.message.update({
+      deleted: true
+    }, {
       where: conditions
     });
 

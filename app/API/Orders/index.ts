@@ -1,6 +1,7 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
 import Socket from "../../Socket";
+import SMS from "../../SMS";
 import axios from "axios";
 import crypto from "crypto";
 import moment from "moment";
@@ -31,6 +32,97 @@ export default class Orders extends Main {
     this.address = Sequelize.models.address;
     this.code = Sequelize.models.code;
     this.worker = Sequelize.models.worker;
+  }
+
+  /**
+   * @description Изменение статуса заказа по telegram_id
+   */
+  public async changeStatusByTelegram({
+    telegram_id,
+    status_id
+  }: {
+    telegram_id: number,
+    status_id: number
+  }) {
+    const worker = await this.worker.findOne({
+      where: { telegram_id }
+    });
+
+    if (!worker) {
+      throw new Error("Не зарегистрированный telegram_id");
+    }
+
+    const order = await this.order.findOne({
+      where: { fk_worker_id: worker.worker_id },
+      include: [
+        {
+          model: this.user,
+          required: true
+        }
+      ]
+    });
+
+    order.update({ fk_status_id: status_id });
+
+    // Смс-уведомления
+    if (status_id === 4) {
+      new SMS().send([order.user.phone], `Ваш заказ №${order.order_id} уже в пути!`);
+    } else if (status_id === 5) {
+      new SMS().send([order.user.phone], "Благодарим Вас за то, что выбрали LAAPL DELIVERY!");
+    }
+
+    return [true];
+  }
+
+  /**
+   * @description Назначение заказа на курьера
+   */
+  public async assign({
+    telegram_id,
+    order_id
+  }: {
+    telegram_id: number,
+    order_id: number
+  }) {
+    const order = await this.order.findOne({
+      where: { order_id },
+      include: [
+        {
+          model: this.order_data,
+          required: true,
+          include: [
+            {
+              model: this.product,
+              required: true
+            }
+          ]
+        },
+        {
+          model: this.user,
+          required: true
+        }
+      ]
+    });
+
+    if (order.fk_worker_id) {
+      throw new Error("Заказ уже взят другим курьером");
+    }
+
+    const worker = await this.worker.findOne({
+      where: { telegram_id }
+    });
+
+    order.update({ 
+      fk_worker_id: worker.worker_id,
+      fk_status_id: 3 
+    });
+
+    worker.update({ fk_status_id: 3 });
+
+    // Смс-уведомление
+    new SMS().send([order.user.phone], `Ваш заказ №${order.order_id} взят в работу!`);
+
+    return [order];
   }
 
   /**
