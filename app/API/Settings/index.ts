@@ -8,6 +8,7 @@ import Sequelize from "../../Models";
 
 export default class Settings extends Main {
   setting: any;
+  house_type: any;
 
   constructor() {
     super();
@@ -15,6 +16,7 @@ export default class Settings extends Main {
     this.Logger.info("Settings Class init");
 
     this.setting = Sequelize.models.setting;
+    this.house_type = Sequelize.models.house_type;
   }
 
   /**
@@ -29,8 +31,12 @@ export default class Settings extends Main {
       where_clause.setting_id = setting_id;
     }
 
-    return await this.setting.findAll({
+    const settings =  await this.setting.findAll({
       where: where_clause,
     });
+
+    const house_types = await this.house_type.findAll();
+
+    return [settings, house_types];
   }
 }
