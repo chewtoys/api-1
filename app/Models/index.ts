@@ -30,6 +30,7 @@ const Category = Sequelize.models.category;
 const Code = Sequelize.models.code;
 const CodeOperation = Sequelize.models.code_operation;
 const CodeType = Sequelize.models.code_type;
+const HouseType = Sequelize.models.house_type;
 const Image = Sequelize.models.image;
 const Message = Sequelize.models.message;
 const MessageType = Sequelize.models.message_type;
@@ -44,6 +45,8 @@ const User = Sequelize.models.user;
 const Worker = Sequelize.models.worker;
 const WorkerStatus = Sequelize.models.worker_status;
 
+Address.belongsTo(HouseType, { foreignKey: "fk_house_type_id", targetKey: "house_type_id" });
+
 Category.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
 
 Message.belongsTo(MessageType, { foreignKey: "fk_type_id", targetKey: "type_id" });
@@ -55,6 +58,7 @@ User.hasMany(Order, { foreignKey: "fk_user_id", sourceKey: "user_id" });
 Order.belongsTo(Worker, { foreignKey: "fk_worker_id", targetKey: "worker_id" });
 Worker.hasMany(Order, { foreignKey: "fk_worker_id", sourceKey: "worker_id" });
 Order.belongsTo(OrderStatus, { foreignKey: "fk_status_id", targetKey: "status_id" });
+Order.belongsTo(HouseType, { foreignKey: "fk_house_type_id", targetKey: "house_type_id" });
 
 OrderData.belongsTo(Order, { foreignKey: "fk_order_id", targetKey: "order_id" });
 Order.hasMany(OrderData, { foreignKey: "fk_order_id", sourceKey: "order_id" });
@@ -85,6 +89,7 @@ Worker.belongsTo(WorkerStatus, { foreignKey: "fk_status_id", targetKey: "status_
   await Project.sync();
   await Setting.sync();
   await User.sync();
+  await HouseType.sync();
   await Address.sync();
   await WorkerStatus.sync();
   await Worker.sync();
