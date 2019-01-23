@@ -304,9 +304,9 @@ export default class Orders extends Main {
    * @param {number} lat - latitude
    * @param {number} lon - longitude
    * @param {string} address - адрес
-   * @param {string} entrance - информация о подъезде
-   * @param {string} apartment - информация о квартире
    * @param {any} items - массив с содержимым заказа
+   * @param {string} [entrance] - информация о подъезде
+   * @param {string} [apartment] - информация о квартире
    * @param {string} [name] - имя клиента
    * @param {string} [email] - email клиента
    * @param {string} [intercom] - информация о домофоне
@@ -318,12 +318,13 @@ export default class Orders extends Main {
   public async create({
     project_id,
     phone,
+    house_type,
     lat,
     lon,
     address,
+    items,
     entrance,
     apartment,
-    items,
     name,
     email,
     intercom,
@@ -334,12 +335,13 @@ export default class Orders extends Main {
   }: {
     project_id: string;
     phone: string;
+    house_type: number;
     lat: number;
     lon: number;
     address: string;
-    entrance: string;
-    apartment: string;
+    entrance?: string;
     items: any;
+    apartment?: string;
     name?: string;
     email?: string;
     intercom?: string;
@@ -407,29 +409,31 @@ export default class Orders extends Main {
           point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`),
         },
         defaults: {
+          fk_house_type_id: house_type,
           address,
           entrance,
           apartment,
           intercom,
           alias,
-        },
+        }
       }))[1];
 
       if (!created_address) {
         // Эти координаты уже сохранены у этого пользователя. Обновляем информацию о них.
         this.address.update(
           {
+            fk_house_type_id: house_type,
             address,
             entrance,
             apartment,
             intercom,
-            alias,
+            alias
           },
           {
             where: {
               fk_user_id: user.user_id,
               point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`),
-            },
+            }
           }
         );
       }
@@ -449,6 +453,7 @@ export default class Orders extends Main {
       fk_project_id: project_id,
       fk_user_id: user.user_id,
       fk_status_id: 1,
+      fk_house_type_id: house_type,
       point: { type: "Point", coordinates: [lat, lon] },
       address,
       entrance,

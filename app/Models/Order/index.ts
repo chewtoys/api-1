@@ -31,6 +31,11 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true,
     },
+    fk_house_type_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      notEmpty: true
+    },
     point: {
       type: Sequelize.GEOMETRY("POINT"),
       allowNull: false,
@@ -43,23 +48,23 @@ export default (sequelize: any, Sequelize: any) => {
     },
     entrance: {
       type: Sequelize.STRING,
-      allowNull: false,
-      notEmpty: true,
+      allowNull: true,
+      notEmpty: false
     },
     apartment: {
       type: Sequelize.STRING,
       allowNull: true,
-      notEmpty: false,
+      notEmpty: false
     },
     intercom: {
       type: Sequelize.STRING,
       allowNull: true,
-      notEmpty: false,
+      notEmpty: false
     },
     comment: {
       type: Sequelize.STRING,
       allowNull: true,
-      notEmpty: false,
+      notEmpty: false
     },
     delivery_cost: {
       type: Sequelize.FLOAT,
@@ -69,13 +74,13 @@ export default (sequelize: any, Sequelize: any) => {
     order_datetime: {
       type: Sequelize.DATE,
       allowNull: true,
-      notEmpty: true,
+      notEmpty: true
     },
     finish_datetime: {
       type: Sequelize.DATE,
       allowNull: true,
-      notEmpty: true,
-    },
+      notEmpty: true
+    }
   }, {
     freezeTableName: true,
     tableName: "orders",

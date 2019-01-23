@@ -10,6 +10,11 @@ export default (sequelize: any, Sequelize: any) => {
       allowNull: false,
       notEmpty: true
     },
+    fk_house_type_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      notEmpty: true
+    },
     point: {
       type: Sequelize.GEOMETRY("POINT"),
       primaryKey: true,
