@@ -253,6 +253,13 @@ export default class Orders extends Main {
       });
     }
 
+    // Отправка данных в сокет
+    Socket.client.emit("notification", {
+      OrderId,
+      Success,
+      Status,
+    });
+
     if (Success && Status == "AUTHORIZED") {
       // Заказ был только что оплачен, получаем информацию о нем
       const order = await this.order.findOne({
@@ -269,12 +276,6 @@ export default class Orders extends Main {
         where: { fk_status_id: 2 },
       });
 
-      // Отправка данных в сокет
-      Socket.client.emit("notification", {
-        OrderId,
-        Success,
-        Status,
-      });
       Socket.bot.emit("new_order", { order, worker });
     }
 
