@@ -37,15 +37,9 @@ export default class Orders extends Main {
   /**
    * @description Изменение статуса заказа по telegram_id
    */
-  public async changeStatusByTelegram({
-    telegram_id,
-    status_id
-  }: {
-    telegram_id: number,
-    status_id: number
-  }) {
+  public async changeStatusByTelegram({ telegram_id, status_id }: { telegram_id: number; status_id: number }) {
     const worker = await this.worker.findOne({
-      where: { telegram_id }
+      where: { telegram_id },
     });
 
     if (!worker) {
@@ -57,9 +51,9 @@ export default class Orders extends Main {
       include: [
         {
           model: this.user,
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     });
 
     order.update({ fk_status_id: status_id });
@@ -77,13 +71,7 @@ export default class Orders extends Main {
   /**
    * @description Назначение заказа на курьера
    */
-  public async assign({
-    telegram_id,
-    order_id
-  }: {
-    telegram_id: number,
-    order_id: number
-  }) {
+  public async assign({ telegram_id, order_id }: { telegram_id: number; order_id: number }) {
     const order = await this.order.findOne({
       where: { order_id },
       include: [
@@ -93,15 +81,15 @@ export default class Orders extends Main {
           include: [
             {
               model: this.product,
-              required: true
-            }
-          ]
+              required: true,
+            },
+          ],
         },
         {
           model: this.user,
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     });
 
     if (order.fk_worker_id) {
@@ -109,12 +97,12 @@ export default class Orders extends Main {
     }
 
     const worker = await this.worker.findOne({
-      where: { telegram_id }
+      where: { telegram_id },
     });
 
-    order.update({ 
+    order.update({
       fk_worker_id: worker.worker_id,
-      fk_status_id: 3 
+      fk_status_id: 3,
     });
 
     worker.update({ fk_status_id: 3 });
@@ -128,11 +116,7 @@ export default class Orders extends Main {
   /**
    * @description Получение заказов в общем виде
    */
-  public async get({
-    status_id
-  }: {
-    status_id?: number
-  }) {
+  public async get({ status_id }: { status_id?: number }) {
     let conditions: any = {};
 
     if (typeof status_id !== "undefined") {
@@ -140,11 +124,11 @@ export default class Orders extends Main {
     }
 
     const order = await this.order.findAll({
-      where: conditions
+      where: conditions,
     });
 
     return [order];
-  } 
+  }
 
   /**
    * Обработка нотификаций от банка
@@ -269,12 +253,12 @@ export default class Orders extends Main {
       });
     }
 
-    if (Success && (Status == "AUTHORIZED")) {
+    if (Success && Status == "AUTHORIZED") {
       // Заказ был только что оплачен, получаем информацию о нем
       const order = await this.order.findOne({
         where: {
           order_id: OrderId,
-        }
+        },
       });
 
       // Изменение статуса заказа на "Оплачен"
@@ -282,14 +266,14 @@ export default class Orders extends Main {
 
       // Получаем список свободных курьеров
       const worker = await this.worker.findAll({
-        where: { fk_status_id: 2 }
+        where: { fk_status_id: 2 },
       });
 
       // Отправка данных в сокет
       Socket.client.emit("notification", {
         OrderId,
         Success,
-        Status
+        Status,
       });
       Socket.bot.emit("new_order", { order, worker });
     }
@@ -375,12 +359,10 @@ export default class Orders extends Main {
         lifetime: {
           [Sequelize.Op.gte]: moment().format("YYYY-MM-DD HH:mm:ss"),
         },
-        confirmed: true
+        confirmed: true,
       },
       limit: 1,
-      order: [
-        ["code_id", "DESC"]
-      ]
+      order: [["code_id", "DESC"]],
     });
 
     if (!code) throw new Error("Не подтвержден номер, либо истекло время сессии");
@@ -388,7 +370,7 @@ export default class Orders extends Main {
     // Поиск пользователя с таким номером. Если такого нет, создаем нового.
     const user_data = await this.user.findOrCreate({
       where: { phone },
-      defaults: { email, name },
+      // defaults: { email, name },
     });
 
     const user = user_data[0];
@@ -396,7 +378,7 @@ export default class Orders extends Main {
 
     if (!created_user) {
       // Если пользователь уже есть, обновляем email и имя
-      user.update({ email, name });
+      // user.update({ email, name });
     }
 
     if (remember) {
@@ -415,7 +397,7 @@ export default class Orders extends Main {
           apartment,
           intercom,
           alias,
-        }
+        },
       }))[1];
 
       if (!created_address) {
@@ -427,13 +409,13 @@ export default class Orders extends Main {
             entrance,
             apartment,
             intercom,
-            alias
+            alias,
           },
           {
             where: {
               fk_user_id: user.user_id,
               point: Sequelize.fn("ST_GeomFromText", `POINT(${lat} ${lon})`),
-            }
+            },
           }
         );
       }
@@ -504,14 +486,14 @@ export default class Orders extends Main {
         Frame: true,
         Language: "ru",
         DATA: {
-          Email: (typeof email !== "undefined" && email.length) ? email : undefined,
+          Email: typeof email !== "undefined" && email.length ? email : undefined,
           Phone: phone,
           Name: name,
           connection_type: "Widget2.0",
         },
         Receipt: {
           Taxation: "usn_income_outcome",
-          Email: (typeof email !== "undefined" && email.length) ? email : undefined,
+          Email: typeof email !== "undefined" && email.length ? email : undefined,
           EmailCompany: "info@laapl.ru",
           Phone: phone,
           Items: products
