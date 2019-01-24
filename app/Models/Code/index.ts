@@ -37,7 +37,7 @@ export default (sequelize: any, Sequelize: any) => {
       type: Sequelize.DATE,
       allowNull: false,
       notEmpty: true,
-      defaultValue: moment().add(5, "minutes").format("YYYY-MM-DD HH:mm:ss")
+      defaultValue: moment().add(30, "minutes").format("YYYY-MM-DD HH:mm:ss")
     },
     confirmed: {
       type: Sequelize.BOOLEAN,
