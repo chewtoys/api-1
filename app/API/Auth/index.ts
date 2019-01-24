@@ -49,8 +49,7 @@ export default class Auth extends Main {
         ["code_id", "DESC"]
       ],
       defaults: {
-        code: String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1))),
-        lifetime: moment().add(5, "minutes").format("YYYY-MM-DD HH:mm:ss")
+        code: String(Math.round(10000 - 0.5 + Math.random() * (99999 - 10000 + 1)))
       }
     });
 
