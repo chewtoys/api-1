@@ -58,10 +58,53 @@ export default class Orders extends Main {
 
     order.update({ fk_status_id: status_id });
 
-    // Смс-уведомления
     if (status_id === 4) {
       new SMS().send([order.user.phone], `Ваш заказ №${order.order_id} уже в пути!`);
     } else if (status_id === 5) {
+      // Подтверждение платежа
+      const payment = await this.payment.findOne({ where: { fk_order_id: order.order_id } });
+
+      const project = await this.project.findOne({
+        where: {
+          [Sequelize.Op.or]: [{ terminal_key: payment.terminal_key }, { terminal_demokey: payment.terminal_key }]
+        }
+      });
+
+      let data: any = {
+        TerminalKey: payment.terminal_key,
+        PaymentId: payment.payment_id
+      };
+
+      if (project.production) {
+        data["Password"] = project.terminal_password;
+      } else {
+        data["Password"] = project.terminal_demopassword;
+      }
+  
+      const keys = Object.keys(data).sort();
+      let generated_token: string = "";
+  
+      for (let key of keys) {
+        generated_token += data[key];
+      }
+  
+      generated_token = crypto
+        .createHash("sha256")
+        .update(generated_token)
+        .digest("hex");
+
+      delete data["Password"];
+
+      data["Token"] = generated_token;
+
+      const res = await axios({
+        method: "post",
+        url: "https://securepay.tinkoff.ru/v2/Confirm",
+        data
+      });
+
+      console.log(res);
+
       new SMS().send([order.user.phone], "Благодарим Вас за то, что выбрали LAAPL DELIVERY!");
     }
 
