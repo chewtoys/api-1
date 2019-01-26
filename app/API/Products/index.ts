@@ -5,6 +5,7 @@ export default class Products extends Main {
   category: any;
   product: any;
   image: any;
+  setting: any;
 
   constructor() {
     super();
@@ -12,13 +13,22 @@ export default class Products extends Main {
     this.category = Sequelize.models.category;
     this.product = Sequelize.models.product;
     this.image = Sequelize.models.image;
+    this.setting = Sequelize.models.setting;
   }
 
   /**
    * @description Получение списка всех актуальных продуктов
    */
   public async get({ project_id }: { project_id: string }) {
-    const data: any = await this.category.findAll({
+    // Получение коэффициента накрутки стоимости
+    const multiplier = Number((await this.setting.findOne({
+      where: {
+        setting_id: "price_multiplier"
+      }
+    })).value);
+
+    // Получение товаров
+    const data = await this.category.findAll({
       where: {
         actual: true,
         fk_project_id: project_id,
@@ -38,6 +48,12 @@ export default class Products extends Main {
         },
       ],
     });
+
+    for (let key in data) {
+      for (let subkey in data[key].products) {
+        data[key].products[subkey].price = Math.ceil(data[key].products[subkey].price * multiplier);
+      }
+    }
 
     return data;
   }
