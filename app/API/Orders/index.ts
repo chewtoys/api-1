@@ -50,7 +50,7 @@ export default class Orders extends Main {
       where: { 
         fk_worker_id: worker.worker_id,
         fk_status_id: {
-          [Sequelize.Op.in]: [2, 3, 4]
+          [Sequelize.Op.in]: [3, 4]
         } 
       },
       order: [
@@ -63,6 +63,8 @@ export default class Orders extends Main {
         },
       ],
     });
+
+    if (!order) throw new Error("Заказ не найден");
 
     order.update({ fk_status_id: status_id });
 
