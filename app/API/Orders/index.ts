@@ -47,7 +47,15 @@ export default class Orders extends Main {
     }
 
     const order = await this.order.findOne({
-      where: { fk_worker_id: worker.worker_id },
+      where: { 
+        fk_worker_id: worker.worker_id,
+        fk_status_id: {
+          [Sequelize.Op.in]: [2, 3, 4]
+        } 
+      },
+      order: [
+        ["created_at", "DESC"]
+      ],
       include: [
         {
           model: this.user,
