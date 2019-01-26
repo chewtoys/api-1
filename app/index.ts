@@ -57,7 +57,7 @@ class Server {
   public async start(port: number) {
     this.app.listen(port);
 
-    Socket.eventHandler();
+    Socket.botHandler();
 
     Logger.info("start in Server Class init");
   }
