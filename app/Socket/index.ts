@@ -6,8 +6,8 @@ class Socket {
   client: SocketIOClient.Socket;
 
   constructor() {
-    this.bot = io.connect(process.env.BOT_SOCKET);
-    this.client = io.connect(process.env.CLIENT_SOCKET);
+    this.bot = io(process.env.BOT_SOCKET);
+    this.client = io(process.env.CLIENT_SOCKET);
   }
 
   // Обработчик пространства бота
