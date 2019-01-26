@@ -520,11 +520,18 @@ export default class Orders extends Main {
       },
     });
 
+    // Получение коэффициента накрутки стоимости
+    const multiplier = Number((await this.setting.findOne({
+      where: {
+        setting_id: "price_multiplier"
+      }
+    })).value);
+
     for (let item of items) {
       const product = products.filter((subitem: any) => {
         return subitem.product_id === item.product_id;
       });
-      total += product[0].price * item.amount;
+      total += Math.ceil(product[0].price * multiplier) * item.amount;
     }
 
     // Получение ссылки для оплаты
@@ -557,9 +564,9 @@ export default class Orders extends Main {
               })[0];
               return {
                 Name: product.title,
-                Price: product.price * 100,
+                Price: Math.ceil(product.price * multiplier) * 100,
                 Quantity: item.amount,
-                Amount: product.price * item.amount * 100,
+                Amount: Math.ceil(product.price * multiplier) * item.amount * 100,
                 Tax: "none",
               };
             })
