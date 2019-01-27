@@ -37,19 +37,17 @@ export default class Workers extends Main {
    */
   public async createIfNotExist({
     first_name,
-    id,
+    telegram_id,
     last_name,
     username
   }: {
     first_name: string,
-    id: number,
+    telegram_id: number,
     last_name?: string,
     username?: string
   }) {
     const result = await this.worker.findOrCreate({
-      where: {
-        telegram_id: id
-      },
+      where: { telegram_id },
       defaults: {
         telegram_first_name: first_name,
         telegram_last_name: last_name,

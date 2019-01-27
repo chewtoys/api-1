@@ -1,6 +1,5 @@
 import Main from "../../Main";
 import Sequelize from "../../Models";
-import Socket from "../../Socket";
 import SMS from "../../SMS";
 import axios from "axios";
 import crypto from "crypto";
@@ -306,13 +305,6 @@ export default class Orders extends Main {
       });
     }
 
-    // Отправка данных в сокет
-    Socket.client.emit("notification", {
-      OrderId,
-      Success,
-      Status,
-    });
-
     if (Success && Status == "AUTHORIZED") {
       // Заказ был только что оплачен, получаем информацию о нем
       const order = await this.order.findOne({
@@ -329,7 +321,12 @@ export default class Orders extends Main {
         where: { fk_status_id: 2 },
       });
 
-      Socket.bot.emit("new_order", { order, worker });
+      this.socket.botSocket.send(JSON.stringify({
+        meta: {
+          event: "new_order"
+        },
+        data: { order, worker }
+      }));
     }
 
     return "OK";
