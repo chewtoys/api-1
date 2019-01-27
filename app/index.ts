@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import passport from "passport";
 import helmet from "helmet";
 import Logger from "./Main/Logger";
-import Socket from "./Socket";
 import router, { notFound } from "./Routes";
 import { session } from "./utils";
 
@@ -56,8 +55,6 @@ class Server {
    */
   public async start(port: number) {
     this.app.listen(port);
-
-    Socket.botHandler();
 
     Logger.info("start in Server Class init");
   }
