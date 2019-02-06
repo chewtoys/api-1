@@ -16,6 +16,7 @@ export default class Orders extends Main {
   address: any;
   code: any;
   worker: any;
+  category: any;
 
   constructor() {
     super();
@@ -31,6 +32,7 @@ export default class Orders extends Main {
     this.address = Sequelize.models.address;
     this.code = Sequelize.models.code;
     this.worker = Sequelize.models.worker;
+    this.category = Sequelize.models.category;
   }
 
   /**
@@ -46,15 +48,13 @@ export default class Orders extends Main {
     }
 
     const order = await this.order.findOne({
-      where: { 
+      where: {
         fk_worker_id: worker.worker_id,
         fk_status_id: {
-          [Sequelize.Op.in]: [3, 4]
-        } 
+          [Sequelize.Op.in]: [3, 4],
+        },
       },
-      order: [
-        ["created_at", "DESC"]
-      ],
+      order: [["created_at", "DESC"]],
       include: [
         {
           model: this.user,
@@ -75,13 +75,13 @@ export default class Orders extends Main {
 
       const project = await this.project.findOne({
         where: {
-          [Sequelize.Op.or]: [{ terminal_key: payment.terminal_key }, { terminal_demokey: payment.terminal_key }]
-        }
+          [Sequelize.Op.or]: [{ terminal_key: payment.terminal_key }, { terminal_demokey: payment.terminal_key }],
+        },
       });
 
       let data: any = {
         TerminalKey: payment.terminal_key,
-        PaymentId: payment.payment_id
+        PaymentId: payment.payment_id,
       };
 
       if (project.production) {
@@ -89,14 +89,14 @@ export default class Orders extends Main {
       } else {
         data["Password"] = project.terminal_demopassword;
       }
-  
+
       const keys = Object.keys(data).sort();
       let generated_token: string = "";
-  
+
       for (let key of keys) {
         generated_token += data[key];
       }
-  
+
       generated_token = crypto
         .createHash("sha256")
         .update(generated_token)
@@ -109,7 +109,7 @@ export default class Orders extends Main {
       const res = await axios({
         method: "post",
         url: "https://securepay.tinkoff.ru/v2/Confirm",
-        data
+        data,
       });
 
       console.log(res);
@@ -134,6 +134,12 @@ export default class Orders extends Main {
             {
               model: this.product,
               required: true,
+              include: [
+                {
+                  model: this.category,
+                  required: true
+                }
+              ]
             },
           ],
         },
@@ -321,12 +327,14 @@ export default class Orders extends Main {
         where: { fk_status_id: 2 },
       });
 
-      this.socket.botSocket.send(JSON.stringify({
-        meta: {
-          event: "new_order"
-        },
-        data: { order, worker }
-      }));
+      this.socket.botSocket.send(
+        JSON.stringify({
+          meta: {
+            event: "new_order",
+          },
+          data: { order, worker },
+        })
+      );
     }
 
     return "OK";
@@ -345,6 +353,7 @@ export default class Orders extends Main {
    * @param {string} [name] - имя клиента
    * @param {string} [email] - email клиента
    * @param {string} [intercom] - информация о домофоне
+   * @param {string} [level] - информация о этаже
    * @param {string} [order_datetime] - дата и время, на которое заказана доставка
    * @param {string} [comment] - комментарий к заказу
    * @param {boolean} [remember] - сохранить адрес
@@ -363,6 +372,7 @@ export default class Orders extends Main {
     name,
     email,
     intercom,
+    level,
     order_datetime,
     comment,
     remember,
@@ -380,6 +390,7 @@ export default class Orders extends Main {
     name?: string;
     email?: string;
     intercom?: string;
+    level?: string;
     order_datetime?: string;
     comment?: string;
     remember?: boolean;
@@ -447,6 +458,7 @@ export default class Orders extends Main {
           entrance,
           apartment,
           intercom,
+          level,
           alias,
         },
       }))[1];
@@ -460,6 +472,7 @@ export default class Orders extends Main {
             entrance,
             apartment,
             intercom,
+            level,
             alias,
           },
           {
@@ -492,6 +505,7 @@ export default class Orders extends Main {
       entrance,
       apartment,
       intercom,
+      level,
       comment,
       delivery_cost,
       order_datetime,
@@ -518,11 +532,13 @@ export default class Orders extends Main {
     });
 
     // Получение коэффициента накрутки стоимости
-    const multiplier = Number((await this.setting.findOne({
-      where: {
-        setting_id: "price_multiplier"
-      }
-    })).value);
+    const multiplier = Number(
+      (await this.setting.findOne({
+        where: {
+          setting_id: "price_multiplier",
+        },
+      })).value
+    );
 
     for (let item of items) {
       const product = products.filter((subitem: any) => {
