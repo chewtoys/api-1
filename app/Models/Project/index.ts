@@ -22,22 +22,22 @@ export default (sequelize: any, Sequelize: any) => {
     },
     terminal_key: {
       type: Sequelize.STRING(50),
-      allowNull: false,
+      allowNull: true,
       notEmpty: true
     },
     terminal_demokey: {
       type: Sequelize.STRING(50),
-      allowNull: false,
+      allowNull: true,
       notEmpty: true
     },
     terminal_password: {
       type: Sequelize.STRING(50),
-      allowNull: false,
+      allowNull: true,
       notEmpty: true
     },
     terminal_demopassword: {
       type: Sequelize.STRING(50),
-      allowNull: false,
+      allowNull: true,
       notEmpty: true
     },
     production: {
