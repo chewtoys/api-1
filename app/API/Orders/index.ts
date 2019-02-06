@@ -16,6 +16,7 @@ export default class Orders extends Main {
   address: any;
   code: any;
   worker: any;
+  category: any;
 
   constructor() {
     super();
@@ -31,6 +32,7 @@ export default class Orders extends Main {
     this.address = Sequelize.models.address;
     this.code = Sequelize.models.code;
     this.worker = Sequelize.models.worker;
+    this.category = Sequelize.models.category;
   }
 
   /**
@@ -132,6 +134,12 @@ export default class Orders extends Main {
             {
               model: this.product,
               required: true,
+              include: [
+                {
+                  model: this.category,
+                  required: true
+                }
+              ]
             },
           ],
         },
