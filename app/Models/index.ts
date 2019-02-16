@@ -79,6 +79,7 @@ Code.belongsTo(CodeType, { foreignKey: "fk_type_id", targetKey: "type_id" });
 Code.belongsTo(CodeOperation, { foreignKey: "fk_operation_id", targetKey: "operation_id" });
 
 Setting.belongsTo(Project, { foreignKey: "fk_project_id", targetKey: "project_id" });
+Project.hasMany(Setting, { foreignKey: "fk_project_id", sourceKey: "ptoject_id" })
 
 Worker.belongsTo(WorkerStatus, { foreignKey: "fk_status_id", targetKey: "status_id" });
 
